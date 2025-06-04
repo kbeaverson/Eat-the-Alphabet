@@ -78,7 +78,7 @@ struct PasswordRestoreView: View {
                     )
                     .tint(.white)
                 }
-                .padding()
+                .padding(.horizontal, 40)
                 .onAppear { print("PasswordRestoreView appeared") }
             }
         }

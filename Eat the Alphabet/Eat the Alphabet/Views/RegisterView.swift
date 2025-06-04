@@ -75,7 +75,7 @@ struct RegisterView: View {
                     )
                     .tint(.white)
                 }
-                .padding()
+                .padding(.horizontal, 40)
                 .onAppear { print("RegisterView appeared") }
             }
         }
