@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct Eat_the_AlphabetApp: App {
+    @StateObject private var appState = AppState()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView().environmentObject(appState)
         }
     }
 }

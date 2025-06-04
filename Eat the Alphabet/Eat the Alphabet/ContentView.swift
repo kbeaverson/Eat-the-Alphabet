@@ -7,18 +7,20 @@
 
 import SwiftUI
 
-struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+struct ContentView : View {
+    @EnvironmentObject var appState: AppState
+    
+    var body : some View {
+        NavigationStack {
+            if appState.isAuthenticated {
+                MainView()
+            } else {
+                LoginView()
+            }
         }
-        .padding()
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView().environmentObject(AppState())
 }
