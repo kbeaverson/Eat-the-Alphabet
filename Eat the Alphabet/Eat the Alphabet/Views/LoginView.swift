@@ -16,8 +16,6 @@ struct LoginView: View {
         GeometryReader { geo in
             let fieldWidth = geo.size.width - 160
             BackgroundScaffold {
-//            GeometryReader { geo in
-                // let fieldWidth = geo.size.width - 120
                 VStack(spacing: 20) {
                     Text("Login")
                         .font(.system(size: 36, weight: .bold, design: .monospaced))
@@ -42,7 +40,17 @@ struct LoginView: View {
                                 .stroke(Color.gray.opacity(0.4), lineWidth: 1)
                         )
                     
-                    Button("Sign in") { mockLogin() }
+                    Button("Sign in") {
+                        AuthService.shared.login(email: email, password: password) { result in
+                            switch result {
+                            case .success(let user):
+                                print("Logged in as \(user.email ?? "unknown")")
+                                appState.isAuthenticated = true
+                            case .failure(let error):
+                                print("Login error: \(error.localizedDescription)")
+                            }
+                        }
+                    }
                         .frame(width: fieldWidth)
                         .padding(12)
                         .font(.system(size: 18, weight: .bold, design: .monospaced))
@@ -73,10 +81,10 @@ struct LoginView: View {
         }
     }
 
-    func mockLogin() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            appState.isAuthenticated = true
-        }
-    }
+//    func mockLogin() {
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+//            appState.isAuthenticated = true
+//        }
+//    }
 }
 

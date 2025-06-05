@@ -6,6 +6,16 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		10FBBEB32DF16830009D22C4 /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 10FBBEB22DF16830009D22C4 /* Auth */; };
+		10FBBEB52DF16830009D22C4 /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = 10FBBEB42DF16830009D22C4 /* Functions */; };
+		10FBBEB72DF16830009D22C4 /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = 10FBBEB62DF16830009D22C4 /* PostgREST */; };
+		10FBBEB92DF16830009D22C4 /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 10FBBEB82DF16830009D22C4 /* Realtime */; };
+		10FBBEBB2DF16830009D22C4 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 10FBBEBA2DF16830009D22C4 /* Storage */; };
+		10FBBEBD2DF16830009D22C4 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 10FBBEBC2DF16830009D22C4 /* Supabase */; };
+		10FBBEBF2DF16ABC009D22C4 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 10FBBEBE2DF16AAC009D22C4 /* Config.xcconfig */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		98D295152DED1E4E008374A1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,6 +34,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		10FBBEBE2DF16AAC009D22C4 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		98D295072DED1E4D008374A1 /* Eat the Alphabet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Eat the Alphabet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		98D295142DED1E4E008374A1 /* Eat the AlphabetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Eat the AlphabetTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		98D2951E2DED1E4E008374A1 /* Eat the AlphabetUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Eat the AlphabetUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,6 +63,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				10FBBEB72DF16830009D22C4 /* PostgREST in Frameworks */,
+				10FBBEB52DF16830009D22C4 /* Functions in Frameworks */,
+				10FBBEBD2DF16830009D22C4 /* Supabase in Frameworks */,
+				10FBBEB32DF16830009D22C4 /* Auth in Frameworks */,
+				10FBBEBB2DF16830009D22C4 /* Storage in Frameworks */,
+				10FBBEB92DF16830009D22C4 /* Realtime in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +92,7 @@
 		98D294FE2DED1E4D008374A1 = {
 			isa = PBXGroup;
 			children = (
+				10FBBEBE2DF16AAC009D22C4 /* Config.xcconfig */,
 				98D295092DED1E4D008374A1 /* Eat the Alphabet */,
 				98D295172DED1E4E008374A1 /* Eat the AlphabetTests */,
 				98D295212DED1E4E008374A1 /* Eat the AlphabetUITests */,
@@ -112,6 +130,12 @@
 			);
 			name = "Eat the Alphabet";
 			packageProductDependencies = (
+				10FBBEB22DF16830009D22C4 /* Auth */,
+				10FBBEB42DF16830009D22C4 /* Functions */,
+				10FBBEB62DF16830009D22C4 /* PostgREST */,
+				10FBBEB82DF16830009D22C4 /* Realtime */,
+				10FBBEBA2DF16830009D22C4 /* Storage */,
+				10FBBEBC2DF16830009D22C4 /* Supabase */,
 			);
 			productName = "Eat the Alphabet";
 			productReference = 98D295072DED1E4D008374A1 /* Eat the Alphabet.app */;
@@ -195,6 +219,9 @@
 			);
 			mainGroup = 98D294FE2DED1E4D008374A1;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				10FBBEB12DF16830009D22C4 /* XCLocalSwiftPackageReference "../../../../liaoluxi/Downloads/supabase-swift-2.29.2" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 98D295082DED1E4D008374A1 /* Products */;
 			projectDirPath = "";
@@ -212,6 +239,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				10FBBEBF2DF16ABC009D22C4 /* Config.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -552,6 +580,40 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		10FBBEB12DF16830009D22C4 /* XCLocalSwiftPackageReference "../../../../liaoluxi/Downloads/supabase-swift-2.29.2" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../../../liaoluxi/Downloads/supabase-swift-2.29.2";
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		10FBBEB22DF16830009D22C4 /* Auth */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Auth;
+		};
+		10FBBEB42DF16830009D22C4 /* Functions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Functions;
+		};
+		10FBBEB62DF16830009D22C4 /* PostgREST */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PostgREST;
+		};
+		10FBBEB82DF16830009D22C4 /* Realtime */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Realtime;
+		};
+		10FBBEBA2DF16830009D22C4 /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Storage;
+		};
+		10FBBEBC2DF16830009D22C4 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 98D294FF2DED1E4D008374A1 /* Project object */;
 }
