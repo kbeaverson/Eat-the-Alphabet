@@ -23,7 +23,14 @@ struct HomeScreen: View {
             }
         }
         .tabViewStyle(.tabBarOnly)
+        .onAppear {
+            print("Home Screen Appeared")
+        }
+        .onDisappear {
+            print("Home Screen Disappeared")
+        }
     }
+        
     
     
 }
