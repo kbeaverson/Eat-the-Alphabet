@@ -63,17 +63,18 @@ struct RegisterView: View {
                     Toggle("I agree to the Terms and Conditions.", isOn: $agreedToTerms)
                         .toggleStyle(CheckboxToggleStyle())
                     
-                    Button("Register") {
+                    Button(action: {
                         print("Register tapped")
+                    }) {
+                        Text("Register")
+                            .font(.system(size: 18, weight: .bold, design: .monospaced))
+                            .frame(width: fieldWidth, height: 46)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(.buttonBg)
+                            )
+                            .foregroundStyle(.white)
                     }
-                    .frame(width: fieldWidth)
-                    .padding(12)
-                    .font(.system(size: 18, weight: .bold, design: .monospaced))
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(.buttonBg)
-                    )
-                    .tint(.white)
                 }
                 .padding(.horizontal, 40)
                 .onAppear { print("RegisterView appeared") }

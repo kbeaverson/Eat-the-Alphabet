@@ -20,7 +20,7 @@ struct PasswordRestoreView: View {
             BackgroundScaffold {
                 VStack(spacing: 20) {
                     Text("Password Restore")
-                        .font(.system(size: 36, weight: .bold, design: .monospaced))
+                        .font(.system(size: 32, weight: .bold, design: .monospaced))
                         .foregroundColor(.white)
                         .padding(.vertical, 40)
                     
@@ -66,17 +66,18 @@ struct PasswordRestoreView: View {
                                 .stroke(Color.gray.opacity(0.4), lineWidth: 1)
                         )
                     
-                    Button("Confirm") {
+                    Button(action: {
                         print("Restore password tapped")
+                    }) {
+                        Text("Confirm")
+                            .font(.system(size: 18, weight: .bold, design: .monospaced))
+                            .frame(width: fieldWidth, height: 46)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(.buttonBg) // ✅ use color asset by name
+                            )
+                            .foregroundStyle(.white) // ✅ replaces deprecated .foregroundColor
                     }
-                    .frame(width: fieldWidth)
-                    .padding(12)
-                    .font(.system(size: 18, weight: .bold, design: .monospaced))
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(.buttonBg)
-                    )
-                    .tint(.white)
                 }
                 .padding(.horizontal, 40)
                 .onAppear { print("PasswordRestoreView appeared") }

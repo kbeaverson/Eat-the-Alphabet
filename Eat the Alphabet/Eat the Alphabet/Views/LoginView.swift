@@ -14,7 +14,7 @@ struct LoginView: View {
 
     var body: some View {
         GeometryReader { geo in
-            let fieldWidth = geo.size.width - 160
+            let fieldWidth = geo.size.width * 0.6
             BackgroundScaffold {
                 VStack(spacing: 20) {
                     Text("Login")
@@ -40,36 +40,31 @@ struct LoginView: View {
                                 .stroke(Color.gray.opacity(0.4), lineWidth: 1)
                         )
                     
-                    Button("Sign in") {
-                        AuthService.shared.login(email: email, password: password) { result in
-                            switch result {
-                            case .success(let user):
-                                print("Logged in as \(user.email ?? "unknown")")
-                                appState.isAuthenticated = true
-                            case .failure(let error):
-                                print("Login error: \(error.localizedDescription)")
-                            }
-                        }
+                    Button(action: {
+                        mockLogin()
+                    }) {
+                        Text("Sign in")
+                            .font(.system(size: 18, weight: .bold, design: .monospaced))
+                            .frame(width: fieldWidth, height: 46)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(.buttonBg)
+                            )
+                            .foregroundStyle(.white)
                     }
-                        .frame(width: fieldWidth)
-                        .padding(12)
-                        .font(.system(size: 18, weight: .bold, design: .monospaced))
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(.buttonBg)
-                        )
-                        .tint(.white)
+
                     
-                    NavigationLink("Register", destination: RegisterView())
-                        .frame(width: fieldWidth)
-                        .padding(12)
-                        .font(.system(size: 18, weight: .bold, design: .monospaced))
-                        .cornerRadius(12)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(.buttonBg)
-                        )
-                        .tint(.white)
+                    NavigationLink(destination: RegisterView()) {
+                        Text("Register")
+                            .font(.system(size: 18, weight: .bold, design: .monospaced))
+                            .frame(width: fieldWidth, height: 46)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(.buttonBg)
+                            )
+                            .foregroundStyle(.white)
+                    }
+
                     
                     NavigationLink("Restore Password", destination: PasswordRestoreView())
                         .font(.system(size: 16, weight: .bold, design: .monospaced))
@@ -81,10 +76,19 @@ struct LoginView: View {
         }
     }
 
-//    func mockLogin() {
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-//            appState.isAuthenticated = true
+    func mockLogin() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            appState.isAuthenticated = true
+        }
+//        AuthService.shared.login(email: email, password: password) { result in
+//            switch result {
+//            case .success(let user):
+//                print("Logged in as \(user.email ?? "unknown")")
+//                appState.isAuthenticated = true
+//            case .failure(let error):
+//                print("Login error: \(error.localizedDescription)")
+//            }
 //        }
-//    }
+    }
 }
 
