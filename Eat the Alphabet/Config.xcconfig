@@ -1,0 +1,10 @@
+//
+//  Config.xcconfig
+//  Eat the Alphabet
+//
+//  Created by Ronald Liao on 2025/6/5.
+//
+
+SUPABASE_URL = https://nqbccjssatuslwcczbkd.supabase.co
+SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xYmNjanNzYXR1c2x3Y2N6YmtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkwMDQzMzMsImV4cCI6MjA2NDU4MDMzM30.Aeo3cmi9K48Csiw0zmlBcErItpXxQq0Cphisx_WC0Sc
+SUPABASE_SERVICE_ROLE_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xYmNjanNzYXR1c2x3Y2N6YmtkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTAwNDMzMywiZXhwIjoyMDY0NTgwMzMzfQ.dQj318o4IS_qUZW1emzMtLtECv0UWe8o32FZchWJE0Q
