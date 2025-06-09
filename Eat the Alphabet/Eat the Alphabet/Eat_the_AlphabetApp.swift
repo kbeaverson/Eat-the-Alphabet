@@ -11,7 +11,7 @@ import SwiftUI
 struct Eat_the_AlphabetApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HomeScreen()            
         }
     }
 }
