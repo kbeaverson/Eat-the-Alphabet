@@ -8,7 +8,7 @@ import Supabase
 import Foundation
 
 struct User: Codable {
-    let id: String
+    let id: String?
     let created_at: String?
     let address: String?
     

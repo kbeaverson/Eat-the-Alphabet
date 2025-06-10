@@ -10,7 +10,12 @@ import SwiftUI
 
 struct FriendsView: View {
     var body: some View {
-        Text("Friends View")
+        GeometryReader { geo in
+            let fieldWidth = geo.size.width * 0.6
+            BackgroundScaffold {
+                Text("Friends View")
+            }
+        }
     }
 }
 

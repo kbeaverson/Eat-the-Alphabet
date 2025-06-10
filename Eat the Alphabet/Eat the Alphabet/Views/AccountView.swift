@@ -10,7 +10,12 @@ import Supabase
 
 struct AccountView: View {
     var body: some View {
-        Text("Account View")
+        GeometryReader { geo in
+            let fieldWidth = geo.size.width * 0.6
+            BackgroundScaffold {
+                Text("Account View")
+            }
+        }
     }
 }
 

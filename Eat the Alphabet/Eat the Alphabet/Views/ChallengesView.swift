@@ -9,7 +9,12 @@ import SwiftUI
 
 struct ChallengesView: View {
     var body: some View {
-        Text("Challenges View")
+        GeometryReader { geo in
+            let fieldWidth = geo.size.width * 0.6
+            BackgroundScaffold {
+                Text("Challenges View")
+            }
+        }
     }
 }
 
