@@ -13,7 +13,7 @@ struct ContentView : View {
     var body : some View {
         NavigationStack {
             if appState.isAuthenticated {
-                MainView()
+                HomeScreen()
             } else {
                 LoginView()
             }

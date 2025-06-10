@@ -44,16 +44,16 @@ struct LoginView: View {
                     Button(action: {
                         print("Sign in pressed")
                         // TODO: replace with AuthService's varification function
-                        AuthService.shared.login(email: email, password: password) { result in
-                            switch result {
-                                case .success(let user):
-                                    print("Logged in as \(user.email ?? "unknown")")
-                                    appState.isAuthenticated = true
-                                case .failure(let error):
-                                    print("Login error: \(error.localizedDescription)")
-                                }
-                            }
-                        // mockLogin()
+//                        AuthService.shared.login(email: email, password: password) { result in
+//                            switch result {
+//                                case .success(let user):
+//                                    print("Logged in as \(user.email ?? "unknown")")
+//                                    appState.isAuthenticated = true
+//                                case .failure(let error):
+//                                    print("Login error: \(error.localizedDescription)")
+//                                }
+//                            }
+                        mockLogin()
                     }) {
                         Text("Sign in")
                             .font(.system(size: 18, weight: .bold, design: .monospaced))
@@ -89,10 +89,10 @@ struct LoginView: View {
         }
     }
 
-//    func mockLogin() {
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-//            appState.isAuthenticated = true
-//        }
-//    }
+    func mockLogin() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            appState.isAuthenticated = true
+        }
+    }
 }
 
