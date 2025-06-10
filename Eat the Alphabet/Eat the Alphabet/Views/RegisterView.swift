@@ -13,10 +13,13 @@ struct RegisterView: View {
     @State private var password = ""
     @State private var confirmPassword = ""
     @State private var agreedToTerms = false
+    
+    @State private var showAlert = false
+    @State private var alertMessage = ""
 
     var body: some View {
         GeometryReader { geo in
-            let fieldWidth = geo.size.width - 160
+            let fieldWidth = geo.size.width * 0.6
             BackgroundScaffold {
                 VStack(spacing: 20) {
                     Text("Register")
@@ -65,6 +68,35 @@ struct RegisterView: View {
                     
                     Button(action: {
                         print("Register tapped")
+                        // check if agreed to terms
+                        if (!agreedToTerms) {
+                            alertMessage = "You must agree to the terms and conditions."
+                            showAlert = true
+                            return
+                        }
+                        // check if passwords match
+                        if password != confirmPassword {
+                            alertMessage = "Passwords do not match."
+                            showAlert = true
+                            return
+                        }
+                        
+                        AuthService.shared.register(
+                            username: username,
+                            email: email,
+                            password: password
+                        ) { result in
+                            switch result {
+                            case .success(let user):
+                                print("Registered as \(user.email ?? "unknown")")
+                                // DO NOT Navigate to the main app view or show success message
+                            case .failure(let error):
+                                print("Registration error: \(error.localizedDescription)")
+                                alertMessage = "Registration failed: \(error.localizedDescription)"
+                                showAlert = true
+                            }
+                        }
+                        
                     }) {
                         Text("Register")
                             .font(.system(size: 18, weight: .bold, design: .monospaced))
@@ -75,9 +107,13 @@ struct RegisterView: View {
                             )
                             .foregroundStyle(.white)
                     }
+                    .alert(alertMessage, isPresented: $showAlert) {
+                        Button("OK", role: .cancel) { }
+                    }
                 }
                 .padding(.horizontal, 40)
                 .onAppear { print("RegisterView appeared") }
+                .onDisappear{ print("RegisterView disappeared") }
             }
         }
     }

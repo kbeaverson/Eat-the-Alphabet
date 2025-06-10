@@ -12,6 +12,7 @@ struct LoginView: View {
     @State private var email = ""
     @State private var password = ""
 
+    // TODO: why some
     var body: some View {
         GeometryReader { geo in
             let fieldWidth = geo.size.width * 0.6
@@ -41,7 +42,18 @@ struct LoginView: View {
                         )
                     
                     Button(action: {
-                        mockLogin()
+                        print("Sign in pressed")
+                        // TODO: replace with AuthService's varification function
+                        AuthService.shared.login(email: email, password: password) { result in
+                            switch result {
+                                case .success(let user):
+                                    print("Logged in as \(user.email ?? "unknown")")
+                                    appState.isAuthenticated = true
+                                case .failure(let error):
+                                    print("Login error: \(error.localizedDescription)")
+                                }
+                            }
+                        // mockLogin()
                     }) {
                         Text("Sign in")
                             .font(.system(size: 18, weight: .bold, design: .monospaced))
@@ -72,23 +84,15 @@ struct LoginView: View {
                 }
                 .padding(.horizontal, 40)
                 .onAppear { print("LoginView appeared") }
+                .onDisappear{ print("LoginView disappeared") }
             }
         }
     }
 
-    func mockLogin() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            appState.isAuthenticated = true
-        }
-//        AuthService.shared.login(email: email, password: password) { result in
-//            switch result {
-//            case .success(let user):
-//                print("Logged in as \(user.email ?? "unknown")")
-//                appState.isAuthenticated = true
-//            case .failure(let error):
-//                print("Login error: \(error.localizedDescription)")
-//            }
+//    func mockLogin() {
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+//            appState.isAuthenticated = true
 //        }
-    }
+//    }
 }
 

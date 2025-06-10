@@ -39,10 +39,16 @@ final class AuthService {
         }
     }
 
-    func register(email: String, password: String, completion: @escaping (Result<User, Error>) -> Void) {
+    func register(username: String, email: String, password: String, completion: @escaping (Result<User, Error>) -> Void) {
         Task {
             do {
-                let session = try await auth.signUp(email: email, password: password)
+                let session = try await auth.signUp(
+                    email: email,
+                    password: password,
+                    data: [
+                        "username": .string(username)
+                    ]
+                )
                 completion(.success(session.user))
             } catch {
                 completion(.failure(error))

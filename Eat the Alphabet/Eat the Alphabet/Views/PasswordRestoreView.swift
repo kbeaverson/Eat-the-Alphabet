@@ -16,7 +16,7 @@ struct PasswordRestoreView: View {
 
     var body: some View {
         GeometryReader { geo in
-            let fieldWidth = geo.size.width - 160
+            let fieldWidth = geo.size.width * 0.6
             BackgroundScaffold {
                 VStack(spacing: 20) {
                     Text("Password Restore")
@@ -74,13 +74,14 @@ struct PasswordRestoreView: View {
                             .frame(width: fieldWidth, height: 46)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(.buttonBg) // ✅ use color asset by name
+                                    .fill(.buttonBg)
                             )
-                            .foregroundStyle(.white) // ✅ replaces deprecated .foregroundColor
+                            .foregroundStyle(.white)
                     }
                 }
                 .padding(.horizontal, 40)
                 .onAppear { print("PasswordRestoreView appeared") }
+                .onDisappear { print("PasswordRestoreView disappeared") }
             }
         }
     }

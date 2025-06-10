@@ -18,9 +18,8 @@ struct Eat_the_AlphabetApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView().environmentObject(appState)
+            .onOpenURL { url in AuthService.shared.handleURL(url) /* ✅ forward to helper */ }
         }
-        .onOpenURL { url in
-                    AuthService.shared.handleURL(url) // ✅ forward to helper
-                }
+        
     }
 }
