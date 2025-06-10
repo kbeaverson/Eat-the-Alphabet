@@ -28,7 +28,7 @@ final class AuthService {
     
     private init() { }
     
-    func login(email: String, password: String, completion: @escaping (Result<User, Error>) -> Void) {
+    func login(email: String, password: String, completion: @escaping (Result<Auth.User, Error>) -> Void) {
         Task {
             do {
                 let session = try await auth.signIn(email: email, password: password)
@@ -39,7 +39,7 @@ final class AuthService {
         }
     }
 
-    func register(username: String, email: String, password: String, completion: @escaping (Result<User, Error>) -> Void) {
+    func register(username: String, email: String, password: String, completion: @escaping (Result<Auth.User, Error>) -> Void) {
         Task {
             do {
                 let session = try await auth.signUp(
