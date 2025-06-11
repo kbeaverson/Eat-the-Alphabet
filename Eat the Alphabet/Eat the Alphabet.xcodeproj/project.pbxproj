@@ -42,9 +42,33 @@
 		9F376B9C2DF6AEDC003A8EED /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		109299C72DF9549000CD60BD /* Exceptions for "Eat the Alphabet" folder in "Eat the Alphabet" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				MockedData/fakeRestaurants.json,
+			);
+			target = 98D295062DED1E4D008374A1 /* Eat the Alphabet */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		109299C82DF9549000CD60BD /* Exceptions for "Eat the Alphabet" folder in "Compile Sources" phase from "Eat the Alphabet" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 98D295032DED1E4D008374A1 /* Sources */;
+			membershipExceptions = (
+				MockedData/fakeRestaurants.json,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		98D295092DED1E4D008374A1 /* Eat the Alphabet */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				109299C72DF9549000CD60BD /* Exceptions for "Eat the Alphabet" folder in "Eat the Alphabet" target */,
+				109299C82DF9549000CD60BD /* Exceptions for "Eat the Alphabet" folder in "Compile Sources" phase from "Eat the Alphabet" target */,
+			);
 			path = "Eat the Alphabet";
 			sourceTree = "<group>";
 		};

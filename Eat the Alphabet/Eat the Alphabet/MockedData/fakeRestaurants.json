@@ -1,0 +1,49 @@
+//
+//  fakeRestaurants.json
+//  Eat the Alphabet
+//
+//  Created by Ronald Liao on 2025/6/11.
+//
+
+[
+  {
+    "id": "1",
+    "name": "Athens",
+    "cuisine": "Greek cuisine",
+    "distance": "3.7ml",
+    "imageName": "athens",
+    "details": "Lorem ipsum dolor sit amet..."
+  },
+  {
+    "id": "2",
+    "name": "Dheli",
+    "cuisine": "Indian cuisine",
+    "distance": "1.1ml",
+    "imageName": "dheli",
+    "details": "Spicy and flavorful dishes..."
+  },
+  {
+    "id": "3",
+    "name": "Hanoi",
+    "cuisine": "Vietnamese cuisine",
+    "distance": "2.5ml",
+    "imageName": "hanoi",
+    "details": "Fresh ingredients and herbs..."
+    },
+  {
+    "id": "4",
+    "name": "Fang's",
+    "cuisine": "Chinese cuisine",
+    "distance": "4.0ml",
+    "imageName": "fangs",
+    "details": "没什么，just方中山胡辣汤"
+    },
+  {
+    "id": "5",
+    "name": "Xavier's",
+    "cuisine": "French cuisine",
+    "distance": "2.8ml",
+    "imageName": "xaviers",
+    "details": "Elegant and sophisticated dishes..."
+}
+]
