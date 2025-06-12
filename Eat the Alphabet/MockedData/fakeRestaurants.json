@@ -1,17 +1,10 @@
-//
-//  fakeRestaurants.json
-//  Eat the Alphabet
-//
-//  Created by Ronald Liao on 2025/6/11.
-//
-
 [
   {
     "id": "1",
     "name": "Athens",
     "cuisine": "Greek cuisine",
     "distance": "3.7ml",
-    "imageName": "athens",
+    "imageUrl": "https://cdn.eathappyproject.com/wp-content/uploads/2021/10/Chinese-Cuisine.jpg",
     "details": "Lorem ipsum dolor sit amet..."
   },
   {
@@ -19,7 +12,7 @@
     "name": "Dheli",
     "cuisine": "Indian cuisine",
     "distance": "1.1ml",
-    "imageName": "dheli",
+    "imageUrl": "https://cdn.eathappyproject.com/wp-content/uploads/2021/10/Chinese-Cuisine.jpg",
     "details": "Spicy and flavorful dishes..."
   },
   {
@@ -27,23 +20,23 @@
     "name": "Hanoi",
     "cuisine": "Vietnamese cuisine",
     "distance": "2.5ml",
-    "imageName": "hanoi",
+    "imageUrl": "https://cdn.eathappyproject.com/wp-content/uploads/2021/10/Chinese-Cuisine.jpg",
     "details": "Fresh ingredients and herbs..."
-    },
+  },
   {
     "id": "4",
     "name": "Fang's",
     "cuisine": "Chinese cuisine",
     "distance": "4.0ml",
-    "imageName": "fangs",
-    "details": "没什么，just方中山胡辣汤"
-    },
+    "imageUrl": "https://cdn.eathappyproject.com/wp-content/uploads/2021/10/Chinese-Cuisine.jpg",
+    "details": "没什么，just。。。方中山胡辣汤"
+  },
   {
     "id": "5",
     "name": "Xavier's",
     "cuisine": "French cuisine",
     "distance": "2.8ml",
-    "imageName": "xaviers",
+    "imageUrl": "https://cdn.eathappyproject.com/wp-content/uploads/2021/10/Chinese-Cuisine.jpg",
     "details": "Elegant and sophisticated dishes..."
-}
+  }
 ]

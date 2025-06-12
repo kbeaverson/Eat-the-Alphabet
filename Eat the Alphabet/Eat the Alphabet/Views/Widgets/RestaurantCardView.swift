@@ -9,7 +9,7 @@ import SwiftUI
 import UIKit
 
 struct RestaurantListItem: Identifiable, Decodable {
-    let id: Int
+    let id: String
     let name: String
     let cuisine: String
     let distance: String
@@ -24,6 +24,7 @@ struct RestaurantCardView: View {
     
     @State private var loadedImage: Image? = nil
     @State private var bgColor: Color = .restaurantListItemDefault
+    
     var body: some View {
         HStack {
             loadedImage?
