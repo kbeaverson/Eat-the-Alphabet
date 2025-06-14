@@ -21,18 +21,18 @@ struct RestaurantListItem: Identifiable, Decodable {
 struct RestaurantCardView: View {
     let restaurant: RestaurantListItem
     @Binding var isSelected: Bool
+    var isSelectionModeOn: Bool = false
     
     @State private var loadedImage: Image? = nil
-    @State private var bgColor: Color = .restaurantListItemDefault
+    @State private var bgColor: Color = .restaurantListItemDefault // NOTE: if not manually set, it will be the default color
     
     var body: some View {
         HStack {
             loadedImage?
                 .resizable()
                 .scaledToFill()
-                .frame(width: 60, height: 60)
+                .frame(width: 80, height: 80)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
-                .padding(.leading, 8)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(restaurant.name)
@@ -46,36 +46,27 @@ struct RestaurantCardView: View {
                         .font(.caption)
                 }
             }
-            .foregroundColor(.secondary) // TODO: this is font color, might need to change
-            .padding(.leading, 8)
+            .foregroundColor(.defaultText) // TODO: this is font color, might need to change
+            //.padding(.leading, 8)
 
             Spacer()
-
-            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                .resizable()
+            // TODO: hide checkbox when not in selection mode
+            Toggle("", isOn: $isSelected)
+                .toggleStyle(CheckboxToggleStyle())
                 .frame(width: 24, height: 24)
                 .padding(.trailing, 12)
         }
-        .padding(.vertical, 8)
-        .background(bgColor) // TODO: change to UIKit image average color
+        .background(bgColor) // changed to UIKit image average color
         .cornerRadius(12)
         // TODO: long-press to show more information
         .contextMenu {
-            VStack(alignment: .leading) {
-                Text(restaurant.name)
-                    .font(.title2.bold())
-                Text(restaurant.cuisine)
-                    .font(.subheadline)
-                Text("📍 \(restaurant.distance)")
-                    .font(.footnote)
-                Divider()
+//            VStack(alignment: .leading) {
                 Text(restaurant.details)
                     .font(.footnote)
                     .multilineTextAlignment(.leading)
-            }
-            .padding()
+                    .padding(8)
+//            }
         }
-        .padding(.horizontal)
         .onAppear {
             loadImageAndColor(from: restaurant.imageUrl)
         }
@@ -95,7 +86,7 @@ struct RestaurantCardView: View {
             
             DispatchQueue.main.async {
                 self.loadedImage = image
-                self.bgColor = color.opacity(0.15)
+                self.bgColor = color.opacity(1.0)
             }
         }
     }

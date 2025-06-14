@@ -11,7 +11,7 @@ struct BackgroundScaffold<Content: View>: View {
 
     var body: some View {
         ZStack {
-            Color("AppBackground")
+            Color(.appBackground)
                 .ignoresSafeArea()
             content()
         }

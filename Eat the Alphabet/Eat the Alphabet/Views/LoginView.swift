@@ -15,7 +15,7 @@ struct LoginView: View {
     // TODO: why some
     var body: some View {
         GeometryReader { geo in
-            let fieldWidth = geo.size.width * 0.6
+            let buttonWidth = geo.size.width * 0.6
             BackgroundScaffold {
                 VStack(spacing: 20) {
                     Text("Login")
@@ -57,7 +57,7 @@ struct LoginView: View {
                     }) {
                         Text("Sign in")
                             .font(.system(size: 18, weight: .bold, design: .monospaced))
-                            .frame(width: fieldWidth, height: 46)
+                            .frame(width: buttonWidth, height: 46)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
                                     .fill(.buttonBg)
@@ -69,7 +69,7 @@ struct LoginView: View {
                     NavigationLink(destination: RegisterView()) {
                         Text("Register")
                             .font(.system(size: 18, weight: .bold, design: .monospaced))
-                            .frame(width: fieldWidth, height: 46)
+                            .frame(width: buttonWidth, height: 46)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
                                     .fill(.buttonBg)

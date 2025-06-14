@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO: this is macOS checkbox style
 struct CheckboxToggleStyle: ToggleStyle {
     func makeBody(configuration: Configuration) -> some View {
         Button(action: { configuration.isOn.toggle() }) {

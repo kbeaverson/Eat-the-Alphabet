@@ -19,7 +19,7 @@ struct RegisterView: View {
 
     var body: some View {
         GeometryReader { geo in
-            let fieldWidth = geo.size.width * 0.6
+            let buttonWidth = geo.size.width * 0.6
             BackgroundScaffold {
                 VStack(spacing: 20) {
                     Text("Register")
@@ -100,7 +100,7 @@ struct RegisterView: View {
                     }) {
                         Text("Register")
                             .font(.system(size: 18, weight: .bold, design: .monospaced))
-                            .frame(width: fieldWidth, height: 46)
+                            .frame(width: buttonWidth, height: 46)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
                                     .fill(.buttonBg)
