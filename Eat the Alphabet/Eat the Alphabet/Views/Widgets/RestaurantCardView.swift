@@ -8,20 +8,12 @@
 import SwiftUI
 import UIKit
 
-struct RestaurantListItem: Identifiable, Decodable {
-    let id: String
-    let name: String
-    let cuisine: String
-    let distance: String
-    let imageUrl: String
-    let details: String
-    // TODO: image color
-}
-
 struct RestaurantCardView: View {
-    let restaurant: RestaurantListItem
+    let restaurant: RestaurantViewModel
     @Binding var isSelected: Bool
     var isSelectionModeOn: Bool = false
+    
+    var onTap: (() -> Void)? = nil // for tap handling
     
     @State private var loadedImage: Image? = nil
     @State private var bgColor: Color = .restaurantListItemDefault // NOTE: if not manually set, it will be the default color
@@ -58,17 +50,22 @@ struct RestaurantCardView: View {
         }
         .background(bgColor) // changed to UIKit image average color
         .cornerRadius(12)
-        // TODO: long-press to show more information
+        .onAppear {
+            loadImageAndColor(from: restaurant.imageUrl)
+        }
+        // long-press to show additional information
         .contextMenu {
-//            VStack(alignment: .leading) {
+            VStack(alignment: .leading) {
                 Text(restaurant.details)
                     .font(.footnote)
                     .multilineTextAlignment(.leading)
                     .padding(8)
-//            }
+            }
         }
-        .onAppear {
-            loadImageAndColor(from: restaurant.imageUrl)
+        .onTapGesture {
+            if !isSelectionModeOn {
+                onTap?()
+            }
         }
     }
     

@@ -20,7 +20,10 @@ struct RestaurantListView: View {
     @State private var isSelectionModeOn: Bool = false
     @State private var selectedIds: Set<String> = []
     
-    @State private var restaurants: [RestaurantListItem] = []
+    // The one restaurant that actually navigated into
+    @State private var selectedRestaurant: RestaurantViewModel? = nil
+    
+    @State private var restaurants: [RestaurantViewModel] = []
     
     var body: some View {
         GeometryReader { geo in
@@ -43,7 +46,10 @@ struct RestaurantListView: View {
                                         }
                                     }
                                 ),
-                                isSelectionModeOn: isSelectionModeOn
+                                isSelectionModeOn: isSelectionModeOn,
+                                onTap: {
+                                    selectedRestaurant = restaurant // set the
+                                }
                             )
                             .listRowBackground(Color.clear) // transparent background
                             .listRowSeparator(.hidden)
@@ -88,17 +94,21 @@ struct RestaurantListView: View {
             .toolbarBackground(.appBackground, for: .navigationBar) // set color to toolbar
             // .toolbarBackground(.visible, for: .navigationBar) // force make the toolbar visible?
         }
+        .sheet(item: $selectedRestaurant) { restaurant in
+            RestaurantDetailView(restaurant: restaurant)
+                .presentationDetents([.medium, .large]) // drawer-style
+                .presentationDragIndicator(.visible)
+        }
     }
     
-    func loadMockedRestaurants() -> [RestaurantListItem] {
+    func loadMockedRestaurants() -> [RestaurantViewModel] {
         guard let url = Bundle.main.url(forResource: "fakeRestaurants", withExtension: "json") else {
             fatalError("fakeRestaurants.json not found")
         }
-        
         do {
             let data = try Data(contentsOf: url)
             let decoder = JSONDecoder()
-            return try decoder.decode([RestaurantListItem].self, from: data)
+            return try decoder.decode([RestaurantViewModel].self, from: data)
         } catch {
             print("❌ JSON decode error: \(error)")
             if let jsonString = String(data: try! Data(contentsOf: url), encoding: .utf8) {
