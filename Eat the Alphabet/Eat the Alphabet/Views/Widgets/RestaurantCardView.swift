@@ -43,10 +43,12 @@ struct RestaurantCardView: View {
 
             Spacer()
             // TODO: hide checkbox when not in selection mode
-            Toggle("", isOn: $isSelected)
-                .toggleStyle(CheckboxToggleStyle())
-                .frame(width: 24, height: 24)
-                .padding(.trailing, 12)
+            if (isSelectionModeOn) {
+                Toggle("", isOn: $isSelected)
+                    .toggleStyle(CheckboxToggleStyle())
+                    .frame(width: 24, height: 24)
+                    .padding(.trailing, 12)
+            }
         }
         .background(bgColor) // changed to UIKit image average color
         .cornerRadius(12)
