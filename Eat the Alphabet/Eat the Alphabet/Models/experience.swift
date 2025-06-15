@@ -8,7 +8,7 @@ import Foundation
 import SwiftUICore
 
 class Experience {
-    let id : Int
+    let id : String
     var users : [User]
     var restaurant : Restaurant
     let challenge : Challenge
@@ -17,7 +17,7 @@ class Experience {
     let letter : Character
     var photos : [Image]
     
-    init(id: Int, users: [User], restaurant: Restaurant, challenge: Challenge, reviews: [Review], date: Date, letter: Character, photos: [Image]) {
+    init(id: String, users: [User], restaurant: Restaurant, challenge: Challenge, reviews: [Review], date: Date, letter: Character, photos: [Image]) {
         self.id = id
         self.users = users
         self.restaurant = restaurant

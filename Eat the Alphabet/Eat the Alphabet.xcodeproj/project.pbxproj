@@ -42,6 +42,26 @@
 		9F376B9C2DF6AEDC003A8EED /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		10020FD12DFE41C600D22464 /* Exceptions for "Eat the Alphabet" folder in "Eat the Alphabet" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				.Info.plist,
+			);
+			target = 98D295062DED1E4D008374A1 /* Eat the Alphabet */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		10020FD22DFE41C600D22464 /* Exceptions for "Eat the Alphabet" folder in "Compile Sources" phase from "Eat the Alphabet" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 98D295032DED1E4D008374A1 /* Sources */;
+			membershipExceptions = (
+				.Info.plist,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		10929A122DFA4C2700CD60BD /* MockedData */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -50,6 +70,10 @@
 		};
 		98D295092DED1E4D008374A1 /* Eat the Alphabet */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				10020FD12DFE41C600D22464 /* Exceptions for "Eat the Alphabet" folder in "Eat the Alphabet" target */,
+				10020FD22DFE41C600D22464 /* Exceptions for "Eat the Alphabet" folder in "Compile Sources" phase from "Eat the Alphabet" target */,
+			);
 			path = "Eat the Alphabet";
 			sourceTree = "<group>";
 		};
@@ -438,6 +462,13 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Eat-the-Alphabet-Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We use your camera to take pictures.";
+				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We use your location to help you even in the background.";
+				INFOPLIST_KEY_NSLocationTemporaryUsageDescriptionDictionary = "We temperarily need your location to show nearby restaurants.";
+				INFOPLIST_KEY_NSLocationUsageDescription = "We need your location to show nearby restaurants.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need to know when you location is in use to coordinate our usage.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "We use your motion data for step tracking.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -468,6 +499,13 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Eat-the-Alphabet-Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We use your camera to take pictures.";
+				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We use your location to help you even in the background.";
+				INFOPLIST_KEY_NSLocationTemporaryUsageDescriptionDictionary = "We temperarily need your location to show nearby restaurants.";
+				INFOPLIST_KEY_NSLocationUsageDescription = "We need your location to show nearby restaurants.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need to know when you location is in use to coordinate our usage.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "We use your motion data for step tracking.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

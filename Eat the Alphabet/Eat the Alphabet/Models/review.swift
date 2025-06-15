@@ -9,13 +9,13 @@ import Foundation
 
 class Review {
     let user : User
-    let id : Int
+    let id : String
     var date : Date
     var review : String
     var rating : Int
     var order : String
     
-    init(user: User, id: Int, date: Date, review: String, rating: Int, order: String) {
+    init(user: User, id: String, date: Date, review: String, rating: Int, order: String) {
         self.user = user
         self.id = id
         self.date = date

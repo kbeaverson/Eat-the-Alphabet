@@ -3,7 +3,7 @@
     "id": "1",
     "name": "Athens",
     "cuisine": "Greek cuisine",
-    "distance": "3.7ml",
+    "distance": 3.7,
     "imageUrl": "https://cdn.eathappyproject.com/wp-content/uploads/2021/10/Chinese-Cuisine.jpg",
     "details": "Lorem ipsum dolor sit amet..."
   },
@@ -11,7 +11,7 @@
     "id": "2",
     "name": "Dheli",
     "cuisine": "Indian cuisine",
-    "distance": "1.1ml",
+    "distance": 1.1,
     "imageUrl": "https://cdn.eathappyproject.com/wp-content/uploads/2021/10/Chinese-Cuisine.jpg",
     "details": "Spicy and flavorful dishes..."
   },
@@ -19,7 +19,7 @@
     "id": "3",
     "name": "Hanoi",
     "cuisine": "Vietnamese cuisine",
-    "distance": "2.5ml",
+    "distance": 2.5,
     "imageUrl": "https://cdn.eathappyproject.com/wp-content/uploads/2021/10/Chinese-Cuisine.jpg",
     "details": "Fresh ingredients and herbs..."
   },
@@ -27,7 +27,7 @@
     "id": "4",
     "name": "Fang's",
     "cuisine": "Chinese cuisine",
-    "distance": "4.0ml",
+    "distance": 4.0,
     "imageUrl": "https://cdn.eathappyproject.com/wp-content/uploads/2021/10/Chinese-Cuisine.jpg",
     "details": "没什么，just。。。方中山胡辣汤"
   },
@@ -35,7 +35,7 @@
     "id": "5",
     "name": "Xavier's",
     "cuisine": "French cuisine",
-    "distance": "2.8ml",
+    "distance": 2.8,
     "imageUrl": "https://cdn.eathappyproject.com/wp-content/uploads/2021/10/Chinese-Cuisine.jpg",
     "details": "Elegant and sophisticated dishes..."
   }

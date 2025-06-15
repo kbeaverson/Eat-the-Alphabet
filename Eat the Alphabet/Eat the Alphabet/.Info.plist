@@ -1,0 +1,10 @@
+{
+	"NSUserNotificationUsageDescription" = "We send notifications to keep you informed.";
+	"NSBluetoothAlwaysUsageDescription" = "We use Bluetooth to detect nearby devices.";
+	"NSMotionUsageDescription" = "We use your motion data for step tracking.";
+	"NSMicrophoneUsageDescription" = "We use your microphone for voice input.";
+	"NSPhotoLibraryUsageDescription" = "We need photo access to upload your profile picture.";
+	"NSCameraUsageDescription" = "We use your camera to take pictures.";
+	"NSLocationAlwaysAndWhenInUseUsageDescription" = "We use your location to help you even in the background.";
+	"NSLocationWhenInUseUsageDescription" = "We need your location to show nearby restaurants.";
+}

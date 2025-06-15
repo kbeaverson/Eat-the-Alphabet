@@ -7,8 +7,12 @@
 
 
 import SwiftUI
+import CoreLocation
 
 struct RestaurantListView: View {
+    // request permission
+    @StateObject private var permissionManager = PermissionManager.shared
+
     //    @Environment(\.dismiss) var dismiss // ?
     //    @EnvironmentObject var appState: AppState //
     
@@ -56,8 +60,25 @@ struct RestaurantListView: View {
                         }
                     }
                     .onAppear {
+                        permissionManager.requestLocationPermission()
                         // TODO: reaplace with real pulling function
                         restaurants = loadMockedRestaurants()
+                        // TODO: MOCKED database -restaurant-> Restaurant object -> RestaurantViewModel
+                        let mockedRestaurant: Restaurant = Restaurant(
+                            id: "999",
+                            name: "Mocked Restaurant",
+                            cuisine: "Mocked Cuisine",
+                            price: 20,
+                            rating: 4.5,
+                            address: CLLocationCoordinate2D(latitude: 34.7266, longitude: 117.6279)
+                        )
+                        // Request location permission and get location?
+                        let userLocation = permissionManager.currentLocation
+                        // to RestaurantViewModel
+                        let mockedRestaurantViewModel = RestaurantViewModel(restaurant: mockedRestaurant, userLocation: userLocation)
+                        // append to the list
+                        restaurants.append(mockedRestaurantViewModel)
+                        print("Mocked restaurant added")
                     }
                     .scrollContentBackground(.hidden) // hide list background
                     .listRowSpacing(10) // remove the default padding
@@ -96,7 +117,7 @@ struct RestaurantListView: View {
         }
         .sheet(item: $selectedRestaurant) { restaurant in
             RestaurantDetailView(restaurant: restaurant)
-                .presentationDetents([.medium, .large]) // drawer-style
+                .presentationDetents([.large]) // drawer-style
                 .presentationDragIndicator(.visible)
         }
     }

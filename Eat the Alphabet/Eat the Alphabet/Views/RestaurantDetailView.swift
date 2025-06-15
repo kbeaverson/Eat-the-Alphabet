@@ -29,7 +29,11 @@ struct RestaurantDetailView: View {
                     Text(restaurant.cuisine)
                         .font(.headline)
                     Spacer()
-                    Label(restaurant.distance, systemImage: "mappin.and.ellipse")
+                    Label(
+                        restaurant.distance != nil
+                            ? String(format: "%.1f km", restaurant.distance!)
+                            : "Distance unknown",
+                        systemImage: "mappin.and.ellipse")
                         .font(.caption)
                 }
                 .padding(.horizontal)
@@ -42,7 +46,7 @@ struct RestaurantDetailView: View {
                 }
                 .padding(.horizontal)
 
-                Text(restaurant.details)
+                Text(restaurant.details ?? "No details available")
                     .font(.body)
                     .padding(.horizontal)
 
@@ -77,7 +81,10 @@ struct RestaurantDetailView: View {
     }
     
     private func loadImage() {
-        guard let url = URL(string: restaurant.imageUrl) else { return }
+        // guard let url = URL(string: restaurant.imageUrl) else { return }
+        guard let urlString =  restaurant.imageUrl,
+            !urlString.isEmpty,
+            let url = URL(string: urlString) else { return }
         DispatchQueue.global().async {
             if let data = try? Data(contentsOf: url),
                let uiImage = UIImage(data: data) {
