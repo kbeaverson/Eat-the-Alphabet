@@ -19,9 +19,10 @@ class Review {
         self.user = user
         self.id = id
         self.date = date
-        self.review = review
+        // NOTE: consier adding a title? (Eg. App Store reviews) NOT NULLABLE
+        self.review = review 
         self.rating = rating
-        self.order = order
+        self.order = order // NOTE: what is this? The ordered food items?
     }
     
     func addReview(reviewText : String) {

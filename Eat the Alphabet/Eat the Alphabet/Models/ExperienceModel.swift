@@ -24,8 +24,8 @@ class Experience {
         self.challenge = challenge
         self.reviews = reviews
         self.date = date
-        self.letter = letter
-        self.photos = photos
+        self.letter = letter // NOTE: probably not necessary (can be inferred from the restaurant name)
+        self.photos = photos // NOTE: consider changing into list of URLs instead of Image objects, or a review_images [id: UUID, review_id: UUID, imageUrl: text] table
     }
     
     func addPhoto(_ photo: Image) {

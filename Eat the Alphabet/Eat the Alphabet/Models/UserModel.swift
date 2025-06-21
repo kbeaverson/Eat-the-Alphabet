@@ -15,8 +15,12 @@ struct User: Codable {
     // Added by Liao
     init(from supabaseUser: Auth.User) {
         self.id = supabaseUser.id.uuidString
-        // self.email = supabaseUser.email
         self.created_at = nil
+        // NOTE: consider adding a username for @ing NOT NULLABLE
+        // NOTE: consider adding a display name NULLABLE
+        // NOTE: consider add a profile image URL NULLABLE
+        // NOTE: consider adding a phone number NULLABLE
+        // NOTE: consider adding a self.email = supabaseUser.email NULLABLE
         self.address = nil
     }
 
