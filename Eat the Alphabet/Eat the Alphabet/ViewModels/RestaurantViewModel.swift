@@ -7,6 +7,7 @@
 import SwiftUI
 import CoreLocation
 
+// NOTE: RestaurantViewModel is a view model for the Restaurant model, it contains UI related data and logic.
 struct RestaurantViewModel: Identifiable, Decodable {
     let id: String
     let name: String
@@ -21,7 +22,7 @@ struct RestaurantViewModel: Identifiable, Decodable {
         self.id = restaurant.id
         self.name = restaurant.name
         self.cuisine = restaurant.cuisine
-        self.details = restaurant.details// TODO: add details to the database table and model
+        self.details = restaurant.details// FIXME: add details to the database table and model
         self.imageUrl = restaurant.imageUrl
         if let userCoord = userLocation {
             self.distance = RestaurantViewModel.getDistanceInKm(

@@ -26,7 +26,7 @@ class Challenge {
         self.restaurants = restaurants
         self.participants = participants
         self.experiences = experiences
-        self.remainingLetters = remainingLetters
+        self.remainingLetters = remainingLetters // NOTE: this can be inferred from another table (potentially "challenges_restaurants", etc.), instead of using a list of characters
     }
     
     func addUser(_ user: User) {
