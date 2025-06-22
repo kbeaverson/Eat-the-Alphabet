@@ -30,6 +30,21 @@ struct RestaurantListView: View {
     @State private var restaurants: [RestaurantViewModel] = []
     
     var body: some View {
+        Group {
+            if permissionManager.locationAuthorization == .authorizedWhenInUse ||
+               permissionManager.locationAuthorization == .authorizedAlways {
+                contentView
+            } else {
+                ProgressView("Requesting Location Permission...")
+                    .onAppear {
+                        permissionManager.requestLocationPermission()
+                    }
+            }
+        }
+    }
+
+    
+    var contentView: some View {
         GeometryReader { geo in
             BackgroundScaffold {
                 ScrollView{
@@ -60,7 +75,7 @@ struct RestaurantListView: View {
                         }
                     }
                     .onAppear {
-                        permissionManager.requestLocationPermission()
+                        // permissionManager.requestLocationPermission()
                         // TODO: reaplace with real pulling function
                         restaurants = loadMockedRestaurants()
                         // TODO: MOCKED database -restaurant-> Restaurant object -> RestaurantViewModel
