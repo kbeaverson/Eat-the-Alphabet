@@ -27,7 +27,10 @@ struct RestaurantViewModel: Identifiable, Decodable {
         if let userCoord = userLocation {
             self.distance = RestaurantViewModel.getDistanceInKm(
                 selfCoord2d: userCoord,
-                targetCoord2d: restaurant.address
+                targetCoord2d: CLLocationCoordinate2D(
+                    latitude: restaurant.address.latitude,
+                    longitude: restaurant.address.longitude
+                )
             )
         } else {
             self.distance = nil

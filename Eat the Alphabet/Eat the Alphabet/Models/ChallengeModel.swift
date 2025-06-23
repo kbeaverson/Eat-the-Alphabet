@@ -29,29 +29,29 @@ class Challenge {
         self.remainingLetters = remainingLetters // NOTE: this can be inferred from another table (potentially "challenges_restaurants", etc.), instead of using a list of characters
     }
     
-    func addUser(_ user: User) {
-        participants.append(user)
-    }
-    
-    func setTitle(_ title: String) {
-        self.title = title
-    }
-    
-    func setAddress(_ address: CLLocationCoordinate2D) {
-        self.address = address
-    }
-    
-    func setRadius(_ radius: Float) {
-        self.radius = radius
-    }
-    
-    func addExperience(_ experience: Experience) {
-        experiences.append(experience)
-    }
-    
-    func removeLetter(_ letter: Character) {
-        if let index = remainingLetters.firstIndex(of: letter) {
-            remainingLetters.remove(at: index)
-        }
-    }
+//    func addUser(_ user: User) {
+//        participants.append(user)
+//    }
+//    
+//    func setTitle(_ title: String) {
+//        self.title = title
+//    }
+//    
+//    func setAddress(_ address: CLLocationCoordinate2D) {
+//        self.address = GeoPoint(address)
+//    }
+//    
+//    func setRadius(_ radius: Float) {
+//        self.radius = radius
+//    }
+//    
+//    func addExperience(_ experience: Experience) {
+//        experiences.append(experience)
+//    }
+//    
+//    func removeLetter(_ letter: Character) {
+//        if let index = remainingLetters.firstIndex(of: letter) {
+//            remainingLetters.remove(at: index)
+//        }
+//    }
 }

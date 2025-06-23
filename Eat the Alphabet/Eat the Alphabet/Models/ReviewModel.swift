@@ -25,15 +25,15 @@ class Review {
         self.order = order // NOTE: what is this? The ordered food items?
     }
     
-    func addReview(reviewText : String) {
-        review = reviewText;
-    }
-    
-    func addRating(ratingValue : Int) {
-        rating = ratingValue;
-    }
-    
-    func addOrder(orderText : String) {
-        order = orderText;
-    }
+//    func addReview(reviewText : String) {
+//        review = reviewText;
+//    }
+//    
+//    func addRating(ratingValue : Int) {
+//        rating = ratingValue;
+//    }
+//    
+//    func addOrder(orderText : String) {
+//        order = orderText;
+//    }
 }

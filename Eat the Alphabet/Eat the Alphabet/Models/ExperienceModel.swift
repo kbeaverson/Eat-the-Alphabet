@@ -28,19 +28,19 @@ class Experience {
         self.photos = photos // NOTE: consider changing into list of URLs instead of Image objects, or a review_images [id: UUID, review_id: UUID, imageUrl: text] table
     }
     
-    func addPhoto(_ photo: Image) {
-        self.photos.append(photo)
-    }
-    
-    func removePhoto(at index: Int) {
-        self.photos.remove(at: index)
-    }
-    
-    func addReview(_ review: Review) {
-        self.reviews.append(review)
-    }
-    
-    func addUser(_ user: User) {
-        self.users.append(user)
-    }
+//    func addPhoto(_ photo: Image) {
+//        self.photos.append(photo)
+//    }
+//    
+//    func removePhoto(at index: Int) {
+//        self.photos.remove(at: index)
+//    }
+//    
+//    func addReview(_ review: Review) {
+//        self.reviews.append(review)
+//    }
+//    
+//    func addUser(_ user: User) {
+//        self.users.append(user)
+//    }
 }

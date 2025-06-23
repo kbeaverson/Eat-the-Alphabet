@@ -21,15 +21,27 @@ class RestaurantRepository {
         }
     }
 
-    func addRestaurant(_ restaurant: Restaurant) {
-        // TODO: add restaurant to the database
+//    func addRestaurant(_ restaurant: Restaurant) {
+//        // TODO: add restaurant to the database
+//    }
+    func addRestaurant(_ restaurant: Restaurant, completion: @escaping (Result<Void, Error>) -> Void) {
+        // Simulate adding a restaurant to the database
+        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
+            completion(.success(())) // Simulate success
+        }
     }
-    
-    func deleteRestaurant(by id: String) {
+        
+    func deleteRestaurant(by id: String, completion: @escaping (Result<Void, Error>) -> Void) {
         // TODO: delete restaurant by ID from the database
+        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
+            completion(.success(())) // Simulate success
+        }
     }
     
-    func updateRestaurant(_ restaurant: Restaurant) {
+    func updateRestaurant(_ restaurant: Restaurant, completion: @escaping (Result<Void, Error>) -> Void) {
         // TODO: update restaurant in the database with the provided restaurant object
+        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
+            completion(.success(())) // Simulate success
+        }
     }
 }
