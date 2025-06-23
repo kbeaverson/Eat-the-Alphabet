@@ -8,7 +8,7 @@ import SwiftUI
 import CoreLocation
 
 // NOTE: RestaurantViewModel is a view model for the Restaurant model, it contains UI related data and logic.
-struct RestaurantViewModel: Identifiable, Decodable {
+class RestaurantViewModel: ObservableObject {
     let id: String
     let name: String
     let cuisine: String
