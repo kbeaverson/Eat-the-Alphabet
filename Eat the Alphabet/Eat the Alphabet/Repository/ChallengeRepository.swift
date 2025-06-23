@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-class ChallengeRepository: ObservableObject {
+class ChallengeRepository {
     func addUser(_ user: User, completion: @escaping (Result<Void, Error>) -> Void) {
         // participants.append(user)
         DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
