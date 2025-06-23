@@ -9,7 +9,7 @@ import CoreLocation
 class Challenge {
     let id : String
     var title : String
-    var address : CLLocationCoordinate2D
+    var address : GeoPoint
     var radius : Float
     let createDate : Date
     var restaurants : [Restaurant]
@@ -20,7 +20,7 @@ class Challenge {
     init(id: String, title: String, address: CLLocationCoordinate2D, radius: Float, createDate: Date, restaurants: [Restaurant], participants: [User], experiences: [Experience], remainingLetters: [Character]) {
         self.id = id
         self.title = title
-        self.address = address
+        self.address = GeoPoint(address)
         self.radius = radius
         self.createDate = createDate
         self.restaurants = restaurants
