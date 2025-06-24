@@ -9,7 +9,7 @@ import SwiftUI
 import CoreLocation
 
 struct ChallengesView: View {
-    @State private var challenges = [ChallengeViewModel]()
+    @State private var challenges: [ChallengeViewModel] = []
 
     var body: some View {
         GeometryReader { geo in
