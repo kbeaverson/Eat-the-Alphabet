@@ -8,14 +8,14 @@ import SwiftUI
 import CoreLocation
 
 // NOTE: RestaurantViewModel is a view model for the Restaurant model, it contains UI related data and logic.
-class RestaurantViewModel: ObservableObject {
-    let id: String
-    let name: String
-    let cuisine: String
-    let distance: Double? // NOTE: distance in kilometers
-    let imageUrl: String?
-    let details: String?
-    // image color tint is calculated from the image
+struct RestaurantViewModel: Identifiable {
+    // private let restaurantRepository: RestaurantRepository = RestaurantRepository()
+    var id: String
+    var name: String
+    var cuisine: String
+    var details: String?
+    var imageUrl: String?
+    var distance: Double? // distance in km from user location, nil if not available
     
     // mapping database model to view model
     init(restaurant: Restaurant, userLocation: CLLocationCoordinate2D?) {
