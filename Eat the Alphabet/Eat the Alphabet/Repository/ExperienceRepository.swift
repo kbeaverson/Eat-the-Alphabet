@@ -10,31 +10,32 @@ import Foundation
 import SwiftUICore
 
 class ExperienceRepository {
-    func addPhoto(_ photo: Image, completion: @escaping (Result<Void, Error>) -> Void) {
-        // self.photos.append(photo)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            completion(.success(()))
+    func createExperience(experience : Experience, completion: @escaping (Result<String, Error>) -> Void) {
+        // FIXME: Create new experience in supabase
+        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
+            completion(.success((""))) // Simulate success
         }
     }
     
-    func removePhoto(at index: Int, completion: @escaping (Result<Void, Error>) -> Void) {
-        // self.photos.remove(at: index)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            completion(.success(()))
+    // FIXME: Return [Challenge]
+    func fetchAllExperiences(user : User, completion: @escaping (Result<String, Error>) -> Void) {
+        // FIXME: Get list of all experiences for a given user
+        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
+            completion(.success((""))) // Simulate success
         }
     }
     
-    func addReview(_ review: Review, completion: @escaping (Result<Void, Error>) -> Void) {
-        // self.reviews.append(review)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            completion(.success(()))
+    func updateExperience(expereience : Experience, completion: @escaping (Result<String, Error>) -> Void) {
+        // FIXME: Update experience with corresponding id in supabase
+        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
+            completion(.success((""))) // Simulate success
         }
     }
     
-    func addUser(_ user: User, completion: @escaping (Result<Void, Error>) -> Void) {
-        // self.users.append(user)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            completion(.success(()))
+    func deleteExperience(experience : Experience, completion: @escaping (Result<String, Error>) -> Void) {
+        // FIXME: Delete experience with corresponding id from supabase
+        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
+            completion(.success((""))) // Simulate success
         }
     }
 }
