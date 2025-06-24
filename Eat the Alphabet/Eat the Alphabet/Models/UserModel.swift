@@ -7,7 +7,7 @@
 import Supabase
 import Foundation
 
-struct User: Codable {
+struct User: Codable, Identifiable {
     let id: String?
     let created_at: String?
     let address: String?

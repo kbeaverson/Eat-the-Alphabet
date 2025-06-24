@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Review {
+struct Review: Codable, Identifiable {
     let user : User
     let id : String
     var date : Date
@@ -20,20 +20,8 @@ class Review {
         self.id = id
         self.date = date
         // NOTE: consier adding a title? (Eg. App Store reviews) NOT NULLABLE
-        self.review = review 
+        self.review = review
         self.rating = rating
         self.order = order // NOTE: what is this? The ordered food items?
     }
-    
-//    func addReview(reviewText : String) {
-//        review = reviewText;
-//    }
-//    
-//    func addRating(ratingValue : Int) {
-//        rating = ratingValue;
-//    }
-//    
-//    func addOrder(orderText : String) {
-//        order = orderText;
-//    }
 }
