@@ -50,7 +50,6 @@ class ExperienceRepository {
         try await client
             .from("Experience")
             .upsert(experience)
-            .eq("experience_id", value: experience.id)
             .execute()
     }
     
