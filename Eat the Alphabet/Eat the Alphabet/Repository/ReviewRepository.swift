@@ -9,6 +9,8 @@ import Foundation
 
 class ReviewRepository {
     
+    static let shared = ReviewRepository()
+    
     func addReview(reviewText : String, completion: @escaping (Result<Void, Error>) -> Void) {
         // review = reviewText;
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -19,7 +21,6 @@ class ReviewRepository {
     func addRating(ratingValue : Int, completion: @escaping (Result<Void, Error>) -> Void) {
 //        rating = ratingValue;
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            
             completion(.success(()))
         }
     }

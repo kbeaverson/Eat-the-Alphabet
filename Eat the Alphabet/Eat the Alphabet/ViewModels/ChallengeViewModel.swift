@@ -7,7 +7,7 @@
 import Foundation
 import CoreLocation
 
-extension ChallengesView {
+extension ChallengeListView {
     class ViewModel : Observable {
         @Published var challenges: [Challenge] = [
             Challenge(
@@ -19,7 +19,7 @@ extension ChallengesView {
                 restaurants: [], // replace with mock data if available
                 participants: [], // replace with mock data if available
                 experiences: [], // replace with mock data if available
-                remainingLetters: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+                // remainingLetters: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
             )
         ]
         private var repository : ChallengeRepository
@@ -38,13 +38,13 @@ extension ChallengesView {
             var challenge = Challenge(
                 id: id,
                 title: title,
-                address: address,
+                address: GeoPoint(address),
                 radius: 25.0, // FIXME: Decide default radius size
                 createDate: Date(),
                 restaurants: [], 
                 participants: [], 
                 experiences: [], 
-                remainingLetters: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+                // remainingLetters: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
             )
             challenges.append(challenge)
         }
@@ -53,52 +53,40 @@ extension ChallengesView {
             // FIXME: Call delete method from ChallengeRepository
         }
         
-        func updateChallengeTitle(challenge : Challenge, newTitle : String) {
+        func updateChallengeTitle(challenge : inout Challenge, newTitle : String){
             challenge.title = newTitle
-            // FIXME: Call update method from ChallengeRepository
         }
         
-        func updateChallengeCoords(challenge : Challenge, newCoords : CLLocationCoordinate2D) {
+        func updateChallengeCoords(challenge : inout Challenge, newCoords : CLLocationCoordinate2D) {
             var newGeo : GeoPoint = GeoPoint(newCoords)
             challenge.address = newGeo
             // FIXME: Call update method from ChallengeRepository
         }
         
-        func updateChallengeRadius(challenge : Challenge, newRadius : Float) {
+        func updateChallengeRadius(challenge : inout Challenge, newRadius : Float) {
             challenge.radius = newRadius
             // FIXME: Call update method from ChallengeRepository
         }
         
-        func addChallengeExperience(challenge : Challenge, experience : Experience) {
+        func addChallengeExperience(challenge : inout Challenge, experience : Experience) {
             challenge.experiences.append(experience)
             // FIXME: Call update method from ChallengeRepository
         }
         
-        func removeChallengeExperience(challenge: Challenge, experience : Experience) {
+        func removeChallengeExperience(challenge: inout Challenge, experience : Experience) {
             challenge.experiences.removeAll { $0.id == experience.id }
             // FIXME: Call update method from ChallengeRepository
         }
         
-        func addChallengeParticipant(challenge : Challenge, participant : User) {
+        func addChallengeParticipant(challenge : inout Challenge, participant : User) {
             challenge.participants.append(participant)
             // FIXME: Call update method from ChallengeRepository
         }
         
-        func removeChallengeParticipant(challenge : Challenge, participant : User) {
+        func removeChallengeParticipant(challenge : inout Challenge, participant : User) {
             challenge.participants.removeAll { $0.id == participant.id }
             // FIXME: Call update method from ChallengeRepository
         }
         
-        func removeRemainingChallengeLetter(challenge : Challenge, letter : Character) {
-            challenge.remainingLetters.remove(at: challenge.remainingLetters.firstIndex(of: letter)!)
-            // FIXME: Call update method from ChallengeRepository
-        }
-        
-        func addRemainingChallengeLetter(challenge : Challenge, letter : Character) {
-            if (!challenge.remainingLetters.contains(letter)) {
-                challenge.remainingLetters.append(letter)
-                // FIXME: Call update method from ChallengeRepository
-            }
-        }
     }
 }

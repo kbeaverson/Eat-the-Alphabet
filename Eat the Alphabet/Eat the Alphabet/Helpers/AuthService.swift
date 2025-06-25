@@ -7,6 +7,7 @@
 
 import Supabase
 import Foundation
+import SwiftUI
 
 final class AuthService {
     private let client: SupabaseClient
@@ -22,15 +23,15 @@ final class AuthService {
     func login(email: String, password: String, completion: @escaping (Result<User, Error>) -> Void) {
         Task {
             do {
-                let session = try await auth.signIn(email: email, password: password)
-                guard let user = session.user else {
-                    return completion(.failure(AuthError.missingUser))
-                }
-                guard let session = session.session else {
-                    return completion(.failure(AuthError.missingUser))
-                }
-                appState.accessToken = session.accessToken
+                let result = try await auth.signIn(
+                    email: email,
+                    password: password
+                )
+                appState.session = result.self
                 
+                let user = result.user
+                let returnedUser = User(from: user)
+                completion(.success(returnedUser))
             } catch {
                 completion(.failure(error))
             }
@@ -40,17 +41,18 @@ final class AuthService {
     func register(username: String, email: String, password: String, completion: @escaping (Result<User, Error>) -> Void) {
         Task {
             do {
-                let session = try await auth.signUp(
+                let result = try await auth.signUp(
                     email: email,
                     password: password,
                     data: [
                         "username": .string(username)
                     ]
                 )
-                guard let user = session.user else {
-                    return completion(.failure(AuthError.missingUser))
-                }
-                completion(.success(user))
+                appState.session = result.session
+                
+                let user = result.user
+                let returnedUser = User(from: user)
+                completion(.success(returnedUser))
             } catch {
                 completion(.failure(error))
             }

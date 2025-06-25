@@ -9,6 +9,8 @@ import Foundation
 import CoreLocation
 
 class ChallengeRepository {
+    static let shared = ChallengeRepository()
+    
     func createChallenge(challenge : Challenge, completion: @escaping (Result<String, Error>) -> Void) {
         // FIXME: Create new challenge in supabase
         DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {

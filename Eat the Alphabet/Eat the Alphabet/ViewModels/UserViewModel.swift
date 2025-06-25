@@ -8,6 +8,11 @@
 import Foundation
 
 class UserViewModel: ObservableObject {
+    @Published var userName: String = ""
+    @Published var userEmail: String = ""
     
+    private let userRepository = UserRepository.shared
+    
+
 }
 

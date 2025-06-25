@@ -12,6 +12,6 @@ class ReviewViewModel: ObservableObject {
     @Published var ratingValue: Int = 0
     @Published var orderText: String = ""
     
-    private let reviewRepository : ReviewRepository = ReviewRepository()
+    private let reviewRepository = ReviewRepository.shared
     
 }

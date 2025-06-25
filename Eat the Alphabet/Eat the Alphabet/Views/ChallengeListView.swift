@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreLocation
 
-struct ChallengesView: View {
+struct ChallengeListView: View {
     @State private var viewModel = ViewModel()
 
     var body: some View {
@@ -36,5 +36,5 @@ struct ChallengesView: View {
 }
 
 #Preview {
-    ChallengesView()
+    ChallengeListView()
 }
