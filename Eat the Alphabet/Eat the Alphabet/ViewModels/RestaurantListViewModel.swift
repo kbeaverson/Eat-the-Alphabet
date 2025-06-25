@@ -9,6 +9,8 @@ import CoreLocation
 
 // NOTE: RestaurantViewModel is a view model for the Restaurant model, it contains UI related data and logic.
 class RestaurantListViewModel: ObservableObject {
+    private var restaurantRepository = RestaurantRepository.shared
+    
     @Published var restaurants: [RestaurantViewModel] = []
 
     private let repository: RestaurantRepository = RestaurantRepository()
@@ -17,4 +19,6 @@ class RestaurantListViewModel: ObservableObject {
         // Load restaurants from the repository
         // TODO: implement get restaurants ACCORDING to cretetias (eg. aphabet, cuisine, challenge_id)
     }
+    
+    // TODO: other operations, eg. CRUD, should it call repository methods?
 }

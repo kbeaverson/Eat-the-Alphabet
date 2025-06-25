@@ -8,23 +8,25 @@ import Supabase
 import Foundation
 
 struct User: Codable, Identifiable {
-    let id: String?
-    let created_at: Date?
-    let address: String?
+    let id: String
+    let created_at: Date
+    var address: GeoPoint?
+    var username: String?
+    var display_name: String?
+    var profile_image_url: String?
+    var phone_number: String?
     
-    // Added by Liao
-    init(id: String, created_at: Date, address: String) {
-        self.id = id
-        self.created_at = created_at
+    // TEST: constructor from just data
+    init(from supabaseUser: Auth.User) {
+        self.id = supabaseUser.id.uuidString
+        self.created_at = supabaseUser.createdAt
         // NOTE: consider adding a username for @ing NOT NULLABLE
         // NOTE: consider adding a display name NULLABLE
         // NOTE: consider add a profile image URL NULLABLE
         // NOTE: consider adding a phone number NULLABLE
-        // NOTE: consider adding a self.email = supabaseUser.email NULLABLE
-        self.address = address
+        // NOTE: consider adding a self.email = supabaseUser.email
     }
 
-    
     enum CodingKeys: String, CodingKey {
         case id
         case created_at

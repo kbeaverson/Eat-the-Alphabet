@@ -23,5 +23,8 @@ class UserViewModel: ObservableObject {
             self.user = user
         }
     
+    private let userRepository = UserRepository.shared
+    
+
 }
 

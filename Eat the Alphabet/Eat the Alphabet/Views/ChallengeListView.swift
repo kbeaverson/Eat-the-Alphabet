@@ -36,5 +36,5 @@ struct ChallengesView: View {
 }
 
 #Preview {
-    ChallengesView()
+    ChallengeListView()
 }
