@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+import Supabase
 
 class ChallengeRepository {
     func createChallenge(challenge : Challenge, completion: @escaping (Result<String, Error>) -> Void) {
@@ -14,6 +15,7 @@ class ChallengeRepository {
         DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
             completion(.success((""))) // Simulate success
         }
+        
     }
     
     // FIXME: Return [Challenge]
