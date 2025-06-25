@@ -1,3 +1,25 @@
-Config.xcconfig
-.DS_Store
-UserInterfaceState.xcuserstate
+## User settings
+xcuserdata/
+
+## Obj-C/Swift specific
+*.hmap
+
+## App packaging
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Swift Package Manager
+# Packages/
+# Package.pins
+# Package.resolved
+# *.xcodeproj
+
+.build/
+
+# Code Injection
+iOSInjectionProject/

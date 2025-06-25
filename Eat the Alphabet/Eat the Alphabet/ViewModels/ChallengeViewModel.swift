@@ -7,9 +7,12 @@
 import Foundation
 import CoreLocation
 
+@MainActor
 class ChallengeViewModel : ObservableObject {
     @Published var challenge: Challenge
-    private let repository : ChallengeRepository
+    private let challengeRepository : ChallengeRepository
+    private let experienceRepository : ExperienceRepository
+    private let userRepository : UserRepository
     
     init(
         challenge: Challenge = Challenge(
@@ -21,59 +24,75 @@ class ChallengeViewModel : ObservableObject {
             participants: [], // FIXME: Populate with current User
             experiences: []
         ),
-        repository: ChallengeRepository = ChallengeRepository()
+        challengeRepository: ChallengeRepository = ChallengeRepository(),
+        experienceRepository : ExperienceRepository = ExperienceRepository(),
+        userRepository : UserRepository = UserRepository()
     ) {
         self.challenge = challenge
-        self.repository = repository
+        self.challengeRepository = challengeRepository
+        self.experienceRepository = experienceRepository
+        self.userRepository = userRepository
     }
     
-    func createChallenge() {
-        // FIXME: Call create method from ChallengeRepository for this challenge
+    func createChallenge() async {
+        await challengeRepository.createChallenge(challenge: self.challenge)
     }
     
-    func deleteChallenge() {
-        // FIXME: Call delete method from ChallengeRepository using this challenge
+    func deleteChallenge() async {
+        await challengeRepository.deleteChallenge(challenge: self.challenge)
     }
     
-    func updateChallengeTitle(newTitle : String) {
+    func updateChallengeTitle(newTitle : String) async {
         challenge.title = newTitle
         challenge = challenge
-        // FIXME: Call update method from ChallengeRepository
+        await challengeRepository.updateChallenge(challenge: self.challenge)
     }
     
-    func updateChallengeCoords(newCoords : CLLocationCoordinate2D) {
+    func updateChallengeCoords(newCoords : CLLocationCoordinate2D) async {
         challenge.address = GeoPoint(newCoords)
         challenge = challenge
-        // FIXME: Call update method from ChallengeRepository
+        await challengeRepository.updateChallenge(challenge: self.challenge)
     }
     
-    func updateChallengeRadius(newRadius : Float) {
+    func updateChallengeRadius(newRadius : Float) async {
         challenge.radius = newRadius
         challenge = challenge
-        // FIXME: Call update method from ChallengeRepository
+        await challengeRepository.updateChallenge(challenge: self.challenge)
     }
     
-    func addChallengeExperience(experience : Experience) {
+    func addChallengeExperience(experience : Experience) async {
         challenge.experiences.append(experience)
         challenge = challenge
-        // FIXME: Call update method from ChallengeRepository
+        await challengeRepository.updateChallenge(challenge: self.challenge)
     }
     
-    func removeChallengeExperience(experience : Experience) {
+    func removeChallengeExperience(experience : Experience) async {
         challenge.experiences.removeAll { $0.id == experience.id}
         challenge = challenge
-        // FIXME: Call update method from ChallengeRepository
+        await challengeRepository.updateChallenge(challenge: self.challenge)
     }
     
-    func addChallengeParticipant(participant : User) {
+    func addChallengeParticipant(participant : User) async {
         challenge.participants.append(participant)
         challenge = challenge
-        // FIXME: Call update method from ChallengeRepository
+        await challengeRepository.updateChallenge(challenge: self.challenge)
     }
     
-    func removeChallengeParticipant(participant : User) {
+    func removeChallengeParticipant(participant : User) async {
         challenge.participants.removeAll { $0.id == participant.id }
         challenge = challenge
-        // FIXME: Call update method from ChallengeRepository
+        await challengeRepository.updateChallenge(challenge: self.challenge)
+    }
+    
+    func loadParticipants() async {
+        let participants = await challengeRepository.fetchParticipants(for: challenge.id)
+        challenge.participants = participants
+        challenge = challenge
+    }
+    
+    func loadExperiences() async {
+        let experiences = await challengeRepository.fetchExperiences(for: challenge.id)
+        challenge.experiences = experiences
+        challenge = challenge
     }
 }
