@@ -9,19 +9,19 @@ import Foundation
 
 struct User: Codable, Identifiable {
     let id: String?
-    let created_at: String?
+    let created_at: Date?
     let address: String?
     
     // Added by Liao
-    init(from supabaseUser: Auth.User) {
-        self.id = supabaseUser.id.uuidString
-        self.created_at = nil
+    init(id: String, created_at: Date, address: String) {
+        self.id = id
+        self.created_at = created_at
         // NOTE: consider adding a username for @ing NOT NULLABLE
         // NOTE: consider adding a display name NULLABLE
         // NOTE: consider add a profile image URL NULLABLE
         // NOTE: consider adding a phone number NULLABLE
         // NOTE: consider adding a self.email = supabaseUser.email NULLABLE
-        self.address = nil
+        self.address = address
     }
 
     
