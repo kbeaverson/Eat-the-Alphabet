@@ -17,11 +17,12 @@ class UserViewModel: ObservableObject {
         user: User = User(
             id: UUID().uuidString,
             created_at: Date(),
-            address: "Dummy Address",
+            address: GeoPoint(CLLocationCoordinate2D(latitude: 0, longitude: 0)),
         ), repository: UserRepository = UserRepository()) {
             self.repository = repository
             self.user = user
         }
+
     
     private let userRepository = UserRepository.shared
     

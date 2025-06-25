@@ -17,6 +17,14 @@ struct User: Codable, Identifiable {
     var phone_number: String?
     
     // TEST: constructor from just data
+    init(id: String, created_at: Date, address: GeoPoint? = nil) {
+        self.id = id
+        self.created_at = created_at
+        self.address = address
+    }
+    
+    
+    // for simply initializing a User from Supabase's Auth.User
     init(from supabaseUser: Auth.User) {
         self.id = supabaseUser.id.uuidString
         self.created_at = supabaseUser.createdAt

@@ -18,7 +18,7 @@ class ChallengeViewModel : ObservableObject {
         challenge: Challenge = Challenge(
             id: UUID().uuidString,
             title: "Sample Challenge",
-            address: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
+            address: GeoPoint(CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194)),
             radius: 25.0,
             createDate: Date(),
             participants: [], // FIXME: Populate with current User

@@ -15,7 +15,7 @@ struct HomeScreen: View {
             }
             
             Tab("Challenges", systemImage: "tray.and.arrow.up.fill"){
-                ChallengesView()
+                ChallengeListView()
             }
             
             Tab("Account", systemImage: "person.crop.circle"){

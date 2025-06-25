@@ -9,7 +9,6 @@ import CoreLocation
 
 // NOTE: RestaurantViewModel is a view model for the Restaurant model, it contains UI related data and logic.
 class RestaurantViewModel: Identifiable, ObservableObject {
-    
     // private let restaurantRepository: RestaurantRepository = RestaurantRepository()
     @Published var id: String
     @Published var name: String
@@ -47,5 +46,19 @@ class RestaurantViewModel: Identifiable, ObservableObject {
         return distanceInKm
     }
     
+    // Converts current view model back to model
+    func toModel(with geoLocation: GeoPoint) -> Restaurant {
+        return Restaurant(
+            id: self.id,
+            name: self.name,
+            cuisine: self.cuisine,
+            price: 30, // or add this field to VM
+            rating: 4.5, // or computed/assigned
+            address: geoLocation,
+            details: self.details,
+            imageUrl: self.imageUrl
+        )
+    }
+
     // TODO: other methods, CRUD operations, etc.
 }

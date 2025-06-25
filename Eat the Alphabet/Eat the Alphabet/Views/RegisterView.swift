@@ -88,7 +88,7 @@ struct RegisterView: View {
                         ) { result in
                             switch result {
                             case .success(let user):
-                                print("Registered as \(user.email ?? "unknown")")
+                                print("Registered ")
                                 // DO NOT Navigate to the main app view or show success message
                             case .failure(let error):
                                 print("Registration error: \(error.localizedDescription)")

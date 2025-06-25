@@ -85,7 +85,9 @@ struct RestaurantListView: View {
                             cuisine: "Mocked Cuisine",
                             price: 20,
                             rating: 4.5,
-                            address: CLLocationCoordinate2D(latitude: 34.7266, longitude: 117.6279)
+                            address: GeoPoint(CLLocationCoordinate2D(latitude: 34.7266, longitude: 117.6279)),
+                            details: "This is a mocked restaurant for testing purposes.",
+                            imageUrl: <#String?#>
                         )
                         // Request location permission and get location?
                         let userLocation = permissionManager.currentLocation

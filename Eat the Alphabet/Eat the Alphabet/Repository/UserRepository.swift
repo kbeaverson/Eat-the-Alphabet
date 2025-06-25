@@ -9,6 +9,8 @@ import Foundation
 import Supabase
 
 class UserRepository  {
+    static let shared = UserRepository()
+    
     let supabase = SupabaseManager.shared.client
     
     // Fetch User by username

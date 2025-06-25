@@ -13,6 +13,8 @@ final class AuthService {
     private let client: SupabaseClient
     private var auth: AuthClient
     
+    public static let shared = AuthService()
+    
     @EnvironmentObject var appState: AppState
 
     init(client: SupabaseClient = SupabaseManager.shared.client) {

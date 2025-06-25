@@ -21,7 +21,7 @@ class ExperienceViewModel: ObservableObject {
             challenge: challenge,
             reviews: [],
             date: Date(),
-            photoUrls: [])
+            photo_urls: [])
         self.experience = experience
         self.repository = repository
         self.userRepository = userRepository
@@ -65,7 +65,7 @@ class ExperienceViewModel: ObservableObject {
     }
     
     func addPhoto(url: String) async {
-        experience.photoUrls.append(url)
+        experience.photo_urls.append(url)
         experience = experience
         do {
             try await repository.updateExperience(experience: self.experience)
@@ -75,7 +75,7 @@ class ExperienceViewModel: ObservableObject {
     }
     
     func removePhoto(url: String) async {
-        experience.photoUrls.removeAll { $0 == url }
+        experience.photo_urls.removeAll { $0 == url }
         experience = experience
         do {
             try await repository.updateExperience(experience: self.experience)

@@ -15,7 +15,7 @@ struct Experience: Identifiable, Codable {
     var reviews : [Review]
     var date : Date
     // let letter : Character // NOTE: consider removing this can be inferred from the restaurant name
-    var photo_url : [String]
+    var photo_urls : [String]
     
     // TEST: constructor from just data
 //    init(id: String, users: [User], restaurant: Restaurant, challenge: Challenge, reviews: [Review], date: Date /**, letter: Character*/, photoUrl: [String]) {

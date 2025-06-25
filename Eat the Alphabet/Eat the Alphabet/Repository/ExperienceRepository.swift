@@ -18,12 +18,17 @@ class ExperienceRepository {
     }
     
     func createExperience(experience : Experience) async throws {
-        try await client
-            .from("Experience")
-            .insert(experience)
-            .execute()
+        do {
+            try await client
+                .from("experiences")
+                .insert(experience)
+                .execute()
+        } catch {
+            throw error
+        }
     }
     
+    // Read - fetch all experiences for a user, in async manner
     func fetchAllExperiences(for userID: String) async throws -> [Experience] {
         let experiences: [ExperienceParticipant] = try await client
             .from("Experience_Participant")
@@ -36,6 +41,16 @@ class ExperienceRepository {
         
         if (experienceIDs.isEmpty) {
             return []
+        }
+        
+        return try await client
+            .from("Experience")
+            .select()
+            .in("experience_id", values: experienceIDs)
+            .execute()
+            .value
+    }
+    
     static let shared = ExperienceRepository()
     // Read - get all
     func loadAllExperiences(completion: @escaping (Result<[Experience], Error>) -> Void) {
@@ -51,7 +66,6 @@ class ExperienceRepository {
                 completion(.failure(error))
             }
         }
-        
     }
     
     // Read - get by id
@@ -157,7 +171,7 @@ class ExperienceRepository {
                                     .value
                                 
                                 // Step 3: Append new photo URL to existing array
-                                var updatedPhotos = experience.photo_url ?? []
+                                var updatedPhotos = experience.photo_urls ?? []
                                 updatedPhotos.append(publicUrl.absoluteString)
                                 
                                 // Step 4: Update database
@@ -194,13 +208,6 @@ class ExperienceRepository {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             completion(.success(()))
         }
-        
-        return try await client
-            .from("Experience")
-            .select()
-            .in("experience_id", values: experienceIDs)
-            .execute()
-            .value
     }
     
     func updateExperience(experience : Experience) async throws {

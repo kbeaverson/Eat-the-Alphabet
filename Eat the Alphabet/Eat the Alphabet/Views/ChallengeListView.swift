@@ -1,5 +1,5 @@
 //
-//  ChallengesView.swift
+//  ChallengeListView.swift
 //  Eat the Alphabet
 //
 //  Created by Will Erkman on 6/8/25.
@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreLocation
 
-struct ChallengesView: View {
+struct ChallengeListView: View {
     @State private var challenges: [ChallengeViewModel] = []
 
     var body: some View {
