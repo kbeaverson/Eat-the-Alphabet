@@ -10,9 +10,11 @@ import Foundation
 class ExperienceViewModel: ObservableObject {
     @Published var experience : Experience
     private let repository : ExperienceRepository
+    private let userRepository : UserRepository
+    private let reviewRepository : ReviewRepository
     
-    init(restaurant: Restaurant, challenge: Challenge, repository: ExperienceRepository) {
-        var experience = Experience(
+    init(restaurant: Restaurant, challenge: Challenge, repository: ExperienceRepository, userRepository: UserRepository, reviewRepository: ReviewRepository) {
+        let experience = Experience(
             id: UUID().uuidString,
             users: [],
             restaurant: restaurant,
@@ -22,38 +24,64 @@ class ExperienceViewModel: ObservableObject {
             photoUrls: [])
         self.experience = experience
         self.repository = repository
+        self.userRepository = userRepository
+        self.reviewRepository = reviewRepository
     }
     
-    func createExperience() {
-        // FIXME: Call create method from ExperienceRepository
+    func createExperience() async {
+        do {
+            try await repository.createExperience(experience: self.experience)
+        } catch {
+            print("Error creating experience: \(error)")
+        }
     }
     
-    func deleteExperience() {
-        // FIXME: Call delete method from ExperienceRepository
+    func deleteExperience() async {
+        do {
+            try await repository.deleteExperience(experience: self.experience)
+        } catch {
+            print("Error deleting experience: \(error)")
+        }
     }
     
-    func addReview(review : Review) {
+    func addReview(review : Review) async {
         experience.reviews.append(review)
-        experience = experience
-        // FIXME: Call update method from ExperienceRepository
+        experience = experience // TODO: Implement publishChanges method that does this line
+        do {
+            try await repository.updateExperience(experience: self.experience)
+        } catch {
+            print("Error adding review: \(error)")
+        }
     }
     
-    func removeReview(reviewId : String) {
+    func removeReview(reviewId : String) async {
         experience.reviews.removeAll { $0.id == reviewId }
         experience = experience
-        // FIXME: Call update method from ExperienceRepository
+        do {
+            try await repository.updateExperience(experience: self.experience)
+        } catch {
+            print("Error removing review: \(error)")
+        }
     }
     
-    func addPhoto(url: String) {
+    func addPhoto(url: String) async {
         experience.photoUrls.append(url)
         experience = experience
-        // FIXME: Call update method from ExperienceRepository
+        do {
+            try await repository.updateExperience(experience: self.experience)
+        } catch {
+            print("Error adding photo: \(error)")
+        }
     }
     
-    func removePhoto(url: String) {
+    func removePhoto(url: String) async {
         experience.photoUrls.removeAll { $0 == url }
         experience = experience
-        // FIXME: Call update method from ExperienceRepository
+        do {
+            try await repository.updateExperience(experience: self.experience)
+        } catch {
+            print("Error removing photo: \(error)")
+        }
     }
     
 }
