@@ -41,6 +41,12 @@ class UserRepository  {
     }
     
     // Delete User
-    
+    func deleteUser(user: User) async -> Void {
+        try? await supabase
+            .from("users")
+            .delete()
+            .eq("id", value: user.id)
+            .execute().value
+    }
 }
 
