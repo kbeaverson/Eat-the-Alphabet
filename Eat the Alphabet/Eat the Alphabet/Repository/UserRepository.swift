@@ -31,14 +31,16 @@ class UserRepository  {
         return user
     }
     
-    // Edit user address
-    func editUserAddress(user: User, address: String) async -> Void {
+    // Edit User
+    func editUser(user: User) async -> Void {
         try? await supabase
             .from("users")
-            .update(["address": address])
+            .update(user)
             .eq("id", value: user.id)
             .execute().value
     }
+    
+    // Delete User
     
 }
 
