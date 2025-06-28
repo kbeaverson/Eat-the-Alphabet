@@ -7,7 +7,7 @@
 import Supabase
 import Foundation
 
-struct User: Codable, Identifiable {
+struct Account: Codable, Identifiable {
     let id: String
     let created_at: Date
     var address: GeoPoint?
