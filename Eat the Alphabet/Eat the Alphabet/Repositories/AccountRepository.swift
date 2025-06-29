@@ -8,8 +8,8 @@
 import Foundation
 import Supabase
 
-class UserRepository  {
-    static let shared = UserRepository()
+class AccountRepository  {
+    // static let shared = AccountRepository() is not a good practice
     
     let supabase = SupabaseManager.shared.client
     
@@ -50,5 +50,6 @@ class UserRepository  {
             .eq("id", value: user.id)
             .execute().value
     }
+        
 }
 

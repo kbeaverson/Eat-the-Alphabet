@@ -10,25 +10,53 @@ import CoreLocation
 struct Restaurant: Codable, Identifiable {
     let id : String
     let name : String
+    let created_at : Date
     let cuisine : String
-    let price : Int
-    let rating : Float
-    let address : GeoPoint // FIXME: consider change to 'coord' instead, address is a little misleading?
-    // FIXME: consider add address as a string
-    let details : String? // PLACEHOLDER
-    // FIXME: consider add image's url if there is one NULLABLE
-    let imageUrl : String? // PLACEHOLDER
+    let avg_per_cost : Int?
+    let map_imported_rating : Float?
+    let rating : Float?
+    let address_wgs : GeoPoint
+    let address_text : String?
+    let details : String?
+    let image_url : String?
     
     // TEST: constructor from just data
-//    init(id: String, name: String, cuisine: String, price: Int, rating: Float, address: CLLocationCoordinate2D) {
-//        self.id = id
-//        self.name = name
-//        self.cuisine = cuisine
-//        self.price = price
-//        self.rating = rating
-//        self.address = GeoPoint(address)
-//        // FIXME: replace with real data by adding columns
-//        self.imageUrl = "https://cdn.eathappyproject.com/wp-content/uploads/2021/10/Chinese-Cuisine.jpg"
-//        self.details = "This is a placeholder restaurant description. Please replace it with actual details. Random text start: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-//    }
+    init(id: String,
+         name: String,
+         created_at: Date,
+         cuisine: String,
+         avg_per_cost: Int? = nil,
+         map_imported_rating: Float? = nil,
+         rating: Float? = nil,
+         address_wgs: GeoPoint,
+         address_text: String? = nil,
+         details: String? = nil,
+         image_url: String? = nil) {
+        self.id = id
+        self.name = name
+        self.created_at = created_at
+        self.cuisine = cuisine
+        self.avg_per_cost = avg_per_cost
+        self.map_imported_rating = map_imported_rating
+        self.rating = rating
+        self.address_wgs = address_wgs
+        self.address_text = address_text
+        self.details = details
+        self.image_url = image_url
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case name = "name"
+        case created_at = "created_at"
+        case cuisine = "cuisine"
+        case avg_per_cost = "avg_per_cost"
+        case map_imported_rating = "map_imported_rating"
+        case rating = "rating"
+        case address_wgs = "address_wgs"
+        case address_text = "address_text"
+        case details = "details"
+        case image_url = "image_url"
+    }
+         
 }

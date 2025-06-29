@@ -3,7 +3,7 @@ import CoreLocation
 
 // NOTE: API encapsulation for 
 class RestaurantRepository {
-    static let shared = RestaurantRepository()
+    // static let shared = RestaurantRepository() is a good practice
     
     private let experienceRepository = ExperienceRepository.shared
     
@@ -144,4 +144,5 @@ class RestaurantRepository {
             }
         }
     }
+
 }

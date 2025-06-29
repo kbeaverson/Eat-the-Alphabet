@@ -10,17 +10,27 @@ import Foundation
 struct Account: Codable, Identifiable {
     let id: String
     let created_at: Date
-    var address: GeoPoint?
+    var address_wgs: GeoPoint?
     var username: String?
     var display_name: String?
     var profile_image_url: String?
     var phone_number: String?
     
     // TEST: constructor from just data
-    init(id: String, created_at: Date, address: GeoPoint? = nil) {
+    init(id: String,
+         created_at: Date,
+         address_wgs: GeoPoint? = nil,
+         username: String,
+         display_name: String? = nil,
+         profile_image_url: String? = nil,
+         phone_number: String? = nil) {
         self.id = id
         self.created_at = created_at
-        self.address = address
+        self.address_wgs = address_wgs
+        self.username = username
+        self.display_name = display_name
+        self.profile_image_url = profile_image_url
+        self.phone_number = phone_number
     }
     
     
@@ -28,18 +38,21 @@ struct Account: Codable, Identifiable {
     init(from supabaseUser: Auth.User) {
         self.id = supabaseUser.id.uuidString
         self.created_at = supabaseUser.createdAt
-        // NOTE: consider adding a username for @ing NOT NULLABLE
-        // NOTE: consider adding a display name NULLABLE
+        // TODO: must get username from database
         // NOTE: consider add a profile image URL NULLABLE
         // NOTE: consider adding a phone number NULLABLE
         // NOTE: consider adding a self.email = supabaseUser.email
     }
 
     enum CodingKeys: String, CodingKey {
-        case id
-        case created_at
-        case address
-      }
+        case id = "id"
+        case created_at = "created_at"
+        case address_wgs = "address_wgs"
+        case username = "username"
+        case display_name = "display_name"
+        case profile_image_url = "profile_image_url"
+        case phone_number = "phone_number"
+    }
 }
 
 

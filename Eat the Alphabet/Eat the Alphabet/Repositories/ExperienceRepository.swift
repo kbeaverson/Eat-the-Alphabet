@@ -11,6 +11,8 @@ import SwiftUICore
 import Supabase
 
 class ExperienceRepository {
+    // static let shared = ExperienceRepository() is not a good practice
+    
     let client : SupabaseClient
     
     init(client : SupabaseClient = SupabaseManager.shared.client) {

@@ -11,6 +11,8 @@ import Supabase
 
 // TODO: Unwrap all of the async methods so that the do/catch can be implemented at the ViewModel layer so as to allow error message propagation to the User
 class ChallengeRepository {
+    // static let shared = ChallengeRepository() is not a good practice
+    
     let client : SupabaseClient
     
     init(client : SupabaseClient = SupabaseManager.shared.client) {
@@ -124,4 +126,6 @@ class ChallengeRepository {
             return []
         }
     }
+    
+
 }
