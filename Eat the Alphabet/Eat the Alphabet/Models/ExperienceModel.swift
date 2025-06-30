@@ -9,10 +9,12 @@ import SwiftUICore
 
 struct Experience: Identifiable, Codable {
     let id : String
-    var created_at : Date
+    let created_at : Date
     var status : String
-    var restaurant_id : String
+    let restaurant_id : String
     let challenge_id : String
+    
+    var reviews: [Review]? = []
     
     init (id: String,
           created_at: Date,
@@ -24,13 +26,5 @@ struct Experience: Identifiable, Codable {
         self.status = status
         self.restaurant_id = restaurant_id
         self.challenge_id = challenge_id
-    }
-            
-    enum CodingKeys: String, CodingKey {
-        case id = "id"
-        case created_at = "created_at"
-        case status = "status"
-        case restaurant_id = "restaurant_id"
-        case challenge_id = "challenge_id"
     }
 }

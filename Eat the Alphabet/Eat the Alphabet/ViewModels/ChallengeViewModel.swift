@@ -12,21 +12,13 @@ class ChallengeViewModel : ObservableObject {
     @Published var challenge: Challenge
     private let challengeRepository : ChallengeRepository
     private let experienceRepository : ExperienceRepository
-    private let userRepository : UserRepository
+    private let userRepository : AccountRepository
     
     init(
-        challenge: Challenge = Challenge(
-            id: UUID().uuidString,
-            title: "Sample Challenge",
-            address: GeoPoint(CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194)),
-            radius: 25.0,
-            createDate: Date(),
-            participants: [], // FIXME: Populate with current User
-            experiences: []
-        ),
-        challengeRepository: ChallengeRepository = ChallengeRepository(),
-        experienceRepository : ExperienceRepository = ExperienceRepository(),
-        userRepository : UserRepository = UserRepository()
+        challenge: Challenge,
+        challengeRepository: ChallengeRepository,
+        experienceRepository : ExperienceRepository,
+        userRepository : AccountRepository
     ) {
         self.challenge = challenge
         self.challengeRepository = challengeRepository
@@ -34,64 +26,64 @@ class ChallengeViewModel : ObservableObject {
         self.userRepository = userRepository
     }
     
-    func createChallenge() async {
-        await challengeRepository.createChallenge(challenge: self.challenge)
+    func createChallenge() async throws {
+        try await challengeRepository.createChallenge(challenge: self.challenge)
     }
     
-    func deleteChallenge() async {
-        await challengeRepository.deleteChallenge(challenge: self.challenge)
+    func deleteChallenge() async throws {
+        try await challengeRepository.deleteChallenge(id: self.challenge.id)
     }
     
-    func updateChallengeTitle(newTitle : String) async {
+    func updateChallengeTitle(newTitle : String) async throws {
         challenge.title = newTitle
         challenge = challenge
-        await challengeRepository.updateChallenge(challenge: self.challenge)
+        try await challengeRepository.updateChallenge(challenge: self.challenge)
     }
     
-    func updateChallengeCoords(newCoords : CLLocationCoordinate2D) async {
-        challenge.address = GeoPoint(newCoords)
+    func updateChallengeCoords(newCoords : CLLocationCoordinate2D) async throws {
+        challenge.center_wgs = GeoPoint(newCoords)
         challenge = challenge
-        await challengeRepository.updateChallenge(challenge: self.challenge)
+        try await challengeRepository.updateChallenge(challenge: self.challenge)
     }
     
-    func updateChallengeRadius(newRadius : Float) async {
+    func updateChallengeRadius(newRadius : Float) async throws {
         challenge.radius = newRadius
         challenge = challenge
-        await challengeRepository.updateChallenge(challenge: self.challenge)
+        try await challengeRepository.updateChallenge(challenge: self.challenge)
     }
     
-    func addChallengeExperience(experience : Experience) async {
-        challenge.experiences.append(experience)
+    func addChallengeExperience(experience : Experience) async throws{
+        challenge.experiences = (challenge.experiences ?? []) + [experience]
         challenge = challenge
-        await challengeRepository.updateChallenge(challenge: self.challenge)
+        try await challengeRepository.updateChallenge(challenge: self.challenge)
     }
     
-    func removeChallengeExperience(experience : Experience) async {
-        challenge.experiences.removeAll { $0.id == experience.id}
+    func removeChallengeExperience(experience : Experience) async throws {
+        challenge.experiences = (challenge.experiences ?? []).filter { $0.id != experience.id }
         challenge = challenge
-        await challengeRepository.updateChallenge(challenge: self.challenge)
+        try await challengeRepository.updateChallenge(challenge: self.challenge)
     }
     
-    func addChallengeParticipant(participant : User) async {
-        challenge.participants.append(participant)
+    func addChallengeParticipant(participant : Account) async throws {
+        challenge.participants = (challenge.participants ?? []) + [participant]
         challenge = challenge
-        await challengeRepository.updateChallenge(challenge: self.challenge)
+        try await challengeRepository.updateChallenge(challenge: self.challenge)
     }
     
-    func removeChallengeParticipant(participant : User) async {
-        challenge.participants.removeAll { $0.id == participant.id }
+    func removeChallengeParticipant(participant : Account) async throws {
+        challenge.participants = (challenge.participants ?? []).filter { $0.id != participant.id }
         challenge = challenge
-        await challengeRepository.updateChallenge(challenge: self.challenge)
+        try await challengeRepository.updateChallenge(challenge: self.challenge)
     }
     
-    func loadParticipants() async {
-        let participants = await challengeRepository.fetchParticipants(for: challenge.id)
+    func loadParticipants() async throws {
+        let participants = try await challengeRepository.getParticipants(byChallengeId: challenge.id)
         challenge.participants = participants
         challenge = challenge
     }
     
-    func loadExperiences() async {
-        let experiences = await challengeRepository.fetchExperiences(for: challenge.id)
+    func loadExperiences() async throws{
+        let experiences = try await challengeRepository.getExperiences(by: challenge.id)
         challenge.experiences = experiences
         challenge = challenge
     }

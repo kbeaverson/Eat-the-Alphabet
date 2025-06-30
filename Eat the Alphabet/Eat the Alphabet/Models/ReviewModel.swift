@@ -13,9 +13,11 @@ struct Review: Codable, Identifiable {
     var title : String?
     var review : String
     var rating : Int
-    var user_id: String
-    var experience_id : String
     var order : String
+    let user_id: String
+    var experience_id: String
+    
+    var image_urls: [String]? = []
     
     // TEST: constructor from just data
     init (id: String,
@@ -36,14 +38,14 @@ struct Review: Codable, Identifiable {
         self.order = order
     }
     
-    enum CodingKeys: String, CodingKey {
-        case id = "id"
-        case created_at = "created_at"
-        case title = "title"
-        case review = "review"
-        case rating = "rating"
-        case user_id = "user_id"
-        case experience_id = "experience_id"
-        case order = "order"
-    }
+//    enum CodingKeys: String, CodingKey {
+//        case id = "id"
+//        case created_at = "created_at"
+//        case title = "title"
+//        case review = "review"
+//        case rating = "rating"
+//        case user_id = "user_id"
+//        case experience_id = "experience_id"
+//        case order = "order"
+//    }
 }

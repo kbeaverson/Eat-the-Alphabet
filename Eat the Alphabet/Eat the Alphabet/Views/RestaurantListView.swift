@@ -75,27 +75,6 @@ struct RestaurantListView: View {
                         }
                     }
                     .onAppear {
-                        // permissionManager.requestLocationPermission()
-                        // TODO: reaplace with real pulling function
-                        restaurants = loadMockedRestaurants()
-                        // TODO: MOCKED database -restaurant-> Restaurant object -> RestaurantViewModel
-                        let mockedRestaurant: Restaurant = Restaurant(
-                            id: "999",
-                            name: "Mocked Restaurant",
-                            cuisine: "Mocked Cuisine",
-                            price: 20,
-                            rating: 4.5,
-                            address: GeoPoint(CLLocationCoordinate2D(latitude: 34.7266, longitude: 117.6279)),
-                            details: "This is a mocked restaurant for testing purposes.",
-                            imageUrl: <#String?#>
-                        )
-                        // Request location permission and get location?
-                        let userLocation = permissionManager.currentLocation
-                        // to RestaurantViewModel
-                        let mockedRestaurantViewModel = RestaurantViewModel(restaurant: mockedRestaurant, userLocation: userLocation)
-                        // append to the list
-                        restaurants.append(mockedRestaurantViewModel)
-                        print("Mocked restaurant added")
                     }
                     .scrollContentBackground(.hidden) // hide list background
                     .listRowSpacing(10) // remove the default padding
@@ -139,14 +118,14 @@ struct RestaurantListView: View {
         }
     }
     
-    func loadMockedRestaurants() -> [RestaurantViewModel] {
+    func loadMockedRestaurants() -> [Restaurant] {
         guard let url = Bundle.main.url(forResource: "fakeRestaurants", withExtension: "json") else {
             fatalError("fakeRestaurants.json not found")
         }
         do {
             let data = try Data(contentsOf: url)
             let decoder = JSONDecoder()
-            return try decoder.decode([RestaurantViewModel].self, from: data)
+            return try decoder.decode([Restaurant].self, from: data)
         } catch {
             print("❌ JSON decode error: \(error)")
             if let jsonString = String(data: try! Data(contentsOf: url), encoding: .utf8) {

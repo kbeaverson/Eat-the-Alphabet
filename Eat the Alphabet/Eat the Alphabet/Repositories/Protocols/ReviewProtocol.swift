@@ -7,20 +7,21 @@
 
 protocol ReviewProtocol {
     // Basic CRUD
-    func createReview(_ review: Review) async throws -> Review
+    // we do not use `_` to omit the parameter label
+    func createReview(review: Review) async throws -> Review
     func getReview(by id: String) async throws -> Review
-    func updateReview(_ review: Review) async throws
-    func deleteReview(id: String) async throws
+    func updateReview(review: Review) async throws
+    func deleteReview(by id: String) async throws
 
-    // Relation-based queries
-    func getReviews(by userId: String) async throws -> [Review]
-    func getReviews(for experienceId: String) async throws -> [Review]
-    func getReviews(forRestaurantId restaurantId: String) async throws -> [Review]
-
-    // Aggregates
-    func getAverageRating(forRestaurantId restaurantId: String) async throws -> Float?
-    func getRecentReviews(limit: Int) async throws -> [Review]
+    // Relation-based queries (ordered by createdAt)
+//    func getReviews(byUser userId: String) async throws -> [Review]
+//    func getReviews(byExperience experienceId: String) async throws -> [Review]
+//    func getReviews(byRestaurant restaurantId: String) async throws -> [Review]
+//
+//    // Aggregates
+//    func getAverageRating(forRestaurantId restaurantId: String) async throws -> Float?
+    // func getRecentReviews(limit: Int) async throws -> [Review]
 
     // Validation
-    func hasUserReviewed(experienceId: String, userId: String) async throws -> Bool
+    // func hasUserReviewed(experienceId: String, userId: String) async throws -> Bool
 }

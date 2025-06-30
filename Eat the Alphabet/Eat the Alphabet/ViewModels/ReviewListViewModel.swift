@@ -12,7 +12,7 @@ class ReviewListViewModel: ObservableObject {
     // TODO: Consider monitoring loading status/errors with other published vars?
     
     private let reviewRepository: ReviewRepository = ReviewRepository()
-    private let userRepository: UserRepository = UserRepository()
+    private let userRepository: AccountRepository = AccountRepository()
     private let userId: String?
     private let experienceId: String?
     
@@ -21,27 +21,27 @@ class ReviewListViewModel: ObservableObject {
         self.experienceId = experienceId
     }
     
-    @MainActor
-    func loadReviewsForUser() async {
-        // Would place monitoring/error stuff here
-        guard let userId = userId else { return }
-        do {
-            let reviews = try await reviewRepository.fetchAllReviewsForUser(for: userId)
-            self.reviewViewModels = reviews.map{ ReviewViewModel(review: $0) }
-        } catch {
-            print("Error fetching reviews for user: \(error)")
-        }
-    }
-    
-    @MainActor
-    func loadReviewsForExperience() async {
-        // Would place monitoring/error stuff here
-        guard let experienceId = experienceId else { return }
-        do {
-            let reviews = try await reviewRepository.fetchAllReviewsForExperience(for: experienceId)
-            self.reviewViewModels = reviews.map{ ReviewViewModel(review: $0) }
-        } catch {
-            print("Error fetching reviews for experience: \(error)")
-        }
-    }
+//    @MainActor
+//    func loadReviewsForUser() async {
+//        // Would place monitoring/error stuff here
+//        guard let userId = userId else { return }
+//        do {
+//            let reviews = try await reviewRepository.fetchAllReviewsForUser(for: userId)
+//            self.reviewViewModels = reviews.map{ ReviewViewModel(review: $0) }
+//        } catch {
+//            print("Error fetching reviews for user: \(error)")
+//        }
+//    }
+//    
+//    @MainActor
+//    func loadReviewsForExperience() async {
+//        // Would place monitoring/error stuff here
+//        guard let experienceId = experienceId else { return }
+//        do {
+//            let reviews = try await reviewRepository.fetchAllReviewsForExperience(for: experienceId)
+//            self.reviewViewModels = reviews.map{ ReviewViewModel(review: $0) }
+//        } catch {
+//            print("Error fetching reviews for experience: \(error)")
+//        }
+//    }
 }

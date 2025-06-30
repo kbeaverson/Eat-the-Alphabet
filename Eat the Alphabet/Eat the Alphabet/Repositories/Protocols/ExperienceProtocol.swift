@@ -6,17 +6,18 @@
 //
 
 protocol ExperienceProtocol {
-    func createExperience(challengeId: String, restaurantId: String) async throws -> Experience
-    func getExperienceDetails(by id: String) async throws -> ExperienceDetails
-    func updateExperienceStatus(id: String, status: String) async throws
+    // Basic CRUD operations
+    func getExperience(by id: String) async throws -> Experience
+    func createExperience(challengeId: String, restaurantId: String) async throws
+    func createExperience(experience: Experience) async throws
+    func updateExperience(experience: Experience) async throws
+    // func getExperienceDetails(by id: String) async throws -> ExperienceDetails    func updateExperienceStatus(id: String, status: String) async throws
     func deleteExperience(id: String) async throws
     
-    // lazy loading
-    func getExperience(by id: String) async throws -> Experience
-    func getParticipants(for experienceId: String) async throws -> [Account]
-    func getReviews(for experienceId: String) async throws -> [Review]
-    func getRestaurant(for experienceId: String) async throws -> Restaurant
+    // func getExperienceDetails(by id: String) async throws -> ExperienceDetails
     
+    // lazy loading
+    func getRestaurant(for experienceId: String) async throws -> Restaurant
     
     // pariticipants
     func getParticipants(for experienceId: String) async throws -> [Account]
@@ -25,6 +26,6 @@ protocol ExperienceProtocol {
     
     // reviews
     func getReviews(for experienceId: String) async throws -> [Review]
-    func addReview(_ review: Review, for experienceId: String) async throws
-    func deleteReview(_ reviewId: String, for experienceId: String) async throws
+    func addReview(review: Review, for experienceId: String) async throws
+    func deleteReview(reviewId: String, for experienceId: String) async throws
 }

@@ -10,16 +10,19 @@ import CoreLocation
 import Supabase
 
 // TODO: Unwrap all of the async methods so that the do/catch can be implemented at the ViewModel layer so as to allow error message propagation to the User
-class ChallengeRepository {
+class ChallengeRepository : ChallengeProtocol {
+    
     // static let shared = ChallengeRepository() is not a good practice
     
     let client : SupabaseClient
+    
+    private let accountRepository: AccountRepository = AccountRepository()
     
     init(client : SupabaseClient = SupabaseManager.shared.client) {
         self.client = client
     }
     
-    func createChallenge(challenge : Challenge) async {
+    func createChallenge(challenge : Challenge) async throws -> Void {
         do {
             try await client
                 .from("Challenge")
@@ -28,38 +31,73 @@ class ChallengeRepository {
             print("Challenge successfully created.")
         } catch {
             print("Error creating challenge: \(error)")
+            throw error
         }
     }
     
-    func fetchAllChallenges(for userID : String) async -> [Challenge] {
+    func getChallenge(by id: String) async throws -> Challenge {
         do {
-            let challenges: [ChallengeParticipant] = try await client
-                .from("Challenge_Participant")
+            let challenge: Challenge = try await client
+                .from("Challenge")
                 .select()
-                .eq("user_id", value: userID)
+                .eq("id", value: id)
+                .single()
                 .execute()
                 .value
             
-            let challengeIds = challenges.map{ $0.challengeID }
+            return challenge
+        } catch {
+            print("Error fetching challenge: \(error)")
+            throw error
+        }
+    }
+    
+    func getChallenges(byUserId userId: String) async throws -> [Challenge] {
+        // TODO: Implement fetching challenges by user ID
+        do {
+            let challengesOfUser: [Challenge] = try await accountRepository.getChallenges(for: userId)
             
-            if (challengeIds.isEmpty) {
-                print("No challenges found for user \(userID).")
+            if challengesOfUser.isEmpty {
+                print("No challenges found for user \(userId).")
                 return []
             }
             
-            return try await client
-                .from("Challenge")
-                .select()
-                .in("id", values: challengeIds)
-                .execute()
-                .value
+            return challengesOfUser
         } catch {
-            print("Error fetching challenges: \(error)")
-            return []
+            print("Error fetching challenges by user ID: \(error)")
+            throw error
         }
     }
     
-    func updateChallenge(challenge : Challenge) async {
+    //    func fetchAllChallenges(for userID : String) async -> [Challenge] {
+    //        do {
+    //            let challenges: [ChallengeParticipant] = try await client
+    //                .from("Challenge_Participant")
+    //                .select()
+    //                .eq("user_id", value: userID)
+    //                .execute()
+    //                .value
+    //
+    //            let challengeIds = challenges.map{ $0.challengeID }
+    //
+    //            if (challengeIds.isEmpty) {
+    //                print("No challenges found for user \(userID).")
+    //                return []
+    //            }
+    //
+    //            return try await client
+    //                .from("Challenge")
+    //                .select()
+    //                .in("id", values: challengeIds)
+    //                .execute()
+    //                .value
+    //        } catch {
+    //            print("Error fetching challenges: \(error)")
+    //            return []
+    //        }
+    //    }
+    
+    func updateChallenge(challenge : Challenge) async throws -> Void {
         do {
             try await client
                 .from("Challenge")
@@ -72,12 +110,12 @@ class ChallengeRepository {
         
     }
     
-    func deleteChallenge(challenge : Challenge) async {
+    func deleteChallenge(id: String) async throws -> Void {
         do {
             try await client
                 .from("Challenge")
                 .delete()
-                .eq("id", value: challenge.id)
+                .eq("id", value: id)
                 .execute()
             print("Challenge successfully deleted.")
         } catch {
@@ -85,47 +123,103 @@ class ChallengeRepository {
         }
     }
     
-    func fetchExperiences(for challengeID : String) async -> [Experience] {
+    func getExperiences(by challengeId: String) async throws -> [Experience] {
         do {
-            return try await client
+            let challengeWithExperiences: Challenge = try await client
                 .from("Experience")
-                .select()
-                .eq("challenge_id", value: challengeID)
+                .select(
+                    """
+                    *,
+                    experiences(*)
+                    """
+                ) // FIXME: all of itself and all of the multi-to-multi participants
+                .eq("challenge_id", value: challengeId)
+                .single()
                 .execute()
                 .value
+            
+            
+            return challengeWithExperiences.experiences ?? []
         } catch {
             print("Error fetching experiences: \(error)")
-            return []
+            throw error
         }
     }
     
-    func fetchParticipants(for challengeID : String) async -> [User] {
+    //    func fetchParticipants(for challengeID : String) async -> [User] {
+    //        do {
+    //            let participants: [ChallengeParticipant] = try await client
+    //                .from("Challenge_Participant")
+    //                .select()
+    //                .eq("challenge_id", value: challengeID)
+    //                .execute()
+    //                .value
+    //
+    //            let userIDs = participants.map { $0.userID }
+    //
+    //            if (userIDs.isEmpty) {
+    //                print("No participants found for this challenge: \(challengeID)")
+    //                return []
+    //            }
+    //
+    //            return try await client
+    //                .from("User")
+    //                .select()
+    //                .in("id", values: userIDs)
+    //                .execute()
+    //                .value
+    //        } catch {
+    //            print("Error fetching participants: \(error)")
+    //            return []
+    //        }
+    //    }
+    func addParticipant(userId: String, to challengeId: String) async throws -> Void {
+        // TODO: use participant (Account) methods for this
+    }
+    func removeParticipant(userId: String, from challengeId: String) async throws -> Void {
+        // TODO: use participant (Account) methods for this
+    }
+    func getParticipants(byChallengeId challengeId: String) async throws -> [Account] {
         do {
-            let participants: [ChallengeParticipant] = try await client
-                .from("Challenge_Participant")
-                .select()
-                .eq("challenge_id", value: challengeID)
+            let challengeWithParticipants: Challenge = try await client
+                .from("Challenge")
+                .select(
+                    """
+                    *,
+                    participants(*)
+                    """
+                )
+                .eq("id", value: challengeId)
+                .single()
                 .execute()
                 .value
             
-            let userIDs = participants.map { $0.userID }
-            
-            if (userIDs.isEmpty) {
-                print("No participants found for this challenge: \(challengeID)")
-                return []
-            }
-            
-            return try await client
-                .from("User")
-                .select()
-                .in("id", values: userIDs)
-                .execute()
-                .value
+            return challengeWithParticipants.participants ?? []
         } catch {
             print("Error fetching participants: \(error)")
-            return []
+            throw error
         }
     }
     
-
+    func getLetters(in challengeId: String) async throws -> [String] {
+        do {
+            let challengeWithLetters: Challenge = try await client
+                .from("Challenge")
+                .select(
+                    """
+                    *,
+                    letters(*)
+                    """
+                )
+                .eq("id", value: challengeId)
+                .single()
+                .execute()
+                .value
+            
+            return challengeWithLetters.letters ?? []
+        } catch {
+            print("Error fetching letters: \(error)")
+            throw error
+        }
+    }
 }

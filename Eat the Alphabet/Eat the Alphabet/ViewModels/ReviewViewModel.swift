@@ -10,27 +10,27 @@ import Foundation
 class ReviewViewModel: ObservableObject {
     @Published var review: Review
     private let reviewRepository : ReviewRepository = ReviewRepository()
-    private let userRepository: UserRepository = UserRepository()
+    private let userRepository: AccountRepository = AccountRepository()
     
     init(review: Review) {
         self.review = review
     }
     
-    func createReview() async {
-        do {
-            try await reviewRepository.createReview(review: review)
-        } catch {
-            print("Error creating review: \(error)")
-        }
-    }
+//    func createReview() async {
+//        do {
+//            try await reviewRepository.createReview(review: review)
+//        } catch {
+//            print("Error creating review: \(error)")
+//        }
+//    }
     
-    func deleteReview() async {
-        do {
-            try await reviewRepository.deleteReview(review: review)
-        } catch {
-            print("Error deleting review: \(error)")
-        }
-    }
+//    func deleteReview() async {
+//        do {
+//            try await reviewRepository.deleteReview(review: review)
+//        } catch {
+//            print("Error deleting review: \(error)")
+//        }
+//    }
     
     func updateReviewText(reviewText: String) async {
         review.review = reviewText

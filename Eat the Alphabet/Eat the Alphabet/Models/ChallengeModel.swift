@@ -14,6 +14,10 @@ struct Challenge: Codable, Identifiable {
     let created_at : Date
     var description: String? // Optional description of the challenge
     
+    var experiences: [Experience]? = [] // Experiences associated with the challenge
+    var letters: [String]? = [] // Letters associated with the challenge
+    var participants: [Account]? = [] // Participants associated with the challenge
+    
     // TEST: constructor from just data
     init(id: String,
          title: String,
@@ -29,12 +33,12 @@ struct Challenge: Codable, Identifiable {
         self.description = description
     }
         
-    enum CodingKeys: String, CodingKey {
-        case id = "id"
-        case title = "title"
-        case center_wgs = "center_wgs"
-        case radius = "radius"
-        case created_at = "created_at"
-        case description = "description"
-    }
+//    enum CodingKeys: String, CodingKey {
+//        case id = "id"
+//        case title = "title"
+//        case center_wgs = "center_wgs"
+//        case radius = "radius"
+//        case created_at = "created_at"
+//        case description = "description"
+//    }
 }

@@ -8,52 +8,71 @@
 import Foundation
 import Supabase
 
-class ReviewRepository {
-    let client : SupabaseClient
+final class ReviewRepository : ReviewProtocol {
+    
+    private let client : SupabaseClient
     
     init(client : SupabaseClient = SupabaseManager.shared.client) {
         self.client = client
     }
-    
-    func createReview(review : Review) async throws {
+    // 1
+    func createReview(review : Review) async throws -> Review {
         try await client
             .from("Review")
             .insert(review)
             .execute()
+            .value
     }
     
-    func deleteReview(review : Review) async throws {
-        try await client
-            .from("Review")
-            .delete()
-            .eq("id", value: review.id)
-            .execute()
-    }
-    
-    func fetchAllReviewsForUser(for userID: String) async throws -> [Review] {
+    // 2
+    func getReview(by id: String) async throws -> Review {
         try await client
             .from("Review")
             .select()
-            .eq("user_id", value: userID)
-            .order("createdAt", ascending: false)
+            .eq("id", value: id)
             .execute()
             .value
     }
     
-    func fetchAllReviewsForExperience(for experienceID: String) async throws -> [Review] {
-        try await client
-            .from("Review")
-            .select()
-            .eq("experience_id", value: experienceID)
-            .order("createdAt", ascending: false)
-            .execute()
-            .value
-    }
-    
+    // 3
     func updateReview(review: Review) async throws {
         try await client
             .from("Review")
             .upsert(review)
             .execute()
     }
+    
+    // 4
+    func deleteReview(by id: String) async throws {
+        try await client
+            .from("Review")
+            .delete()
+            .eq("id", value: id)
+            .execute()
+    }
+    
+//    func getReviews(byUser userID: String) async throws -> [Review] {
+//        // TODO: use Account's Repo function to do this
+//    }
+//    
+//    func getReviews(byExperience experienceId: String) async throws -> [Review] {
+//        // TODO: use Experience's Repo function to get an experience's reviews
+//    }
+//    func getReviews(byRestaurant restaurantId: String) async throws -> [Review] {
+//        // TODO: use Restaurant's Repo function to get a restaurant's reviews
+//    }
+//    
+//    func getAverageRating(forRestaurantId restaurantId: String) async throws -> Float? {
+//        // TODO: use Restaurant's Repo function to get a rest's reviews, and calculate
+//    }
+    
+    //    func getRecentReviews(limit: Int) async throws -> [Review] {
+    //        <#code#>
+    //    }
+    //
+    //    func hasUserReviewed(experienceId: String, userId: String) async throws -> Bool {
+    //        <#code#>
+    //    }
+
+    
 }

@@ -7,20 +7,20 @@
 
 protocol RestaurantProtocol {
     // CRUD
-    func createRestaurant(_ restaurant: Restaurant) async throws -> Restaurant
+    func createRestaurant(restaurant: Restaurant) async throws
     func getRestaurant(by id: String) async throws -> Restaurant
-    func updateRestaurant(_ restaurant: Restaurant) async throws
+    func updateRestaurant(restaurant: Restaurant) async throws
     func deleteRestaurant(id: String) async throws
     
     // Search & filter
-    func searchRestaurants(by name: String) async throws -> [Restaurant]
-    func filterRestaurants(
-        cuisine: String?,
-        maxPrice: Int?,
-        minRating: Float?,
-        within radius: Float?,
-        from location: GeoPoint?
-    ) async throws -> [Restaurant]
+//    func searchRestaurants(by name: String) async throws -> [Restaurant]
+//    func filterRestaurants(
+//        cuisine: String?,
+//        maxPrice: Int?,
+//        minRating: Float?,
+//        within radius: Float?,
+//        from location: GeoPoint?
+//    ) async throws -> [Restaurant]
     
     // Experience-related
     func getExperiences(for restaurantId: String) async throws -> [Experience]

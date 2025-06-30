@@ -22,7 +22,7 @@ final class AuthService {
         self.auth = client.auth
     }
 
-    func login(email: String, password: String, completion: @escaping (Result<User, Error>) -> Void) {
+    func login(email: String, password: String, completion: @escaping (Result<Account, Error>) -> Void) {
         Task {
             do {
                 let result = try await auth.signIn(
@@ -32,7 +32,7 @@ final class AuthService {
                 appState.session = result.self
                 
                 let user = result.user
-                let returnedUser = User(from: user)
+                let returnedUser = Account(from: user)
                 completion(.success(returnedUser))
             } catch {
                 completion(.failure(error))
@@ -40,7 +40,7 @@ final class AuthService {
         }
     }
 
-    func register(username: String, email: String, password: String, completion: @escaping (Result<User, Error>) -> Void) {
+    func register(username: String, email: String, password: String, completion: @escaping (Result<Account, Error>) -> Void) {
         Task {
             do {
                 let result = try await auth.signUp(
@@ -53,7 +53,7 @@ final class AuthService {
                 appState.session = result.session
                 
                 let user = result.user
-                let returnedUser = User(from: user)
+                let returnedUser = Account(from: user)
                 completion(.success(returnedUser))
             } catch {
                 completion(.failure(error))

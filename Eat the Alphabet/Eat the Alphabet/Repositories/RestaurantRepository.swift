@@ -1,147 +1,129 @@
 import Foundation
 import CoreLocation
+import Supabase
 
-// NOTE: API encapsulation for 
-class RestaurantRepository {
-    // static let shared = RestaurantRepository() is a good practice
+// NOTE: API encapsulation for
+class RestaurantRepository : RestaurantProtocol {
     
-    private let experienceRepository = ExperienceRepository.shared
+    let client: SupabaseClient
+    init(client: SupabaseClient = SupabaseManager.shared.client) {
+        self.client = client
+    }
     
-    // Fetch all restaurants
-    func loadAllRestaurants(completion: @escaping (Result<[Restaurant], Error>) -> Void) {
-        Task {
-            do {
-                let response: [Restaurant] = try await SupabaseManager.shared.client
-                    .from("restaurants")
-                    .select()
-                    .execute()
-                    .value
-                completion(.success(response))
-            } catch {
-                completion(.failure(error))
-            }
+    func createRestaurant(restaurant: Restaurant) async throws -> Void {
+        do {
+            try await client
+                .from("Restaurant")
+                .insert(restaurant)
+                .execute()
+            
+            print("Restaurant successfully created.")
+        } catch {
+            
+            print("Error creating restaurant: \(error)")
+            throw error
         }
     }
     
-    func loadRestaurantById(id: String, completion: @escaping (Result<Restaurant, Error>) -> Void) {
-        Task {
-            do {
-                let response: Restaurant = try await SupabaseManager.shared.client
-                    .from("restaurants")
-                    .select()
-                    .eq("id", value: id)
-                    .execute()
-                    .value
-                completion(.success(response))
-            } catch {
-                completion(.failure(error))
-            }
+    func getRestaurant(by id: String) async throws -> Restaurant {
+        do {
+            let restaurant: Restaurant = try await client
+                .from("Restaurant")
+                .select()
+                .eq("id", value: id)
+                .single()
+                .execute()
+                .value
+            
+            return restaurant
+        } catch {
+            print("Error fetching restaurant by id: \(error)")
+            throw error
         }
     }
     
-    // Fetch restaurant by its experience ID
-    func loadRestaurantByExperienceId ( experience_id: String, completion: @escaping (Result<Restaurant, Error>) -> Void ) {
-        Task {
-            do {
-                let response: Restaurant = try await SupabaseManager.shared.client
-                    .from("experience")
-                    .select()
-                    .eq("id", value: experience_id)
-                    .execute()
-                    .value as Restaurant
-                completion(.success(response))
-            } catch {
-                completion(.failure(error))
-            }
+    func updateRestaurant(restaurant: Restaurant) async throws {
+        do {
+            try await client
+                .from("Restaurant")
+                .update(restaurant)
+                .eq("id", value: restaurant.id)
+                .execute()
+            
+            print("Restaurant successfully updated.")
+        } catch {
+            print("Error updating restaurant: \(error)")
+            throw error
         }
-    }
-        
-    func loadRestaurantsByChallengeId(challengeId: String, completion: @escaping (Result<[Restaurant], Error>) -> Void) {
-        experienceRepository.loadExperiencesByChallengeId(challengeId: challengeId) { result in
-            switch result {
-            case .success(let experiences):
-                let restaurantIds = experiences.map { $0.restaurant.id }
-                var restaurants: [Restaurant] = []
-                var encounteredError: Error? = nil
-                let group = DispatchGroup()
 
-                for id in restaurantIds {
-                    group.enter()
-                    self.loadRestaurantById(id: id) { result in
-                        switch result {
-                        case .success(let restaurant):
-                            restaurants.append(restaurant)
-                        case .failure(let error):
-                            // Capture the first error encountered
-                            if encounteredError == nil {
-                                encounteredError = error
-                            }
-                        }
-                        group.leave()
-                    }
-                }
-                group.notify(queue: .main) {
-                    if let error = encounteredError {
-                        completion(.failure(error))
-                    } else {
-                        completion(.success(restaurants))
-                    }
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
+    }
+    
+    func deleteRestaurant(id: String) async throws {
+        do {
+            try await client
+                .from("Restaurant")
+                .delete()
+                .eq("id", value: id)
+                .execute()
+            
+            print("Restaurant successfully deleted.")
+        } catch {
+            print("Error deleting restaurant: \(error)")
+            throw error
         }
+
     }
-
-
-
-//    func addRestaurant(_ restaurant: Restaurant) {
-//        // TODO: add restaurant to the database
+    
+//    func searchRestaurants(by name: String) async throws -> [Restaurant] {
+//        <#code#>
 //    }
-    func addRestaurant(_ restaurant: Restaurant, completion: @escaping (Result<Void, Error>) -> Void) {
-        Task {
-            do {
-                let response = try await SupabaseManager.shared.client
-                    .from("restaurants")
-                    .insert(restaurant)
-                    .execute()
-                // Check if the response contains an error
-                completion(.success(())) // Simulate success
-            } catch {
-                completion(.failure(error))
-            }
-        }
-    }
-        
-    func deleteRestaurant(by id: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        Task {
-            do {
-                let response = try await SupabaseManager.shared.client
-                    .from("restaurants")
-                    .delete()
-                    .eq("id", value: id)
-                    .execute()
-                // Check if the response contains an error
-                completion(.success(())) // Simulate success
-            } catch {
-                completion(.failure(error))
-            }
+//    
+//    func filterRestaurants(cuisine: String?, maxPrice: Int?, minRating: Float?, within radius: Float?, from location: GeoPoint?) async throws -> [Restaurant] {
+//        <#code#>
+//    }
+    
+    func getExperiences(for restaurantId: String) async throws -> [Experience] {
+        do {
+            let restaurantWithExperiences: Restaurant = try await client
+                .from("Restaurant")
+                .select(
+                    """
+                    *,
+                    experiences(*)
+                    """
+                )
+                .eq("id", value: restaurantId)
+                .single()
+                .execute()
+                .value
+            
+            return restaurantWithExperiences.experiences ?? []
+        } catch {
+            print("Error fetching experiences for restaurant: \(error)")
+            throw error
         }
     }
     
-    func updateRestaurant(_ restaurant: Restaurant, completion: @escaping (Result<Void, Error>) -> Void) {
-        Task {
-            do {
-                let response = try await SupabaseManager.shared.client
-                    .from("restaurants")
-                    .update(restaurant)
-                    .eq("id", value: restaurant.id)
-                    .execute()
-                // Check if the response contains an error
-                completion(.success(())) // Simulate success
-            } catch {
-                completion(.failure(error))
-            }
+    // TODO: technique revise
+    func getAverageRating(for restaurantId: String) async throws -> Float? {
+        do {
+            let restaurant: Restaurant = try await client
+                .from("Restaurant")
+                .select(
+                    """
+                    avg(map_imported_rating) as avg_map_imported_rating,
+                    avg(rating) as avg_rating
+                    """
+                )
+                .eq("id", value: restaurantId)
+                .single()
+                .execute()
+                .value
+            
+            return restaurant.map_imported_rating ?? restaurant.rating ?? nil
+        } catch {
+            print("Error fetching average rating for restaurant: \(error)")
+            throw error
         }
     }
 

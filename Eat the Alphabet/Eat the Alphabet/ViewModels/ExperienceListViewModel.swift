@@ -12,10 +12,10 @@ class ExperienceListViewModel: ObservableObject {
     
     private let reviewRepository: ReviewRepository
     private let experienceRepository: ExperienceRepository
-    private let userRepository: UserRepository
+    private let userRepository: AccountRepository
     private let userId: String
     
-    init(reviewRepository: ReviewRepository, experienceRepository: ExperienceRepository, userRepository: UserRepository, userId: String) {
+    init(reviewRepository: ReviewRepository, experienceRepository: ExperienceRepository, userRepository: AccountRepository, userId: String) {
         self.reviewRepository = reviewRepository
         self.experienceRepository = experienceRepository
         self.userRepository = userRepository
@@ -25,11 +25,11 @@ class ExperienceListViewModel: ObservableObject {
     @MainActor
     func loadExperiences() async {
         // Would place monitoring/error stuff here
-        do {
-            let experiences = try await experienceRepository.fetchAllExperiences(for: userId)
-            self.experienceViewModels = experiences.map{ ExperienceViewModel(restaurant: $0.restaurant, challenge: $0.challenge, repository: experienceRepository, userRepository: userRepository, reviewRepository: reviewRepository) }
-        } catch {
-            print("Error fetching experiences: \(error)")
-        }
+//        do {
+//            let experiences = try await experienceRepository.fetchAllExperiences(for: userId)
+//            self.experienceViewModels = experiences.map{ ExperienceViewModel(restaurant: $0.restaurant, challenge: $0.challenge, repository: experienceRepository, userRepository: userRepository, reviewRepository: reviewRepository) }
+//        } catch {
+//            print("Error fetching experiences: \(error)")
+//        }
     }
 }

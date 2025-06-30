@@ -8,22 +8,23 @@
 import Foundation
 
 struct Friends: Codable {
-    let user_id1: String
-    let user_id2: String
+    let user1_id: String
+    let user2_id: String
     let created_at: Date
     var status: String // eg. "pending", "accepted", "rejected", "blocked"
     
-    init (user_id1: String, user_id2: String, created_at: Date, status: String) {
-        self.user_id1 = user_id1
-        self.user_id2 = user_id2
+    init (user1_id: String, user2_id: String, created_at: Date, status: String) {
+        self.user1_id = user1_id
+        self.user2_id = user2_id
         self.created_at = created_at
         self.status = status
     }
     
-    enum CodingKeys: String, CodingKey {
-        case user_id1 = "user_id1"
-        case user_id2 = "user_id2"
-        case created_at = "created_at"
-        case status = "status"
-    }
-        
+//    enum CodingKeys: String, CodingKey {
+//        case user1_id = "user1_id"
+//        case user2_id = "user2_id"
+//        case created_at = "created_at"
+//        case status = "status"
+//    }
+    
+}

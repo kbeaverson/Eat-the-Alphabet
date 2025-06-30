@@ -9,7 +9,7 @@ import CoreLocation
 
 // NOTE: RestaurantViewModel is a view model for the Restaurant model, it contains UI related data and logic.
 class RestaurantListViewModel: ObservableObject {
-    private var restaurantRepository = RestaurantRepository.shared
+    private var restaurantRepository = RestaurantRepository()
     
     @Published var restaurants: [RestaurantViewModel] = []
 

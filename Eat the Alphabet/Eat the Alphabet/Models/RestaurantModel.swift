@@ -20,6 +20,8 @@ struct Restaurant: Codable, Identifiable {
     let details : String?
     let image_url : String?
     
+    var experiences: [Experience]? = [] // Experiences associated with the restaurant
+    
     // TEST: constructor from just data
     init(id: String,
          name: String,

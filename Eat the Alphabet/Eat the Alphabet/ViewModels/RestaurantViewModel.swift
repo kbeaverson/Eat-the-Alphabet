@@ -23,13 +23,13 @@ class RestaurantViewModel: Identifiable, ObservableObject {
         self.name = restaurant.name
         self.cuisine = restaurant.cuisine
         self.details = restaurant.details// FIXME: add details to the database table and model
-        self.imageUrl = restaurant.imageUrl
+        self.imageUrl = restaurant.image_url
         if let userCoord = userLocation {
             self.distance = RestaurantViewModel.getDistanceInKm(
                 selfCoord2d: userCoord,
                 targetCoord2d: CLLocationCoordinate2D(
-                    latitude: restaurant.address.latitude,
-                    longitude: restaurant.address.longitude
+                    latitude: restaurant.address_wgs.latitude,
+                    longitude: restaurant.address_wgs.longitude
                 )
             )
         } else {
@@ -47,18 +47,18 @@ class RestaurantViewModel: Identifiable, ObservableObject {
     }
     
     // Converts current view model back to model
-    func toModel(with geoLocation: GeoPoint) -> Restaurant {
-        return Restaurant(
-            id: self.id,
-            name: self.name,
-            cuisine: self.cuisine,
-            price: 30, // or add this field to VM
-            rating: 4.5, // or computed/assigned
-            address: geoLocation,
-            details: self.details,
-            imageUrl: self.imageUrl
-        )
-    }
+//    func toModel(with geoLocation: GeoPoint) -> Restaurant {
+//        return Restaurant(
+//            id: self.id,
+//            name: self.name,
+//            cuisine: self.cuisine,
+//            price: 30, // or add this field to VM
+//            rating: 4.5, // or computed/assigned
+//            address: geoLocation,
+//            details: self.details,
+//            imageUrl: self.imageUrl
+//        )
+//    }
 
     // TODO: other methods, CRUD operations, etc.
 }

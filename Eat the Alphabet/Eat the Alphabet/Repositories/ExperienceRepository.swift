@@ -10,7 +10,7 @@ import Foundation
 import SwiftUICore
 import Supabase
 
-class ExperienceRepository {
+class ExperienceRepository : ExperienceProtocol {
     // static let shared = ExperienceRepository() is not a good practice
     
     let client : SupabaseClient
@@ -19,6 +19,23 @@ class ExperienceRepository {
         self.client = client
     }
     
+    func getExperience(by id: String) async throws -> Experience {
+        do {
+            let experiences: Experience = try await client
+                .from("experiences")
+                .select()
+                .eq("id", value: id)
+                .single()
+                .execute()
+                .value
+            return experiences
+        } catch {
+            print("Error fetching experience: \(error)")
+            throw error
+        }
+    }
+    
+    // Create - add new experience
     func createExperience(experience : Experience) async throws {
         do {
             try await client
@@ -30,235 +47,181 @@ class ExperienceRepository {
         }
     }
     
-    // Read - fetch all experiences for a user, in async manner
-    func fetchAllExperiences(for userID: String) async throws -> [Experience] {
-        let experiences: [ExperienceParticipant] = try await client
-            .from("Experience_Participant")
-            .select()
-            .eq("user_id", value: userID)
-            .execute()
-            .value
-        
-        let experienceIDs = experiences.map { $0.experienceID }
-        
-        if (experienceIDs.isEmpty) {
-            return []
-        }
-        
-        return try await client
-            .from("Experience")
-            .select()
-            .in("experience_id", values: experienceIDs)
-            .execute()
-            .value
-    }
-    
-    static let shared = ExperienceRepository()
-    // Read - get all
-    func loadAllExperiences(completion: @escaping (Result<[Experience], Error>) -> Void) {
-        Task {
-            do {
-                let response: [Experience] = try await SupabaseManager.shared.client
-                    .from("experiences")
-                    .select()
-                    .execute()
-                    .value
-                completion(.success(response))
-            } catch {
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    // Read - get by id
-    func loadExperienceById(id: String, completion: @escaping (Result<Experience, Error>) -> Void) {
-        Task {
-            do {
-                let response: Experience = try await SupabaseManager.shared.client
-                    .from("experiences")
-                    .select()
-                    .eq("id", value: id)
-                    .execute()
-                    .value
-                completion(.success(response))
-            } catch {
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    // Read - get by challenge_id
-    func loadExperiencesByChallengeId(challengeId: String, completion: @escaping (Result<[Experience], Error>) -> Void) {
-        Task {
-            do {
-                let response: [Experience] = try await SupabaseManager.shared.client
-                    .from("experiences")
-                    .select()
-                    .eq("challenge_id", value: challengeId)
-                    .execute()
-                    .value
-                completion(.success(response))
-            } catch {
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    // Create - add new experience
-    
-    // Delete - remove experience by id
-    func removeExperienceById(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        Task {
-            do {
-                try await SupabaseManager.shared.client
-                    .from("experiences")
-                    .delete()
-                    .eq("id", value: id)
-                    .execute()
-                completion(.success(()))
-            } catch {
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    // Update - update experience by id, with an Experience object
-    func updateExperience(_ experience: Experience, completion: @escaping (Result<Void, Error>) -> Void) {
-        Task {
-            do {
-                try await SupabaseManager.shared.client
-                    .from("experiences")
-                    .update(experience)
-                    .eq("id", value: experience.id)
-                    .execute()
-                completion(.success(()))
-            } catch {
-                completion(.failure(error))
-            }
-        }
-    }
-    
-        
-    // Update - update experience with photo
-    // upload photo to bucket 'experienceimages', if succeed, write the retsponse URL to the image_url field of the Experience object, update it to the database
-    // Adds a SwiftUI Image to Supabase storage and updates Experience.photo_url
-        func addPhoto(photo: Image, experience_id: String, completion: @escaping (Result<Void, Error>) -> Void) {
-            // Convert SwiftUI Image to UIImage (must be handled via ImageRenderer or similar)
-            guard let uiImage = photo.asUIImage(), // see extension below
-                  let imageData = uiImage.pngData() else {
-                completion(.failure(PhotoUploadError.invalidImage))
-                return
-            }
-
-            let fileName = UUID().uuidString + ".png"
-            let bucket = SupabaseStorageHelper.Bucket.experienceImages
-
-            // Step 1: Upload image to bucket
-            SupabaseStorageHelper.shared.uploadImage(image: uiImage, to: bucket, fileName: fileName) { result in
-                switch result {
-                case .success(let imagePath):
-                    do {
-                    let publicUrl = try SupabaseManager.shared.client.storage
-                        .from(bucket.rawValue)
-                        .getPublicURL(path: imagePath)
-                    // Step 2: Retrieve existing Experience object
-                        Task {
-                            do {
-                                var experience: Experience = try await SupabaseManager.shared.client
-                                    .from("experiences")
-                                    .select()
-                                    .eq("id", value: experience_id)
-                                    .single()
-                                    .execute()
-                                    .value
-                                
-                                // Step 3: Append new photo URL to existing array
-                                var updatedPhotos = experience.photo_urls ?? []
-                                updatedPhotos.append(publicUrl.absoluteString)
-                                
-                                // Step 4: Update database
-                                try await SupabaseManager.shared.client
-                                    .from("experiences")
-                                    .update(["photo_url": updatedPhotos])
-                                    .eq("id", value: experience_id)
-                                    .execute()
-                                
-                                completion(.success(()))
-                            } catch {
-                                completion(.failure(error))
-                            }
-                        }
-                    } catch {
-                        completion(.failure(error))
-                    }
-
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            }
-        }
-    
-    // remove photo from the bucket, if succeed, (remove the photo from the photos array, in the Model and ViewModel) and update the Experience object, update to the database
-    func removePhoto(at index: Int, completion: @escaping (Result<Void, Error>) -> Void) {
-        // self.photos.remove(at: index)
-        
-    }
-    
-    // add a Review to the Experience, if succeed (unlikely this step would fail), append the Review to the reviews array in the Experience object, update it to the database
-    func addReview(_ review: Review, completion: @escaping (Result<Void, Error>) -> Void) {
-        // self.reviews.append(review)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            completion(.success(()))
+    func createExperience(challengeId: String, restaurantId: String) async throws {
+        let experience = Experience(
+            id: UUID().uuidString,
+            created_at: Date(),
+            status: "incomplete",
+            restaurant_id: restaurantId,
+            challenge_id: challengeId)
+        do {
+            try await createExperience(experience: experience)
+        } catch {
+            print("Error creating experience: \(error)")
+            throw error
         }
     }
     
     func updateExperience(experience : Experience) async throws {
-        try await client
-            .from("Experience")
-            .upsert(experience)
-            .execute()
+        do {
+            try await client
+                .from("Experience")
+                .update(experience)
+                .execute()
+        }
+        catch {
+            print("Error updating experience: \(error)")
+            throw error
+        }
     }
     
-    func deleteExperience(experience : Experience) async throws {
-        try await client
-            .from("Experience")
-            .delete()
-            .eq("id", value: experience.id)
-            .execute()
+    func deleteExperience(id : String) async throws {
+        do {
+            try await client
+                .from("Experience")
+                .delete()
+                .eq("id", value: id)
+                .execute()
+        }
+        catch {
+            print("Error deleting experience: \(error)")
+            throw error
+        }
     }
     
-    func fetchReviews(for experienceID : String) async throws -> [Review] {
-        return try await client
-            .from("Review")
-            .select()
-            .eq("experience_id", value: experienceID)
-            .execute()
-            .value
+    
+    
+    // Read - fetch all experiences for a user, in async manner
+    //    func getAllExperiences(for userID: String) async throws -> [Experience] {
+    //        let experiences: [ExperienceParticipant] = try await client
+    //            .from("Experience_Participant")
+    //            .select()
+    //            .eq("user_id", value: userID)
+    //            .execute()
+    //            .value
+    //
+    //        let experienceIDs = experiences.map { $0.experienceID }
+    //
+    //        if (experienceIDs.isEmpty) {
+    //            return []
+    //        }
+    //
+    //        return try await client
+    //            .from("Experience")
+    //            .select()
+    //            .in("experience_id", values: experienceIDs)
+    //            .execute()
+    //            .value
+    //    }
+    
+    // FIXME: placeholder
+    func getRestaurant(for experienceId: String) async throws -> Restaurant {
+        do {
+            let restaurant: Restaurant = try await client
+                .from("Restaurant")
+                .select()
+                .eq("experience_id", value: experienceId)
+                .single()
+                .execute()
+                .value
+            return restaurant
+        } catch {
+            print("Error fetching restaurant for experience: \(error)")
+            throw error
+        }
     }
     
-    func fetchParticipants(for experienceID : String) async throws -> [Review] {
-        let participants: [ExperienceParticipant] = try await client
-            .from("Experience_Participant")
-            .select()
-            .eq("experience_id", value: experienceID)
-            .execute()
-            .value
+    // FIXME: placeholder
+    func getParticipants(for experienceId: String) async throws -> [Account] {
+        do {
+            let participants: [Account] = try await client
+                .from("Experience_Participant")
+                .select()
+                .eq("experience_id", value: experienceId)
+                .execute()
+                .value
+            
+            return participants
+        } catch {
+            print("Error fetching participants for experience: \(error)")
+            throw error
+        }
+    }
+    
+    // FIXME: placeholder
+    func addParticipant(userId: String, to experienceId: String) async throws {
+        let participant = ExperienceParticipant(
+            // id: UUID().uuidString,
+            userID: userId,
+            experienceID: experienceId
+            // created_at: Date()
+        )
         
-        let userIDs = participants.map { $0.userID }
-        
-        if (userIDs.isEmpty) {
-            return []
+        do {
+            try await client
+                .from("Experience_Participant")
+                .insert(participant)
+                .execute()
+        } catch {
+            print("Error adding participant to experience: \(error)")
+            throw error
         }
         
-        return try await client
-            .from("User")
-            .select()
-            .in("id", values: userIDs)
-            .execute()
-            .value
     }
-}
-
-enum PhotoUploadError: Error {
-    case invalidImage
+    
+    // FIXME: placeholder
+    func removeParticipant(userId: String, from experienceId: String) async throws {
+        do {
+            try await client
+                .from("Experience_Participant")
+                .delete()
+                .eq("user_id", value: userId)
+                .eq("experience_id", value: experienceId)
+                .execute()
+        } catch {
+            print("Error removing participant from experience: \(error)")
+            throw error
+        }
+    }
+    // static let shared = ExperienceRepository()
+    
+    func getReviews(for experienceId : String) async throws -> [Review] {
+        do {
+            return try await client
+                .from("Review")
+                .select()
+                .eq("experience_id", value: experienceId)
+                .execute()
+                .value
+        }
+        catch {
+            print("Error fetching reviews: \(error)")
+            throw error
+            
+        }
+    }
+    
+    // add a Review to the Experience, if succeed (unlikely this step would fail), append the Review to the reviews array in the Experience object, update it to the database
+    func addReview(review: Review, for experienceId: String) async throws -> Void{
+        
+    }
+    // FIXME: placeholder
+    func deleteReview(reviewId: String, for experienceId: String) async throws {
+        do {
+            try await client
+                .from("Review")
+                .delete()
+                .eq("id", value: reviewId)
+                .eq("experience_id", value: experienceId)
+                .execute()
+        } catch {
+            print("Error deleting review: \(error)")
+            throw error
+            
+        }
+    }
+    
+    enum PhotoUploadError: Error {
+        case invalidImage
+    }
 }

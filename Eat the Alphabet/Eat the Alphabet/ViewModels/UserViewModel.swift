@@ -10,22 +10,20 @@ import CoreLocation
 import Supabase
 
 class UserViewModel: ObservableObject {
-    @Published var user: User
-    private let repository: UserRepository
+    @Published var user: Account
+    private let repository: AccountRepository
     
-    init(
-        user: User = User(
+    init() {
+        self.user = Account(
             id: UUID().uuidString,
             created_at: Date(),
-            address: GeoPoint(CLLocationCoordinate2D(latitude: 0, longitude: 0)),
-        ), repository: UserRepository = UserRepository()) {
-            self.repository = repository
-            self.user = user
+            address_wgs: GeoPoint(CLLocationCoordinate2D(latitude: 0, longitude: 0)),
+            username: "",
+            display_name: "",
+            profile_image_url: nil,
+            phone_number: nil)
+        self.repository = AccountRepository()
         }
-
-    
-    private let userRepository = UserRepository.shared
-    
 
 }
 

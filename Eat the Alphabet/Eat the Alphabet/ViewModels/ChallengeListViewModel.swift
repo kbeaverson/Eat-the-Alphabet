@@ -12,10 +12,10 @@ class ChallengeListViewModel: ObservableObject {
     
     private let challengeRepository: ChallengeRepository
     private let experienceRepository: ExperienceRepository
-    private let userRepository: UserRepository
+    private let userRepository: AccountRepository
     private let userId: String
     
-    init(challengeRepository: ChallengeRepository, experienceRepository: ExperienceRepository, userRepository: UserRepository, userId: String) {
+    init(challengeRepository: ChallengeRepository, experienceRepository: ExperienceRepository, userRepository: AccountRepository, userId: String) {
         self.challengeRepository = challengeRepository
         self.experienceRepository = experienceRepository
         self.userRepository = userRepository
@@ -23,10 +23,16 @@ class ChallengeListViewModel: ObservableObject {
     }
     
     @MainActor
-    func loadChallenges() async {
-        // Would place monitoring/error stuff here
-        let challenges = await challengeRepository.fetchAllChallenges(for: userId)
-        self.challengeViewModels = challenges.map{ ChallengeViewModel(challenge: $0, challengeRepository: challengeRepository, experienceRepository: experienceRepository, userRepository: userRepository) }
+    func loadChallenges() async throws {
+        do {
+            // Would place monitoring/error stuff here
+            let challenges = try await challengeRepository.getChallenges(byUserId: userId)
+            self.challengeViewModels = challenges.map{ ChallengeViewModel(challenge: $0, challengeRepository: challengeRepository, experienceRepository: experienceRepository, userRepository: userRepository) }
+        }
+        catch {
+            print("Error loading challenges: \(error)")
+            throw error
+        }
     }
     
 }
