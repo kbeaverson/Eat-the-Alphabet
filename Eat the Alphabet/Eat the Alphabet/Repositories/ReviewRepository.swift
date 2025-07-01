@@ -9,15 +9,9 @@ import Foundation
 import Supabase
 
 final class ReviewRepository : ReviewProtocol {
-    
-    private let client : SupabaseClient
-    
-    init(client : SupabaseClient = SupabaseManager.shared.client) {
-        self.client = client
-    }
     // 1
     func createReview(review : Review) async throws -> Review {
-        try await client
+        try await supabaseClient
             .from("Review")
             .insert(review)
             .execute()
@@ -26,7 +20,7 @@ final class ReviewRepository : ReviewProtocol {
     
     // 2
     func getReview(by id: String) async throws -> Review {
-        try await client
+        try await supabaseClient
             .from("Review")
             .select()
             .eq("id", value: id)
@@ -36,7 +30,7 @@ final class ReviewRepository : ReviewProtocol {
     
     // 3
     func updateReview(review: Review) async throws {
-        try await client
+        try await supabaseClient
             .from("Review")
             .upsert(review)
             .execute()
@@ -44,7 +38,7 @@ final class ReviewRepository : ReviewProtocol {
     
     // 4
     func deleteReview(by id: String) async throws {
-        try await client
+        try await supabaseClient
             .from("Review")
             .delete()
             .eq("id", value: id)

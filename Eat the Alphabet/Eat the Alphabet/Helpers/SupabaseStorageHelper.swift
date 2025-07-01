@@ -12,8 +12,7 @@ import UIKit
 
 final class SupabaseStorageHelper {
     static let shared = SupabaseStorageHelper()
-    private let client = SupabaseManager.shared.client
-
+    
     enum Bucket: String {
         case restaurantImages = "restaurantimages"
         case reviewImages = "reviewimages"
@@ -30,17 +29,9 @@ final class SupabaseStorageHelper {
         Task {
             do {
                 let path = "public/\(fileName)"
-                try await client.storage
+                try await supabaseClient.storage
                     .from(bucket.rawValue)
-                    .upload(
-                        path: path,
-                        file: imageData,
-                        options: FileOptions(
-                            cacheControl: "3600",
-                            contentType: "image/png",
-                            upsert: false
-                        )
-                    )
+                    // upload
                 completion(.success(path))
             } catch {
                 completion(.failure(error))

@@ -10,7 +10,5 @@ import Supabase
 import SwiftUI
 
 class AppState: ObservableObject {
-    @Published var isAuthenticated: Bool = false
-    // @Published var currentUser: User? = nil
     @Published var session: Auth.Session? = nil
 }

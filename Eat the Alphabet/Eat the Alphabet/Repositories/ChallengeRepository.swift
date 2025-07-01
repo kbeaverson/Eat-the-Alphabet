@@ -12,19 +12,11 @@ import Supabase
 // TODO: Unwrap all of the async methods so that the do/catch can be implemented at the ViewModel layer so as to allow error message propagation to the User
 class ChallengeRepository : ChallengeProtocol {
     
-    // static let shared = ChallengeRepository() is not a good practice
-    
-    let client : SupabaseClient
-    
     private let accountRepository: AccountRepository = AccountRepository()
-    
-    init(client : SupabaseClient = SupabaseManager.shared.client) {
-        self.client = client
-    }
     
     func createChallenge(challenge : Challenge) async throws -> Void {
         do {
-            try await client
+            try await supabaseClient
                 .from("Challenge")
                 .insert(challenge)
                 .execute()
@@ -37,7 +29,7 @@ class ChallengeRepository : ChallengeProtocol {
     
     func getChallenge(by id: String) async throws -> Challenge {
         do {
-            let challenge: Challenge = try await client
+            let challenge: Challenge = try await supabaseClient
                 .from("Challenge")
                 .select()
                 .eq("id", value: id)
@@ -99,7 +91,7 @@ class ChallengeRepository : ChallengeProtocol {
     
     func updateChallenge(challenge : Challenge) async throws -> Void {
         do {
-            try await client
+            try await supabaseClient
                 .from("Challenge")
                 .upsert(challenge)
                 .execute()
@@ -112,7 +104,7 @@ class ChallengeRepository : ChallengeProtocol {
     
     func deleteChallenge(id: String) async throws -> Void {
         do {
-            try await client
+            try await supabaseClient
                 .from("Challenge")
                 .delete()
                 .eq("id", value: id)
@@ -125,7 +117,7 @@ class ChallengeRepository : ChallengeProtocol {
     
     func getExperiences(by challengeId: String) async throws -> [Experience] {
         do {
-            let challengeWithExperiences: Challenge = try await client
+            let challengeWithExperiences: Challenge = try await supabaseClient
                 .from("Experience")
                 .select(
                     """
@@ -179,7 +171,7 @@ class ChallengeRepository : ChallengeProtocol {
     }
     func getParticipants(byChallengeId challengeId: String) async throws -> [Account] {
         do {
-            let challengeWithParticipants: Challenge = try await client
+            let challengeWithParticipants: Challenge = try await supabaseClient
                 .from("Challenge")
                 .select(
                     """
@@ -201,7 +193,7 @@ class ChallengeRepository : ChallengeProtocol {
     
     func getLetters(in challengeId: String) async throws -> [String] {
         do {
-            let challengeWithLetters: Challenge = try await client
+            let challengeWithLetters: Challenge = try await supabaseClient
                 .from("Challenge")
                 .select(
                     """

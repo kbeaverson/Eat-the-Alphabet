@@ -9,15 +9,10 @@ import Foundation
 import Supabase
 
 class AccountRepository : AccountProtocol {
-    
-    // static let shared = AccountRepository() is not a good practice
-    
-    let supabase = SupabaseManager.shared.client
-    
     // 1
     func createAccount(account: Account) async throws-> Void {
         do {
-            try await supabase
+            try await supabaseClient
                 .from("Account")
                 .insert(account)
                 .execute()
@@ -30,7 +25,7 @@ class AccountRepository : AccountProtocol {
     // 2 Fetch User by username
     func getAccount(byId id: String) async throws -> Account {
         do {
-            let account: Account = try await supabase
+            let account: Account = try await supabaseClient
                 .from("Account")
                 .select()
                 .eq("id", value: id)
@@ -47,7 +42,7 @@ class AccountRepository : AccountProtocol {
     // 2 Fetch User by username
     func getAccount(byUsername username: String) async throws -> Account {
         do {
-            let account: Account = try await supabase
+            let account: Account = try await supabaseClient
                 .from("Account")
                 .select()
                 .eq("username", value: username)
@@ -64,7 +59,7 @@ class AccountRepository : AccountProtocol {
     // 3 update Account by id
     func updateAccount(account: Account) async throws -> Void{
         do {
-            try await supabase
+            try await supabaseClient
                 .from("Account")
                 .update(account)
                 .eq("id", value: account.id)
@@ -77,7 +72,7 @@ class AccountRepository : AccountProtocol {
     
     // 4 Delete User
     func deleteAccount(id: String) async throws-> Void {
-        try? await supabase
+        try? await supabaseClient
             .from("Accounts")
             .delete()
             .eq("id", value: id)
@@ -89,7 +84,7 @@ class AccountRepository : AccountProtocol {
     func getFriends(of userId: String) async throws -> [Friends] {
         // foriegn key query
         do {
-            let accountWithFriends: Account = try await supabase
+            let accountWithFriends: Account = try await supabaseClient
                 .from("Account")
                 .select(
                     """
@@ -132,7 +127,7 @@ class AccountRepository : AccountProtocol {
     // get User's Challenges
     func getChallenges(for userId: String) async throws -> [Challenge] {
         do {
-            let accountWithChallenges: [Account] = try await supabase
+            let accountWithChallenges: [Account] = try await supabaseClient
                 .from("Account")
                 .select(
                     """
@@ -155,7 +150,7 @@ class AccountRepository : AccountProtocol {
     // get User's Experiences
     func getExperiences(for userId: String) async throws -> [Experience] {
         do {
-            let accountWithExperiences: [Account] = try await supabase
+            let accountWithExperiences: [Account] = try await supabaseClient
                 .from("Account")
                 .select(
                     """
@@ -179,7 +174,7 @@ class AccountRepository : AccountProtocol {
     func getReviews(by userId: String) async throws -> [Review] {
         do {
             
-            let accountWithReviews: [Account] = try await supabase
+            let accountWithReviews: [Account] = try await supabaseClient
                 .from("Account")
                 .select(
                     """
@@ -202,7 +197,7 @@ class AccountRepository : AccountProtocol {
     // check if username exists
     func checkUsernameExists(username: String) async throws -> Bool {
         do {
-            let count: Int = try await supabase
+            let count: Int = try await supabaseClient
                 .from("Account")
                 .select()
                 .eq("username", value: username)

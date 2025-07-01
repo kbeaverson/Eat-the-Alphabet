@@ -11,17 +11,10 @@ import SwiftUICore
 import Supabase
 
 class ExperienceRepository : ExperienceProtocol {
-    // static let shared = ExperienceRepository() is not a good practice
-    
-    let client : SupabaseClient
-    
-    init(client : SupabaseClient = SupabaseManager.shared.client) {
-        self.client = client
-    }
     
     func getExperience(by id: String) async throws -> Experience {
         do {
-            let experiences: Experience = try await client
+            let experiences: Experience = try await supabaseClient
                 .from("experiences")
                 .select()
                 .eq("id", value: id)
@@ -38,7 +31,7 @@ class ExperienceRepository : ExperienceProtocol {
     // Create - add new experience
     func createExperience(experience : Experience) async throws {
         do {
-            try await client
+            try await supabaseClient
                 .from("experiences")
                 .insert(experience)
                 .execute()
@@ -64,7 +57,7 @@ class ExperienceRepository : ExperienceProtocol {
     
     func updateExperience(experience : Experience) async throws {
         do {
-            try await client
+            try await supabaseClient
                 .from("Experience")
                 .update(experience)
                 .execute()
@@ -77,7 +70,7 @@ class ExperienceRepository : ExperienceProtocol {
     
     func deleteExperience(id : String) async throws {
         do {
-            try await client
+            try await supabaseClient
                 .from("Experience")
                 .delete()
                 .eq("id", value: id)
@@ -93,7 +86,7 @@ class ExperienceRepository : ExperienceProtocol {
     
     // Read - fetch all experiences for a user, in async manner
     //    func getAllExperiences(for userID: String) async throws -> [Experience] {
-    //        let experiences: [ExperienceParticipant] = try await client
+    //        let experiences: [ExperienceParticipant] = try await supabaseClient
     //            .from("Experience_Participant")
     //            .select()
     //            .eq("user_id", value: userID)
@@ -106,7 +99,7 @@ class ExperienceRepository : ExperienceProtocol {
     //            return []
     //        }
     //
-    //        return try await client
+    //        return try await supabaseClient
     //            .from("Experience")
     //            .select()
     //            .in("experience_id", values: experienceIDs)
@@ -117,7 +110,7 @@ class ExperienceRepository : ExperienceProtocol {
     // FIXME: placeholder
     func getRestaurant(for experienceId: String) async throws -> Restaurant {
         do {
-            let restaurant: Restaurant = try await client
+            let restaurant: Restaurant = try await supabaseClient
                 .from("Restaurant")
                 .select()
                 .eq("experience_id", value: experienceId)
@@ -134,7 +127,7 @@ class ExperienceRepository : ExperienceProtocol {
     // FIXME: placeholder
     func getParticipants(for experienceId: String) async throws -> [Account] {
         do {
-            let participants: [Account] = try await client
+            let participants: [Account] = try await supabaseClient
                 .from("Experience_Participant")
                 .select()
                 .eq("experience_id", value: experienceId)
@@ -158,7 +151,7 @@ class ExperienceRepository : ExperienceProtocol {
         )
         
         do {
-            try await client
+            try await supabaseClient
                 .from("Experience_Participant")
                 .insert(participant)
                 .execute()
@@ -172,7 +165,7 @@ class ExperienceRepository : ExperienceProtocol {
     // FIXME: placeholder
     func removeParticipant(userId: String, from experienceId: String) async throws {
         do {
-            try await client
+            try await supabaseClient
                 .from("Experience_Participant")
                 .delete()
                 .eq("user_id", value: userId)
@@ -187,7 +180,7 @@ class ExperienceRepository : ExperienceProtocol {
     
     func getReviews(for experienceId : String) async throws -> [Review] {
         do {
-            return try await client
+            return try await supabaseClient
                 .from("Review")
                 .select()
                 .eq("experience_id", value: experienceId)
@@ -208,7 +201,7 @@ class ExperienceRepository : ExperienceProtocol {
     // FIXME: placeholder
     func deleteReview(reviewId: String, for experienceId: String) async throws {
         do {
-            try await client
+            try await supabaseClient
                 .from("Review")
                 .delete()
                 .eq("id", value: reviewId)
