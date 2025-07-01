@@ -310,6 +310,7 @@
 /* Begin XCBuildConfiguration section */
 		98D295262DED1E4E008374A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9F376B9A2DF6ADFC003A8EED /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -373,6 +374,7 @@
 		};
 		98D295272DED1E4E008374A1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9F376B9A2DF6ADFC003A8EED /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -429,6 +431,7 @@
 		};
 		98D295292DED1E4E008374A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9F376B9A2DF6ADFC003A8EED /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -466,6 +469,7 @@
 		};
 		98D2952A2DED1E4E008374A1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9F376B9A2DF6ADFC003A8EED /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -503,6 +507,7 @@
 		};
 		98D2952C2DED1E4E008374A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9F376B9A2DF6ADFC003A8EED /* Config.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -521,6 +526,7 @@
 		};
 		98D2952D2DED1E4E008374A1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9F376B9A2DF6ADFC003A8EED /* Config.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -539,6 +545,7 @@
 		};
 		98D2952F2DED1E4E008374A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9F376B9A2DF6ADFC003A8EED /* Config.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -555,6 +562,7 @@
 		};
 		98D295302DED1E4E008374A1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9F376B9A2DF6ADFC003A8EED /* Config.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

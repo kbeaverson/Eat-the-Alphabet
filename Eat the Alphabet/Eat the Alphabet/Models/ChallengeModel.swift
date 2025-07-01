@@ -33,12 +33,12 @@ struct Challenge: Codable, Identifiable {
         self.description = description
     }
         
-//    enum CodingKeys: String, CodingKey {
-//        case id = "id"
-//        case title = "title"
-//        case center_wgs = "center_wgs"
-//        case radius = "radius"
-//        case created_at = "created_at"
-//        case description = "description"
-//    }
+    enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case title = "title"
+        case center_wgs = "center_wgs"
+        case radius = "radius"
+        case created_at = "created_at"
+        case description = "description"
+    }
 }

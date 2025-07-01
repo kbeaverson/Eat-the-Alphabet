@@ -28,6 +28,9 @@ struct RegisterView: View {
                         .padding(.vertical, 40)
                     
                     TextField("Username", text: $username)
+                        .textContentType(.username)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
                         .padding(12) // inner padding (inside white box)
                         .background(.textFieldBg)
                         .cornerRadius(8)
@@ -37,6 +40,9 @@ struct RegisterView: View {
                         )
                     
                     TextField("Email/Phone Address", text: $email)
+                        .textContentType(.emailAddress)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
                         .padding(12) // inner padding (inside white box)
                         .background(.textFieldBg)
                         .cornerRadius(8)
@@ -46,6 +52,9 @@ struct RegisterView: View {
                         )
                     
                     SecureField("Password", text: $password)
+                        .textContentType(.newPassword)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
                         .padding(12) // inner padding (inside white box)
                         .background(.textFieldBg)
                         .cornerRadius(8)
@@ -55,6 +64,9 @@ struct RegisterView: View {
                         )
                     
                     SecureField("Confirm password", text: $confirmPassword)
+                        .textContentType(.newPassword)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
                         .padding(12) // inner padding (inside white box)
                         .background(.textFieldBg)
                         .cornerRadius(8)

@@ -20,11 +20,11 @@ struct Friends: Codable {
         self.status = status
     }
     
-//    enum CodingKeys: String, CodingKey {
-//        case user1_id = "user1_id"
-//        case user2_id = "user2_id"
-//        case created_at = "created_at"
-//        case status = "status"
-//    }
+    enum CodingKeys: String, CodingKey {
+        case user1_id = "user1_id"
+        case user2_id = "user2_id"
+        case created_at = "created_at"
+        case status = "status"
+    }
     
 }

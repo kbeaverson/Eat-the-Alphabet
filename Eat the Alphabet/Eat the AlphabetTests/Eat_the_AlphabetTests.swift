@@ -5,9 +5,11 @@
 //  Created by Kenny Beaverson on 6/1/25.
 //
 
+import Foundation
 import Testing
 import Supabase
 @testable import Eat_the_Alphabet
+
 
 struct Eat_the_AlphabetTests {
     
@@ -16,7 +18,10 @@ struct Eat_the_AlphabetTests {
     }
     
     /** TEST get user access token first*/
-    @Test func testLogin() async throws {
+    @Test func testConfigs() async throws {
+        print("Testing configurations...")
+        // test if values SUPABASE_URL is not empty
+        #expect(Bundle.main.object(forInfoDictionaryKey: "SUPABASE_URL") as? String != nil, "SUPABASE_URL should not be nil")
         
     }
     

@@ -9,11 +9,11 @@ import Foundation
 
 class ReviewViewModel: ObservableObject {
     @Published var review: Review
-    private let reviewRepository : ReviewRepository = ReviewRepository()
-    private let userRepository: AccountRepository = AccountRepository()
+    private let reviewRepository : ReviewRepository /*= ReviewRepository()*/
     
     init(review: Review) {
         self.review = review
+        self.reviewRepository = ReviewRepository()
     }
     
 //    func createReview() async {

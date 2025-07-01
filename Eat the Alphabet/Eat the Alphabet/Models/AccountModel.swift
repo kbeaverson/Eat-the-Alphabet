@@ -50,15 +50,15 @@ struct Account: Codable, Identifiable {
         // NOTE: consider adding a self.email = supabaseUser.email
     }
 
-//    enum CodingKeys: String, CodingKey {
-//        case id = "id"
-//        case created_at = "created_at"
-//        case address_wgs = "address_wgs"
-//        case username = "username"
-//        case display_name = "display_name"
-//        case profile_image_url = "profile_image_url"
-//        case phone_number = "phone_number"
-//    }
+    enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case created_at = "created_at"
+        case address_wgs = "address_wgs"
+        case username = "username"
+        case display_name = "display_name"
+        case profile_image_url = "profile_image_url"
+        case phone_number = "phone_number"
+    }
 }
 
 

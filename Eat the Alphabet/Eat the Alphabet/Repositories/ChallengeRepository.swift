@@ -137,8 +137,6 @@ class ChallengeRepository : ChallengeProtocol {
                 .single()
                 .execute()
                 .value
-            
-            
             return challengeWithExperiences.experiences ?? []
         } catch {
             print("Error fetching experiences: \(error)")

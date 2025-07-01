@@ -24,6 +24,9 @@ struct LoginView: View {
                         .padding(.vertical, 40)
                     
                     TextField("Email/Phone Address", text: $email)
+                        .textContentType(.emailAddress)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
                         .padding(12) // inner padding (inside white box)
                         .background(.textFieldBg)
                         .cornerRadius(8)
@@ -33,6 +36,9 @@ struct LoginView: View {
                         )
                     
                     SecureField("Password", text: $password)
+                        .textContentType(.password)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
                         .padding(12) // inner padding (inside white box)
                         .background(.textFieldBg)
                         .cornerRadius(8)
