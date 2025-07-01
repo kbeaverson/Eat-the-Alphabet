@@ -12,64 +12,48 @@ import SwiftUI
 final class AuthService {
     private let client: SupabaseClient
     private var auth: AuthClient
+    private var appState: AppState?
     
     public static let shared = AuthService()
-    
-    @EnvironmentObject var appState: AppState
 
     init(client: SupabaseClient = SupabaseManager.shared.client) {
         self.client = client
         self.auth = client.auth
     }
+    
+    public func injectAppState(appState: AppState) {
+        self.appState = appState
+        
+//        if let session = SupabaseManager.shared.client.auth.session {
+//                appState.session = session
+//                appState.isAuthenticated = true
+//        }
+        //TODO: Can uncomment the above when session persistence is implemented
+    }
+        
 
-    func login(email: String, password: String, completion: @escaping (Result<Account, Error>) -> Void) {
-        Task {
-            do {
-                let result = try await auth.signIn(
-                    email: email,
-                    password: password
-                )
-                appState.session = result.self
-                
-                let user = result.user
-                let returnedUser = Account(from: user)
-                completion(.success(returnedUser))
-            } catch {
-                completion(.failure(error))
-            }
-        }
+    func login(email: String, password: String) async throws {
+        let result = try await auth.signIn(
+            email: email,
+            password: password
+        )
+        appState?.session = result.self
+        // TODO: Do we need to update appState.authenticated too?
     }
 
-    func register(username: String, email: String, password: String, completion: @escaping (Result<Account, Error>) -> Void) {
-        Task {
-            do {
-                let result = try await auth.signUp(
-                    email: email,
-                    password: password,
-                    data: [
-                        "username": .string(username)
-                    ]
-                )
-                appState.session = result.session
-                
-                let user = result.user
-                let returnedUser = Account(from: user)
-                completion(.success(returnedUser))
-            } catch {
-                completion(.failure(error))
-            }
-        }
+    func register(username: String, email: String, password: String) async throws {
+        let result = try await auth.signUp(
+            email: email,
+            password: password,
+            data: [
+                "username": .string(username)
+            ]
+        )
+        appState?.session = result.session
     }
 
-    func resetPassword(email: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        Task {
-            do {
-                try await auth.resetPasswordForEmail(email)
-                completion(.success(()))
-            } catch {
-                completion(.failure(error))
-            }
-        }
+    func resetPassword(email: String) async throws {
+        try await auth.resetPasswordForEmail(email)
     }
 
     func handleURL(_ url: URL) {

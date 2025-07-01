@@ -80,22 +80,31 @@ struct RegisterView: View {
                             showAlert = true
                             return
                         }
-                        
-                        AuthService.shared.register(
-                            username: username,
-                            email: email,
-                            password: password
-                        ) { result in
-                            switch result {
-                            case .success(let user):
-                                print("Registered ")
-                                // DO NOT Navigate to the main app view or show success message
-                            case .failure(let error):
-                                print("Registration error: \(error.localizedDescription)")
+                        Task {
+                            do {
+                                try await AuthService.shared.register(
+                                    username: username,
+                                    email: email,
+                                    password: password
+                                )
+                                print("Registered successfully.")
+                            } catch {
+                                print("Registration failed: \(error)")
                                 alertMessage = "Registration failed: \(error.localizedDescription)"
                                 showAlert = true
                             }
                         }
+//                        ) { result in
+//                            switch result {
+//                            case .success(let user):
+//                                print("Registered ")
+//                                // DO NOT Navigate to the main app view or show success message
+//                            case .failure(let error):
+//                                print("Registration error: \(error.localizedDescription)")
+//                                alertMessage = "Registration failed: \(error.localizedDescription)"
+//                                showAlert = true
+//                            }
+//                        }
                         
                     }) {
                         Text("Register")
