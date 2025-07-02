@@ -22,10 +22,16 @@ struct Eat_the_AlphabetTests {
         print("Testing configurations...")
         // test if values SUPABASE_URL is not empty
         #expect(Bundle.main.object(forInfoDictionaryKey: "SUPABASE_URL") as? String != nil, "SUPABASE_URL should not be nil")
-        
+        print("SUPABASE_URL: " + (Bundle.main.infoDictionary?["SUPABASE_URL"] as? String ?? "nil"))
+        #expect(Bundle.main.object(forInfoDictionaryKey: "SUPABASE_ANON_KEY") as? String != nil, "SUPABASE_ANON_KEY should not be nil")
+        print("SUPABASE_ANON_KEY: " + (Bundle.main.infoDictionary?["SUPABASE_ANON_KEY"] as? String ?? "nil"))
+        #expect(Bundle.main.object(forInfoDictionaryKey: "SUPABASE_SERVICE_ROLE_KEY") as? String != nil, "SUPABASE_SERVICE_ROLE_KEY should not be nil")
+        print("SUPABASE_SERVICE_ROLE_KEY: " + (Bundle.main.infoDictionary?["SUPABASE_SERVICE_ROLE_KEY"] as? String ?? "nil"))
+        // wait for 1 sec
+        try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
     }
     
-    @Test func testRegister() async throws {
+    @Test func test() async throws {
         
     }
     

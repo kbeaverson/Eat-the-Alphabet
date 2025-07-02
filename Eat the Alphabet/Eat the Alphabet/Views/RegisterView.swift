@@ -94,7 +94,7 @@ struct RegisterView: View {
                         }
                         Task {
                             do {
-                                try await AuthService.shared.register(
+                                let result: Result = try await AuthService.shared.register(
                                     username: username,
                                     email: email,
                                     password: password

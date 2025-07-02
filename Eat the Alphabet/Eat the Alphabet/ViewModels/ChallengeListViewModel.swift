@@ -8,7 +8,7 @@ import Foundation
 import SwiftUI
 
 class ChallengeListViewModel: ObservableObject {
-    @EnvironmentObject var appState: AppState
+    // @EnvironmentObject var appState: AppState
     
     @Published var challengeModels : [Challenge] = []
     // TODO: Consider monitoring loading status/errors with other published vars?

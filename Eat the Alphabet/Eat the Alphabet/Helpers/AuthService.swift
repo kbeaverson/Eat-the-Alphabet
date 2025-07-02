@@ -10,38 +10,52 @@ import Foundation
 import SwiftUI
 
 final class AuthService {
-    private var appState: AppState?
+    // private var appState: AppState?
     
+//    public func injectAppState(appState: AppState) {
+//        self.appState = appState
+//        //TODO: Can uncomment the above when session persistence is implemented
+//    }
     public static let shared = AuthService()
-    
-    public func injectAppState(appState: AppState) {
-        self.appState = appState
-        //TODO: Can uncomment the above when session persistence is implemented
-    }
-        
 
-    func login(email: String, password: String) async throws {
-        let result = try await supabaseClient.auth.signIn(
-            email: email,
-            password: password
-        )
-        appState?.session = result
+    public func login(email: String, password: String) async throws -> (Result<User, Error>) {
+        do {
+            let result = try await supabaseClient.auth.signIn(
+                email: email,
+                password: password
+            )
+            
+            return .success(result.user)
+            // appState?.session = result
+        } catch {
+            print("Login error: \(error)")
+            return .failure(error)
+        }
         // TODO: Do we need to update appState.authenticated too?
     }
 
-    func register(username: String, email: String, password: String) async throws {
-        let result = try await supabaseClient.auth.signUp(
-            email: email,
-            password: password,
-            data: [
-                "username": .string(username)
-            ]
-        )
-        appState?.session = result.session
+    public func register(username: String, email: String, password: String) async throws -> (Result<User, Error>) {
+        do {
+            let result = try await supabaseClient.auth.signUp(
+                email: email,
+                password: password,
+                data: [
+                    "username": .string(username)
+                ]
+            )
+            
+            return .success(result.user)
+            // appState?.session = result.session
+        }
+        catch {
+            print("Registration error: \(error)")
+            return .failure(error)
+        }
     }
 
-    func resetPassword(email: String) async throws {
+    public func resetPassword(email: String) async throws {
         try await supabaseClient.auth.resetPasswordForEmail(email)
+        // todo: handle the email to navigate back to the app
     }
 
     func handleURL(_ url: URL) {
