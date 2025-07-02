@@ -27,7 +27,6 @@ class ChallengeListViewModel: ObservableObject {
     func loadChallenges() async throws {
         do {
             // Would place monitoring/error stuff here
-            
 //            let challenges = try await challengeRepository.getChallenges(byUserId: appstate.currentUser?.id)
 //            self.challengeViewModels = challenges.map{ ChallengeViewModel(challenge: $0, challengeRepository: challengeRepository, experienceRepository: experienceRepository, userRepository: userRepository) }
         }
