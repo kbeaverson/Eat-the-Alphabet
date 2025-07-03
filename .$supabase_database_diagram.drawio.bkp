@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
   <diagram name="第 1 页" id="NpTUac61gr3fFL1JbAI0">
-    <mxGraphModel dx="1581" dy="1023" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="765" dy="495" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -146,7 +146,7 @@
           <mxGeometry y="330" width="190" height="30" as="geometry" />
         </mxCell>
         <mxCell id="L86B1Z6Jg-OLmUhc2pmN-70" value="Experience" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="960" y="1010" width="190" height="150" as="geometry" />
+          <mxGeometry x="960" y="1010" width="190" height="180" as="geometry" />
         </mxCell>
         <mxCell id="L86B1Z6Jg-OLmUhc2pmN-71" value="id: uuid&amp;nbsp;PRIMARY" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="L86B1Z6Jg-OLmUhc2pmN-70" vertex="1">
           <mxGeometry y="30" width="190" height="30" as="geometry" />
@@ -154,11 +154,14 @@
         <mxCell id="L86B1Z6Jg-OLmUhc2pmN-72" value="created_at: timestamptz" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="L86B1Z6Jg-OLmUhc2pmN-70" vertex="1">
           <mxGeometry y="60" width="190" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="L86B1Z6Jg-OLmUhc2pmN-73" value="challenge_id: uuid" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="L86B1Z6Jg-OLmUhc2pmN-70" vertex="1">
+        <mxCell id="e-C7q4NlqBt8orJ2KI13-16" value="status: varchar" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="L86B1Z6Jg-OLmUhc2pmN-70">
           <mxGeometry y="90" width="190" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="L86B1Z6Jg-OLmUhc2pmN-74" value="restaurant_id: uuid" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="L86B1Z6Jg-OLmUhc2pmN-70" vertex="1">
+        <mxCell id="L86B1Z6Jg-OLmUhc2pmN-73" value="challenge_id: uuid" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="L86B1Z6Jg-OLmUhc2pmN-70" vertex="1">
           <mxGeometry y="120" width="190" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="L86B1Z6Jg-OLmUhc2pmN-74" value="restaurant_id: uuid" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="L86B1Z6Jg-OLmUhc2pmN-70" vertex="1">
+          <mxGeometry y="150" width="190" height="30" as="geometry" />
         </mxCell>
         <mxCell id="L86B1Z6Jg-OLmUhc2pmN-79" value="&quot;Requested&quot;, &quot;Pending&quot;, &quot;Active&quot;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="414" y="595" width="200" height="30" as="geometry" />
