@@ -7,7 +7,7 @@
 import Foundation
 import SwiftUI
 
-class ChallengeListViewModel: ObservableObject {
+class ChallengesViewModel: ObservableObject {
     @EnvironmentObject var appState: AppState
     
     @Published var challengeModels : [Challenge] = []
@@ -17,10 +17,10 @@ class ChallengeListViewModel: ObservableObject {
     private let experienceRepository: ExperienceRepository
     private let userRepository: AccountRepository
     
-    init(challengeRepository: ChallengeRepository, experienceRepository: ExperienceRepository, userRepository: AccountRepository) {
-        self.challengeRepository = challengeRepository
-        self.experienceRepository = experienceRepository
-        self.userRepository = userRepository
+    init() {
+        self.challengeRepository = ChallengeRepository()
+        self.experienceRepository = ExperienceRepository()
+        self.userRepository = AccountRepository()
     }
     
     @MainActor

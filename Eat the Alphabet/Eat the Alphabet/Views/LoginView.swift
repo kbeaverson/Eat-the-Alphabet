@@ -8,7 +8,8 @@
 import SwiftUI
 import Supabase
 
-struct LoginView: View {
+struct LoginView : View {
+    @Binding var session: Session?
     @EnvironmentObject var appState: AppState
     
     @State private var email = ""
@@ -133,8 +134,10 @@ struct LoginView: View {
                 let result = try await AuthService.shared.login(email: email, password: password)
                 switch result {
                 case .success(let user):
+                    let newSession = try await supabaseClient.auth.session
                     await MainActor.run {
-                        appState.currentAuthUser = user
+                        // appState.currentAuthUser = user
+                        self.session = newSession
                     }
                 case .failure(let error):
                     await MainActor.run {
@@ -147,7 +150,6 @@ struct LoginView: View {
                     errorMessage = "Login error: \(error.localizedDescription)"
                 }
             }
-            
             await MainActor.run {
                 isLoading = false
             }

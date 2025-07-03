@@ -116,22 +116,22 @@ struct RestaurantListView: View {
         }
     }
     
-    func loadMockedRestaurants() -> [Restaurant] {
-        guard let url = Bundle.main.url(forResource: "fakeRestaurants", withExtension: "json") else {
-            fatalError("fakeRestaurants.json not found")
-        }
-        do {
-            let data = try Data(contentsOf: url)
-            let decoder = JSONDecoder()
-            return try decoder.decode([Restaurant].self, from: data)
-        } catch {
-            print("❌ JSON decode error: \(error)")
-            if let jsonString = String(data: try! Data(contentsOf: url), encoding: .utf8) {
-                print("📄 JSON content:\n\(jsonString)")
-            }
-            fatalError()
-        }
-    }
+//    func loadMockedRestaurants() -> [Restaurant] {
+//        guard let url = Bundle.main.url(forResource: "fakeRestaurants", withExtension: "json") else {
+//            fatalError("fakeRestaurants.json not found")
+//        }
+//        do {
+//            let data = try Data(contentsOf: url)
+//            let decoder = JSONDecoder()
+//            return try decoder.decode([Restaurant].self, from: data)
+//        } catch {
+//            print("❌ JSON decode error: \(error)")
+//            if let jsonString = String(data: try! Data(contentsOf: url), encoding: .utf8) {
+//                print("📄 JSON content:\n\(jsonString)")
+//            }
+//            fatalError()
+//        }
+//    }
     
 }
 

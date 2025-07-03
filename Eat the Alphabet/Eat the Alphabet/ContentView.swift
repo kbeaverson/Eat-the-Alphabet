@@ -50,7 +50,9 @@ struct ContentView : View {
     var contentView: some View {
         NavigationStack {
             if session == nil { // placeholder
-                LoginView()
+                LoginView(
+                    session: $session,
+                )
             } else {
                 HomeScreen()
             }

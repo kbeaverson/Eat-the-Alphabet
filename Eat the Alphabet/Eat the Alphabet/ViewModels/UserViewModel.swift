@@ -21,7 +21,9 @@ class UserViewModel: ObservableObject {
             username: "",
             display_name: "",
             profile_image_url: nil,
-            phone_number: nil)
+            phone_number: nil,
+            email: "" // This should be set to the authenticated user's email later
+        )
         self.repository = AccountRepository()
         }
 
