@@ -33,6 +33,7 @@ struct ContentView : View {
                                 } else {
                                     print("Session is valid, navigating to home screen.")
                                 }
+                                checkingSession = false // finished checking session
                             } catch {
                                 print("Error loading session: \(error)")
                                 // Handle error, e.g., navigate to login screen
@@ -57,7 +58,3 @@ struct ContentView : View {
     }
     
 }
-
-//#Preview {
-//    ContentView().environmentObject(AppState())
-//}

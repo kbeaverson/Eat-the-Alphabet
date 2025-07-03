@@ -15,6 +15,7 @@ struct Account: Codable, Identifiable {
     var display_name: String?
     var profile_image_url: String?
     var phone_number: String?
+    var email: String // Supabase Auth User's email, NOT NULLABLE
     
     var reviews: [Review]? = [] // reviews made by this user
     var challenges: [Challenge]? = [] // challenges created by this user
@@ -29,7 +30,8 @@ struct Account: Codable, Identifiable {
          username: String,
          display_name: String? = nil,
          profile_image_url: String? = nil,
-         phone_number: String? = nil) {
+         phone_number: String? = nil,
+         email: String) {
         self.id = id
         self.created_at = created_at
         self.address_wgs = address_wgs
@@ -37,6 +39,7 @@ struct Account: Codable, Identifiable {
         self.display_name = display_name
         self.profile_image_url = profile_image_url
         self.phone_number = phone_number
+        self.email = email
     }
     
     
@@ -44,6 +47,7 @@ struct Account: Codable, Identifiable {
     init(from supabaseUser: Auth.User) {
         self.id = supabaseUser.id.uuidString
         self.created_at = supabaseUser.createdAt
+        self.email = supabaseUser.email ?? "" // Supabase Auth User's email, NOT NULLABLE
         // TODO: must get username from database
         // NOTE: consider add a profile image URL NULLABLE
         // NOTE: consider adding a phone number NULLABLE
@@ -58,6 +62,7 @@ struct Account: Codable, Identifiable {
         case display_name = "display_name"
         case profile_image_url = "profile_image_url"
         case phone_number = "phone_number"
+        case email = "email"
     }
 }
 

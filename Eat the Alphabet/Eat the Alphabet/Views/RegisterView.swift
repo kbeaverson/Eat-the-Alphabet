@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct RegisterView: View {
+    @EnvironmentObject var appState: AppState
+    
     @State private var username = ""
     @State private var email = ""
     @State private var password = ""
@@ -52,7 +54,6 @@ struct RegisterView: View {
                         )
                     
                     SecureField("Password", text: $password)
-                        .textContentType(.newPassword)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                         .padding(12) // inner padding (inside white box)
@@ -64,7 +65,6 @@ struct RegisterView: View {
                         )
                     
                     SecureField("Confirm password", text: $confirmPassword)
-                        .textContentType(.newPassword)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                         .padding(12) // inner padding (inside white box)
@@ -92,20 +92,7 @@ struct RegisterView: View {
                             showAlert = true
                             return
                         }
-                        Task {
-                            do {
-                                let result: Result = try await AuthService.shared.register(
-                                    username: username,
-                                    email: email,
-                                    password: password
-                                )
-                                print("Registered successfully.")
-                            } catch {
-                                print("Registration failed: \(error)")
-                                alertMessage = "Registration failed: \(error.localizedDescription)"
-                                showAlert = true
-                            }
-                        }
+                        register()
 //                        ) { result in
 //                            switch result {
 //                            case .success(let user):
@@ -135,6 +122,32 @@ struct RegisterView: View {
                 .padding(.horizontal, 40)
                 .onAppear { print("RegisterView appeared") }
                 .onDisappear{ print("RegisterView disappeared") }
+            }
+        }
+    }
+    private func register() {
+        Task {
+            do {
+                let result = try await AuthService.shared.register(
+                    username: username,
+                    email: email,
+                    password: password
+                )
+                do {
+                    appState.currentAuthUser = try result.get()
+                } catch {
+                    print("Error getting user from registration result: \(error)")
+                    alertMessage = "Registration failed: \(error.localizedDescription)"
+                    showAlert = true
+                    return
+                }
+                
+                print("Registered successfully.")
+            } catch {
+                print("Registration failed: \(error)")
+                alertMessage = "Registration failed: \(error.localizedDescription)"
+                showAlert = true
+                return
             }
         }
     }

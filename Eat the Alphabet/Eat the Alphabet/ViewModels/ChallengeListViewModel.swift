@@ -8,7 +8,7 @@ import Foundation
 import SwiftUI
 
 class ChallengeListViewModel: ObservableObject {
-    // @EnvironmentObject var appState: AppState
+    @EnvironmentObject var appState: AppState
     
     @Published var challengeModels : [Challenge] = []
     // TODO: Consider monitoring loading status/errors with other published vars?
@@ -25,10 +25,16 @@ class ChallengeListViewModel: ObservableObject {
     
     @MainActor
     func loadChallenges() async throws {
+        // guard the current authenticated user exists
+        guard let user = appState.currentAuthUser else {
+            print ("No authenticated user found.")
+            throw NSError(domain: "ChallengeListViewModel", code: 1, userInfo: [NSLocalizedDescriptionKey: "No authenticated user found."])
+        }
+        
         do {
             // Would place monitoring/error stuff here
-//            let challenges = try await challengeRepository.getChallenges(byUserId: appstate.currentUser?.id)
-//            self.challengeViewModels = challenges.map{ ChallengeViewModel(challenge: $0, challengeRepository: challengeRepository, experienceRepository: experienceRepository, userRepository: userRepository) }
+            let challenges = try await challengeRepository.getChallenges(byUserId: user.id.uuidString)
+            self.challengeModels = challenges.map{ $0 }
         }
         catch {
             print("Error loading challenges: \(error)")

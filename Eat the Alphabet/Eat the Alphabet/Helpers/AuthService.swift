@@ -24,9 +24,7 @@ final class AuthService {
                 email: email,
                 password: password
             )
-            
             return .success(result.user)
-            // appState?.session = result
         } catch {
             print("Login error: \(error)")
             return .failure(error)

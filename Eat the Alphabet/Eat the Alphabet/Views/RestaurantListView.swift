@@ -10,11 +10,9 @@ import SwiftUI
 import CoreLocation
 
 struct RestaurantListView: View {
-    // request permission
-    @StateObject private var permissionManager = PermissionManager.shared
-
     //    @Environment(\.dismiss) var dismiss // ?
-    //    @EnvironmentObject var appState: AppState //
+    @EnvironmentObject var appState: AppState //
+    @EnvironmentObject var permissionManager: PermissionManager // Location permission manager
     
     // passed in values: challenge Title
     @Binding var challengeTitle: String? // NOTE: if we need to change the value at list view, this is the solution
