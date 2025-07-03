@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import Supabase
 
 struct HomeScreen: View {
+    @Binding var session: Session?
     var body: some View {
         TabView {
             Tab("Friends", systemImage: "person.3.fill"){
@@ -19,7 +21,7 @@ struct HomeScreen: View {
             }
             
             Tab("Account", systemImage: "person.crop.circle"){
-                AccountView()
+                AccountView(session: $session)
             }
         }
         .tabViewStyle(.tabBarOnly)
@@ -34,8 +36,6 @@ struct HomeScreen: View {
     
     
 }
-
-
 #Preview {
-    HomeScreen()
+    HomeScreen(session: .constant(nil))
 }

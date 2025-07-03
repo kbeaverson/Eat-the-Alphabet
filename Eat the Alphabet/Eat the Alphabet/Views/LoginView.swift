@@ -159,3 +159,7 @@ struct LoginView : View {
     
 }
 
+#Preview {
+    LoginView(session: .constant(nil))
+}
+        

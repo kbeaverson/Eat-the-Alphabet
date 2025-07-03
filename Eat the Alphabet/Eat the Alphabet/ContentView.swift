@@ -54,7 +54,9 @@ struct ContentView : View {
                     session: $session,
                 )
             } else {
-                HomeScreen()
+                HomeScreen(
+                    session: $session,
+                )
             }
         }
     }
