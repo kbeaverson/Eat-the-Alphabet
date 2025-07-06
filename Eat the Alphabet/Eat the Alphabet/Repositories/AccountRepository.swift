@@ -9,6 +9,7 @@ import Foundation
 import Supabase
 
 class AccountRepository : AccountProtocol {
+    static let shared = AccountRepository()
     // 1
     func createAccount(account: Account) async throws-> Void {
         do {
@@ -27,7 +28,8 @@ class AccountRepository : AccountProtocol {
         do {
             let account: Account = try await supabaseClient
                 .from("Account")
-                .select()
+                .select("id, created_at, username, display_name, profile_image_url, phone_number, email")
+            // FIXME: Temporarily doesn't retrieve address because this data needs decoded separately
                 .eq("id", value: id)
                 .single()
                 .execute()
@@ -150,7 +152,7 @@ class AccountRepository : AccountProtocol {
     // get User's Experiences
     func getExperiences(for userId: String) async throws -> [Experience] {
         do {
-            let accountWithExperiences: [Account] = try await supabaseClient
+            let accountWithExperiences: Account = try await supabaseClient
                 .from("Account")
                 .select(
                     """
@@ -163,7 +165,7 @@ class AccountRepository : AccountProtocol {
                 .execute()
                 .value
             
-            return accountWithExperiences.first?.experiences ?? []
+            return accountWithExperiences.experiences ?? []
         } catch {
             print("Error fetching experiences: \(error)")
             throw error
@@ -174,7 +176,7 @@ class AccountRepository : AccountProtocol {
     func getReviews(by userId: String) async throws -> [Review] {
         do {
             
-            let accountWithReviews: [Account] = try await supabaseClient
+            let accountWithReviews: Account = try await supabaseClient
                 .from("Account")
                 .select(
                     """
@@ -187,7 +189,7 @@ class AccountRepository : AccountProtocol {
                 .execute()
                 .value
             
-            return accountWithReviews.first?.reviews ?? []
+            return accountWithReviews.reviews ?? []
         } catch {
             print("Error fetching reviews: \(error)")
             throw error
