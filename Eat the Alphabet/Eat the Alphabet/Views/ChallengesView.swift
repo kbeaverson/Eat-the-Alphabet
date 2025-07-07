@@ -11,9 +11,7 @@ import CoreLocation
 // for the ChallengesView, on in 2nd of the root tab navigation
 struct ChallengesView: View {
     // ViewModel
-    private let viewModel = ChallengesViewModel()
-    
-    // @State private var challenges: [Challenge] = []
+    private let viewModel : ChallengeListViewModel = ChallengeListViewModel()
     
     var body: some View {
         GeometryReader { geo in
@@ -21,12 +19,11 @@ struct ChallengesView: View {
             BackgroundScaffold {
                 VStack(spacing: 20) {
                     Text("Challenges View")
-                    // TODO: pass in real title of challenge
                     // NOTE: @Binging valuemust use a reference to a @State or another @Bingding
                     LazyVStack(spacing: 10) {
                         ForEach(self.viewModel.challenges, id: \.id) { challenge in
                             // TODO: A Challenge List Item class
-                            
+                            ChallengeListItem(challenge: challenge)
                         }
                     }
                 }
@@ -41,8 +38,7 @@ struct ChallengesView: View {
         Task {
             // Fetch challenges when the view appears
             do {
-                // TODO:
-                try await viewModel.getChallenges()
+                try await viewModel.getChallengesByAccount()
             } catch {
                 print("Failed to load challenges: \(error)")
             }

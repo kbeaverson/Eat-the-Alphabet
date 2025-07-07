@@ -12,18 +12,15 @@ class ChallengeViewModel : ObservableObject {
     @Published var challenge: Challenge
     private let challengeRepository : ChallengeRepository
     private let experienceRepository : ExperienceRepository
-    private let userRepository : AccountRepository
+    private let accountRepository : AccountRepository
     
     init(
         challenge: Challenge,
-        challengeRepository: ChallengeRepository,
-        experienceRepository : ExperienceRepository,
-        userRepository : AccountRepository
     ) {
         self.challenge = challenge
-        self.challengeRepository = challengeRepository
-        self.experienceRepository = experienceRepository
-        self.userRepository = userRepository
+        self.challengeRepository = ChallengeRepository()
+        self.experienceRepository = ExperienceRepository()
+        self.accountRepository = AccountRepository()
     }
     
     func createChallenge() async throws {
@@ -77,14 +74,14 @@ class ChallengeViewModel : ObservableObject {
     }
     
     func loadParticipants() async throws {
-        let participants = try await challengeRepository.getParticipants(byChallengeId: challenge.id)
-        challenge.participants = participants
-        challenge = challenge
+        let challengeWithParticipants = try await challengeRepository.getWithParticipants(byChallengeId: challenge.id)
+        challenge.participants = challengeWithParticipants.participants
+        challenge = challengeWithParticipants
     }
     
-    func loadExperiences() async throws{
-        let experiences = try await challengeRepository.getExperiences(by: challenge.id)
-        challenge.experiences = experiences
-        challenge = challenge
+    func loadExperience() async throws{
+        let challengeWithRepository = try await challengeRepository.getWithExperiences(by: challenge.id)
+        challenge.experiences = challengeWithRepository.experiences
+        challenge = challengeWithRepository
     }
 }

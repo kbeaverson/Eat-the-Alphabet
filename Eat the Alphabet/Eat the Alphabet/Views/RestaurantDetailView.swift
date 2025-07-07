@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct RestaurantDetailView: View {
-    let restaurant: RestaurantViewModel
+    let restaurantId: String
+    let viewModel: RestaurantViewModel = RestaurantViewModel()
     @State private var loadedImage: Image? = nil
     
     var body: some View {
@@ -20,18 +21,19 @@ struct RestaurantDetailView: View {
                     .frame(height: 240)
                     .clipped()
 
-                Text(restaurant.name)
+                Text(viewModel.restaurant?.name ?? "")
                     .font(.system(size: 32, weight: .heavy))
                     .foregroundColor(.blue)
                     .padding(.horizontal)
 
                 HStack {
-                    Text(restaurant.cuisine)
+                    Text(viewModel.restaurant?.cuisine ?? "")
                         .font(.headline)
                     Spacer()
                     Label(
-                        restaurant.distance != nil
-                            ? String(format: "%.1f km", restaurant.distance!)
+                        // restaurant.distance != nil
+                        false
+                        ? String(format: "%.1f km", viewModel.restaurant?.address_text ?? "" /*restaurant.distance!*/)
                             : "Distance unknown",
                         systemImage: "mappin.and.ellipse")
                         .font(.caption)
@@ -46,7 +48,7 @@ struct RestaurantDetailView: View {
                 }
                 .padding(.horizontal)
 
-                Text(restaurant.details ?? "No details available")
+                Text(viewModel.restaurant?.details ?? "No details available")
                     .font(.body)
                     .padding(.horizontal)
 
@@ -76,13 +78,21 @@ struct RestaurantDetailView: View {
             }
         }
         .onAppear {
+            Task {
+                do {
+                    try await viewModel.fetchRestaurant(byId: restaurantId)
+                }
+                catch {
+                    print("Error fetching restaurant: \(error)")
+                }
+            }
             loadImage()
         }
     }
     
     private func loadImage() {
         // guard let url = URL(string: restaurant.imageUrl) else { return }
-        guard let urlString =  restaurant.imageUrl,
+        guard let urlString =  viewModel.restaurant?.image_url,
             !urlString.isEmpty,
             let url = URL(string: urlString) else { return }
         DispatchQueue.global().async {
@@ -96,3 +106,8 @@ struct RestaurantDetailView: View {
         }
     }
 }
+
+#Preview {
+    RestaurantDetailView(restaurantId: "example-restaurant-id")
+}
+

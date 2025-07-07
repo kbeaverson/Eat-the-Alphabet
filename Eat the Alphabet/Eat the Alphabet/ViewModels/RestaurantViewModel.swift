@@ -9,32 +9,13 @@ import CoreLocation
 
 // NOTE: RestaurantViewModel is a view model for the Restaurant model, it contains UI related data and logic.
 class RestaurantViewModel: Identifiable, ObservableObject {
-    // private let restaurantRepository: RestaurantRepository = RestaurantRepository()
-    @Published var id: String
-    @Published var name: String
-    @Published var cuisine: String
-    @Published var details: String?
-    @Published var imageUrl: String?
-    @Published var distance: Double? // distance in km from user location, nil if not available
+    private let restaurantRepository: RestaurantRepository = RestaurantRepository()
+    @Published var restaurant: Restaurant?
     
-    // mapping database model to view model
-    init(restaurant: Restaurant, userLocation: CLLocationCoordinate2D?) {
-        self.id = restaurant.id
-        self.name = restaurant.name
-        self.cuisine = restaurant.cuisine
-        self.details = restaurant.details// FIXME: add details to the database table and model
-        self.imageUrl = restaurant.image_url
-        if let userCoord = userLocation {
-            self.distance = RestaurantViewModel.getDistanceInKm(
-                selfCoord2d: userCoord,
-                targetCoord2d: CLLocationCoordinate2D(
-                    latitude: restaurant.address_wgs.latitude,
-                    longitude: restaurant.address_wgs.longitude
-                )
-            )
-        } else {
-            self.distance = nil
-        }
+    public func fetchRestaurant(byId restaurantId: String) async throws {
+        // Fetch restaurant from the repository
+        let fetchedRestaurant = try await restaurantRepository.getRestaurant(by: restaurantId)
+        self.restaurant = fetchedRestaurant
     }
     
     static func getDistanceInKm(selfCoord2d: CLLocationCoordinate2D, targetCoord2d: CLLocationCoordinate2D) -> Double {

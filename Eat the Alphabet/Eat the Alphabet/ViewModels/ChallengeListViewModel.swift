@@ -25,7 +25,7 @@ class ChallengeListViewModel: ObservableObject {
     }
     
     @MainActor
-    public func getChallenges() async throws {
+    public func getChallengesByAccount() async throws {
         // guard the current authenticated user exists
         guard let user = appState.currentAuthUser else {
             print ("No authenticated user found.")

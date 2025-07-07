@@ -11,25 +11,23 @@ class ExperienceListViewModel: ObservableObject {
     // TODO: Consider monitoring loading status/errors with other published vars?
     
     private let reviewRepository: ReviewRepository
-    private let experienceRepository: ExperienceRepository
-    private let userRepository: AccountRepository
-    private let userId: String
+    private let repository: ExperienceRepository
+    private let accountRepository: AccountRepository
     
-    init(reviewRepository: ReviewRepository, experienceRepository: ExperienceRepository, userRepository: AccountRepository, userId: String) {
-        self.reviewRepository = reviewRepository
-        self.experienceRepository = experienceRepository
-        self.userRepository = userRepository
-        self.userId = userId
+    init() {
+        self.reviewRepository = ReviewRepository()
+        self.repository = ExperienceRepository()
+        self.accountRepository = AccountRepository()
     }
     
     @MainActor
-    func loadExperiences() async {
-        // Would place monitoring/error stuff here
-//        do {
-//            let experiences = try await experienceRepository.fetchAllExperiences(for: userId)
-//            self.experienceViewModels = experiences.map{ ExperienceViewModel(restaurant: $0.restaurant, challenge: $0.challenge, repository: experienceRepository, userRepository: userRepository, reviewRepository: reviewRepository) }
-//        } catch {
-//            print("Error fetching experiences: \(error)")
-//        }
+    func fetchExperiences(challengeId: String) async throws{
+        do {
+            let fetchedExperience = try await repository.getExperiences(byChallenge: challengeId)
+            self.experiences = fetchedExperience
+        } catch {
+            print("Error fetching experience: \(error)")
+            throw error
+        }
     }
 }

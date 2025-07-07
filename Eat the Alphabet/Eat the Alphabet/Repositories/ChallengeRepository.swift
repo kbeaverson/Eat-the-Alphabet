@@ -122,7 +122,21 @@ class ChallengeRepository : ChallengeProtocol {
     }
     
     func getExperience(forLetter letter: Character, in challengeId: String) async throws -> Experience? {
-        <#code#>
+        do {
+            let experiences: [Experience] = try await supabaseClient
+                .from("Experience")
+                .select()
+                .eq("challenge_id", value: challengeId)
+                .eq("letter", value: String(letter))
+                .execute()
+                .value
+            
+            // Return the first experience found for the letter, or nil if none found
+            return experiences.first
+        } catch {
+            print("Error fetching experience for letter \(letter): \(error)")
+            throw error
+        }
     }
     
 
@@ -151,6 +165,7 @@ class ChallengeRepository : ChallengeProtocol {
             throw error
         }
     }
+    
     
     func getLetters(in challengeId: String) async throws -> [String] {
         do {

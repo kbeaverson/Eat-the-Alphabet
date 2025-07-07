@@ -44,9 +44,9 @@ final class ReviewRepository : ReviewProtocol {
     }
     
     // 3 can update only if user id matches
-    func updateReview(review: Review, userId: String) async throws -> Review {
+    func updateReview(review: Review, userId: String) async throws -> Void {
         do {
-            return try await supabaseClient
+            try await supabaseClient
                 .from("Review")
                 .update(review)
                 .eq("id", value: review.id)
@@ -67,7 +67,4 @@ final class ReviewRepository : ReviewProtocol {
             .eq("id", value: id)
             .execute()
     }
-    
-
-    
 }

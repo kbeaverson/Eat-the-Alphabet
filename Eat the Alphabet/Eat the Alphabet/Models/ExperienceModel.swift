@@ -16,6 +16,7 @@ struct Experience: Identifiable, Codable {
     let letter: String
     
     var reviews: [Review]? = []
+    var participants: [Account]? = [] // Participants associated with the experience
     
     init (id: String,
           created_at: Date,

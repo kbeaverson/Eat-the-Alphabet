@@ -18,7 +18,7 @@ protocol ExperienceProtocol {
     // func getExperienceDetails(by id: String) async throws -> ExperienceDetails
     
     // get with related data
-    func getWithRestaurant(for experienceId: String) async throws -> Experience
+    func getRestaurant(for experienceId: String) async throws -> Restaurant
     
     // pariticipants
     func getWithParticipants(for experienceId: String) async throws -> Experience
@@ -29,4 +29,6 @@ protocol ExperienceProtocol {
     func getWithReviews(by experienceId: String) async throws -> Experience
     // func addReview(review: Review, for experienceId: String) async throws
     // func deleteReview(reviewId: String, for experienceId: String) async throws
+    
+    func getSelfLetter(for experienceId: String) async throws -> String?
 }
