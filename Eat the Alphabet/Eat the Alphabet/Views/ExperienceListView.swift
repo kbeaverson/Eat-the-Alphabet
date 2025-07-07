@@ -9,7 +9,7 @@
 import SwiftUI
 import CoreLocation
 
-struct RestaurantListView: View {
+struct ExperienceListView: View {
     //    @Environment(\.dismiss) var dismiss // ?
     @EnvironmentObject var appState: AppState //
     @EnvironmentObject var permissionManager: PermissionManager // Location permission manager
@@ -49,7 +49,7 @@ struct RestaurantListView: View {
                     // 这个spacing是给每个item的间距
                     LazyVStack(spacing: 10) {
                         ForEach(restaurants) { restaurant in
-                            RestaurantCardView(
+                            RestaurantListItem(
                                 restaurant: restaurant,
                                 isSelected: Binding(
                                     // returns TRUE if selectedIds contaisn the restaurant id

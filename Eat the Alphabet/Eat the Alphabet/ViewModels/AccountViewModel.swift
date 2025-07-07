@@ -9,7 +9,7 @@ import Foundation
 import CoreLocation
 import Supabase
 
-class UserViewModel: ObservableObject {
+class AccountViewModel: ObservableObject {
     @Published var user: Account
     private let repository: AccountRepository
     

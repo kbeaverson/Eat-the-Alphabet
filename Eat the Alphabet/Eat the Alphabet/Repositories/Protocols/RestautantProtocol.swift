@@ -7,10 +7,23 @@
 
 protocol RestaurantProtocol {
     // CRUD
-    func createRestaurant(restaurant: Restaurant) async throws
     func getRestaurant(by id: String) async throws -> Restaurant
+    func getRestaurant(byExperience experienceId: String) async throws -> Restaurant
+    func getRestaurants(byChallenge challengeId: String) async throws -> [Restaurant]
+    func getRestaurants(byCuisine cuisine: String) async throws -> [Restaurant]
+    
+    func createRestaurant(restaurant: Restaurant) async throws
     func updateRestaurant(restaurant: Restaurant) async throws
     func deleteRestaurant(id: String) async throws
+    
+    // Experience-related
+    func getWithExperience(for restaurantId: String) async throws -> Restaurant
+    
+    // Review-related
+    func getReviews(for restaurantId: String) async throws -> [Review]
+    
+    // Aggregation (optional)
+    func getAverageRating(for restaurantId: String) async throws -> Float?
     
     // Search & filter
 //    func searchRestaurants(by name: String) async throws -> [Restaurant]
@@ -21,10 +34,4 @@ protocol RestaurantProtocol {
 //        within radius: Float?,
 //        from location: GeoPoint?
 //    ) async throws -> [Restaurant]
-    
-    // Experience-related
-    func getExperiences(for restaurantId: String) async throws -> [Experience]
-    
-    // Aggregation (optional)
-    func getAverageRating(for restaurantId: String) async throws -> Float?
 }

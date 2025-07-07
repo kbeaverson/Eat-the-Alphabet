@@ -13,16 +13,12 @@ protocol ChallengeProtocol {
     func updateChallenge(challenge: Challenge) async throws
     func deleteChallenge(id: String) async throws
 
-    // Participants
-    func addParticipant(userId: String, to challengeId: String) async throws
-    func removeParticipant(userId: String, from challengeId: String) async throws
-    func getParticipants(byChallengeId challengeId: String) async throws -> [Account]
-    
-
     // Experiences (progress tracking)
-    func getExperiences(by challengeId: String) async throws -> [Experience]
-//    func getCompletedExperiences(in challengeId: String) async throws -> [Experience]
-//    func getExperience(forLetter letter: Character, in challengeId: String) async throws -> Experience?
+    func getWithExperiences(by challengeId: String) async throws -> Challenge
+    func getExperience(forLetter letter: Character, in challengeId: String) async throws -> Experience?
+    
+    // with Participants
+    func getWithParticipants(byChallengeId challengeId: String) async throws -> Challenge
     
     // Letters
     func getLetters(in challengeId: String) async throws -> [String]

@@ -12,6 +12,8 @@ import Supabase
 
 class ExperienceRepository : ExperienceProtocol {
     
+    private let restaurantRepository: RestaurantRepository = RestaurantRepository()
+    // 1 Read
     func getExperience(by id: String) async throws -> Experience {
         do {
             let experiences: Experience = try await supabaseClient
@@ -28,25 +30,50 @@ class ExperienceRepository : ExperienceProtocol {
         }
     }
     
-    // Create - add new experience
-    func createExperience(experience : Experience) async throws {
+    func getExperiences(byChallenge challengeId: String) async throws -> [Experience] {
+        do {
+            let experiences: [Experience] = try await supabaseClient
+                .from("experiences")
+                .select()
+                .eq("challenge_id", value: challengeId)
+                .execute()
+                .value
+            
+            if experiences.isEmpty {
+                print("No experiences found for challenge \(challengeId).")
+            }
+            return experiences
+        }
+        catch {
+            print("Error fetching experiences by challenge: \(error)")
+            throw error
+            
+        }
+    }
+    
+    // 2 Create - add new experience
+    func createExperience(experience: Experience) async throws {
         do {
             try await supabaseClient
                 .from("experiences")
                 .insert(experience)
                 .execute()
         } catch {
+            print("Error creating experience: \(error)")
             throw error
         }
     }
     
-    func createExperience(challengeId: String, restaurantId: String) async throws {
+    func createExperience(challengeId: String, restaurantId: String, letter: String) async throws {
         let experience = Experience(
             id: UUID().uuidString,
             created_at: Date(),
             status: "incomplete",
             restaurant_id: restaurantId,
-            challenge_id: challengeId)
+            challenge_id: challengeId,
+            letter: letter
+        )
+        // NOTE: there is a letter as parameter so that creator can alter if auto detection did not work correctly
         do {
             try await createExperience(experience: experience)
         } catch {
@@ -55,7 +82,8 @@ class ExperienceRepository : ExperienceProtocol {
         }
     }
     
-    func updateExperience(experience : Experience) async throws {
+    // 3 Update - update an existing experience
+    func updateExperience(experience: Experience) async throws {
         do {
             try await supabaseClient
                 .from("Experience")
@@ -68,6 +96,7 @@ class ExperienceRepository : ExperienceProtocol {
         }
     }
     
+    // 4 Delete - delete an experience by id
     func deleteExperience(id : String) async throws {
         do {
             try await supabaseClient
@@ -81,7 +110,6 @@ class ExperienceRepository : ExperienceProtocol {
             throw error
         }
     }
-    
     
     
     // Read - fetch all experiences for a user, in async manner
@@ -107,43 +135,40 @@ class ExperienceRepository : ExperienceProtocol {
     //            .value
     //    }
     
-    // FIXME: placeholder
-    func getRestaurant(for experienceId: String) async throws -> Restaurant {
+    // FIXED: under review
+    func getWithRestaurant(for experienceId: String) async throws -> Experience {
         do {
-            let restaurant: Restaurant = try await supabaseClient
-                .from("Restaurant")
-                .select()
-                .eq("experience_id", value: experienceId)
-                .single()
-                .execute()
-                .value
-            return restaurant
+            let restaurant: Restaurant = try await restaurantRepository.getRestaurant(by: experienceId)
         } catch {
             print("Error fetching restaurant for experience: \(error)")
             throw error
         }
     }
     
-    // FIXME: placeholder
-    func getParticipants(for experienceId: String) async throws -> [Account] {
+    // FIXED
+    func getWithParticipants(for experienceId: String) async throws -> Experience {
         do {
-            let participants: [Account] = try await supabaseClient
-                .from("Experience_Participant")
-                .select()
+            let experienceWithParticipants: Experience = try await supabaseClient
+                .from("Experience")
+                .select(
+                    """
+                    *,
+                    Account(*)
+                    """)
                 .eq("experience_id", value: experienceId)
+                .single()
                 .execute()
                 .value
-            
-            return participants
+            return experienceWithParticipants
         } catch {
             print("Error fetching participants for experience: \(error)")
             throw error
         }
     }
     
-    // FIXME: placeholder
+    // CREATE FIXED: under review
     func addParticipant(userId: String, to experienceId: String) async throws {
-        let participant = ExperienceParticipant(
+        let experienceParticipant = ExperienceParticipant(
             // id: UUID().uuidString,
             userID: userId,
             experienceID: experienceId
@@ -153,16 +178,15 @@ class ExperienceRepository : ExperienceProtocol {
         do {
             try await supabaseClient
                 .from("Experience_Participant")
-                .insert(participant)
+                .insert(experienceParticipant)
                 .execute()
         } catch {
             print("Error adding participant to experience: \(error)")
             throw error
         }
-        
     }
     
-    // FIXME: placeholder
+    // REMOVE FIXED: Under review
     func removeParticipant(userId: String, from experienceId: String) async throws {
         do {
             try await supabaseClient
@@ -176,45 +200,31 @@ class ExperienceRepository : ExperienceProtocol {
             throw error
         }
     }
-    // static let shared = ExperienceRepository()
     
-    func getReviews(for experienceId : String) async throws -> [Review] {
+    func getWithReviews(by experienceId : String) async throws -> Experience {
         do {
             return try await supabaseClient
-                .from("Review")
-                .select()
-                .eq("experience_id", value: experienceId)
+                .from("Experience")
+                .select(
+                    """
+                    *,
+                    reviews(*)
+                    """
+                )
+                .eq("id", value: experienceId)
+                .single()
                 .execute()
-                .value
+                .value as Experience
         }
         catch {
             print("Error fetching reviews: \(error)")
             throw error
-            
         }
     }
     
-    // add a Review to the Experience, if succeed (unlikely this step would fail), append the Review to the reviews array in the Experience object, update it to the database
-    func addReview(review: Review, for experienceId: String) async throws -> Void{
-        
-    }
-    // FIXME: placeholder
-    func deleteReview(reviewId: String, for experienceId: String) async throws {
-        do {
-            try await supabaseClient
-                .from("Review")
-                .delete()
-                .eq("id", value: reviewId)
-                .eq("experience_id", value: experienceId)
-                .execute()
-        } catch {
-            print("Error deleting review: \(error)")
-            throw error
-            
-        }
-    }
+    // NOTE: this is now under review repository
+//    func addReview(review: Review, for experienceId: String) async throws -> Void{
+//        
+//    }
     
-    enum PhotoUploadError: Error {
-        case invalidImage
-    }
 }

@@ -9,31 +9,54 @@ import Foundation
 import Supabase
 
 final class ReviewRepository : ReviewProtocol {
+    
     // 1
-    func createReview(review : Review) async throws -> Review {
-        try await supabaseClient
-            .from("Review")
-            .insert(review)
-            .execute()
-            .value
+    func createReview(review : Review) async throws {
+        do {
+            try await supabaseClient
+                .from("Review")
+                .insert(review)
+                .execute()
+                .value
+        }
+        catch {
+            print("Error creating review: \(error)")
+            throw error
+        }
+
     }
     
     // 2
     func getReview(by id: String) async throws -> Review {
-        try await supabaseClient
-            .from("Review")
-            .select()
-            .eq("id", value: id)
-            .execute()
-            .value
+        do {
+            return try await supabaseClient
+                .from("Review")
+                .select()
+                .eq("id", value: id)
+                .execute()
+                .value
+        } catch {
+            print("Error fetching review: \(error)")
+            
+            throw error
+        }
+
     }
     
-    // 3
-    func updateReview(review: Review) async throws {
-        try await supabaseClient
-            .from("Review")
-            .upsert(review)
-            .execute()
+    // 3 can update only if user id matches
+    func updateReview(review: Review, userId: String) async throws -> Review {
+        do {
+            return try await supabaseClient
+                .from("Review")
+                .update(review)
+                .eq("id", value: review.id)
+                .eq("user_id", value: userId)
+                .execute()
+                .value
+        } catch {
+            print("Error updating review: \(error)")
+            throw error
+        }
     }
     
     // 4
@@ -45,28 +68,6 @@ final class ReviewRepository : ReviewProtocol {
             .execute()
     }
     
-//    func getReviews(byUser userID: String) async throws -> [Review] {
-//        // TODO: use Account's Repo function to do this
-//    }
-//    
-//    func getReviews(byExperience experienceId: String) async throws -> [Review] {
-//        // TODO: use Experience's Repo function to get an experience's reviews
-//    }
-//    func getReviews(byRestaurant restaurantId: String) async throws -> [Review] {
-//        // TODO: use Restaurant's Repo function to get a restaurant's reviews
-//    }
-//    
-//    func getAverageRating(forRestaurantId restaurantId: String) async throws -> Float? {
-//        // TODO: use Restaurant's Repo function to get a rest's reviews, and calculate
-//    }
-    
-    //    func getRecentReviews(limit: Int) async throws -> [Review] {
-    //        <#code#>
-    //    }
-    //
-    //    func hasUserReviewed(experienceId: String, userId: String) async throws -> Bool {
-    //        <#code#>
-    //    }
 
     
 }

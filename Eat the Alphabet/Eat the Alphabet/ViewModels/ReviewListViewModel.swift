@@ -8,7 +8,7 @@
 import Foundation
 
 class ReviewListViewModel: ObservableObject {
-    @Published var reviewViewModels : [ReviewViewModel] = []
+    @Published var reviewViewModels : [ReviewItemViewModel] = []
     // TODO: Consider monitoring loading status/errors with other published vars?
     
     private let reviewRepository: ReviewRepository = ReviewRepository()

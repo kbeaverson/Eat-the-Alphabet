@@ -13,18 +13,22 @@ struct Experience: Identifiable, Codable {
     var status : String
     let restaurant_id : String
     let challenge_id : String
+    let letter: String
     
     var reviews: [Review]? = []
     
     init (id: String,
           created_at: Date,
-          status: String="incomplete",
+          status: String = "incomplete",
           restaurant_id: String,
-          challenge_id: String) {
+          challenge_id: String,
+          letter: String
+    ) {
         self.id = id
         self.created_at = created_at
         self.status = status
         self.restaurant_id = restaurant_id
         self.challenge_id = challenge_id
+        self.letter = letter
     }
 }

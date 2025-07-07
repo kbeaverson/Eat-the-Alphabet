@@ -7,7 +7,7 @@
 import Foundation
 
 class ExperienceListViewModel: ObservableObject {
-    @Published var experienceViewModels : [ExperienceViewModel] = []
+    @Published var experiences : [Experience] = []
     // TODO: Consider monitoring loading status/errors with other published vars?
     
     private let reviewRepository: ReviewRepository

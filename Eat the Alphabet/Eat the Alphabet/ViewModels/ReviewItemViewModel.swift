@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ReviewViewModel: ObservableObject {
+class ReviewItemViewModel: ObservableObject {
     @Published var review: Review
     private let reviewRepository : ReviewRepository /*= ReviewRepository()*/
     

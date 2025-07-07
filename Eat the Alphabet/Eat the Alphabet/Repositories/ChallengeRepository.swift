@@ -14,19 +14,24 @@ class ChallengeRepository : ChallengeProtocol {
     
     private let accountRepository: AccountRepository = AccountRepository()
     
+    // 1 Create
     func createChallenge(challenge : Challenge) async throws -> Void {
         do {
-            try await supabaseClient
+            let reponseStatus = try await supabaseClient
                 .from("Challenge")
                 .insert(challenge)
                 .execute()
-            print("Challenge successfully created.")
+                .status
+            guard reponseStatus == 201 else {
+                throw NSError(domain: "ChallengeRepository", code: reponseStatus, userInfo: [NSLocalizedDescriptionKey: "Failed to create challenge. Status code: \(reponseStatus)"])
+            }
         } catch {
             print("Error creating challenge: \(error)")
             throw error
         }
     }
     
+    // 2 Read by its id
     func getChallenge(by id: String) async throws -> Challenge {
         do {
             let challenge: Challenge = try await supabaseClient
@@ -44,8 +49,8 @@ class ChallengeRepository : ChallengeProtocol {
         }
     }
     
+    // 2 Read by user id
     func getChallenges(byUserId userId: String) async throws -> [Challenge] {
-        // TODO: Implement fetching challenges by user ID
         do {
             let challengesOfUser: [Challenge] = try await accountRepository.getChallenges(for: userId)
             
@@ -61,47 +66,25 @@ class ChallengeRepository : ChallengeProtocol {
         }
     }
     
-    //    func fetchAllChallenges(for userID : String) async -> [Challenge] {
-    //        do {
-    //            let challenges: [ChallengeParticipant] = try await client
-    //                .from("Challenge_Participant")
-    //                .select()
-    //                .eq("user_id", value: userID)
-    //                .execute()
-    //                .value
-    //
-    //            let challengeIds = challenges.map{ $0.challengeID }
-    //
-    //            if (challengeIds.isEmpty) {
-    //                print("No challenges found for user \(userID).")
-    //                return []
-    //            }
-    //
-    //            return try await client
-    //                .from("Challenge")
-    //                .select()
-    //                .in("id", values: challengeIds)
-    //                .execute()
-    //                .value
-    //        } catch {
-    //            print("Error fetching challenges: \(error)")
-    //            return []
-    //        }
-    //    }
-    
+    // 3 Update
     func updateChallenge(challenge : Challenge) async throws -> Void {
         do {
-            try await supabaseClient
+            let responseStatus = try await supabaseClient
                 .from("Challenge")
                 .upsert(challenge)
                 .execute()
-            print("Challenge successfully updated.")
+                .status
+            guard responseStatus == 204 else {
+                throw NSError(domain: "ChallengeRepository", code: responseStatus, userInfo: [NSLocalizedDescriptionKey: "Failed to update challenge. Status code: \(responseStatus)"])
+            }
         } catch {
             print("Error updating challenge: \(error)")
+            throw error
         }
         
     }
     
+    // 4 Delete
     func deleteChallenge(id: String) async throws -> Void {
         do {
             try await supabaseClient
@@ -115,7 +98,9 @@ class ChallengeRepository : ChallengeProtocol {
         }
     }
     
-    func getExperiences(by challengeId: String) async throws -> [Experience] {
+    
+    // related items via forign table relationships
+    func getWithExperiences(by challengeId: String) async throws -> Challenge {
         do {
             let challengeWithExperiences: Challenge = try await supabaseClient
                 .from("Experience")
@@ -129,9 +114,62 @@ class ChallengeRepository : ChallengeProtocol {
                 .single()
                 .execute()
                 .value
-            return challengeWithExperiences.experiences ?? []
+            return challengeWithExperiences
         } catch {
             print("Error fetching experiences: \(error)")
+            throw error
+        }
+    }
+    
+    func getExperience(forLetter letter: Character, in challengeId: String) async throws -> Experience? {
+        <#code#>
+    }
+    
+
+    
+    /** Original intention of this methods was to fetch with foreign keys,
+     so that one query can fetch both the challenge itself and its related data.
+     Name change to "get WITH"*/
+    func getWithParticipants(byChallengeId challengeId: String) async throws -> Challenge {
+        do {
+            let challengeWithParticipants: Challenge = try await supabaseClient
+                .from("Challenge")
+                .select(
+                    """
+                    *,
+                    participants(*)
+                    """
+                )
+                .eq("id", value: challengeId)
+                .single()
+                .execute()
+                .value
+            
+            return challengeWithParticipants
+        } catch {
+            print("Error fetching participants: \(error)")
+            throw error
+        }
+    }
+    
+    func getLetters(in challengeId: String) async throws -> [String] {
+        do {
+            let challengeWithLetters: Challenge = try await supabaseClient
+                .from("Challenge")
+                .select(
+                    """
+                    *,
+                    letters(*)
+                    """
+                )
+                .eq("id", value: challengeId)
+                .single()
+                .execute()
+                .value
+            
+            return challengeWithLetters.letters ?? []
+        } catch {
+            print("Error fetching letters: \(error)")
             throw error
         }
     }
@@ -163,53 +201,4 @@ class ChallengeRepository : ChallengeProtocol {
     //            return []
     //        }
     //    }
-    func addParticipant(userId: String, to challengeId: String) async throws -> Void {
-        // TODO: use participant (Account) methods for this
-    }
-    func removeParticipant(userId: String, from challengeId: String) async throws -> Void {
-        // TODO: use participant (Account) methods for this
-    }
-    func getParticipants(byChallengeId challengeId: String) async throws -> [Account] {
-        do {
-            let challengeWithParticipants: Challenge = try await supabaseClient
-                .from("Challenge")
-                .select(
-                    """
-                    *,
-                    participants(*)
-                    """
-                )
-                .eq("id", value: challengeId)
-                .single()
-                .execute()
-                .value
-            
-            return challengeWithParticipants.participants ?? []
-        } catch {
-            print("Error fetching participants: \(error)")
-            throw error
-        }
-    }
-    
-    func getLetters(in challengeId: String) async throws -> [String] {
-        do {
-            let challengeWithLetters: Challenge = try await supabaseClient
-                .from("Challenge")
-                .select(
-                    """
-                    *,
-                    letters(*)
-                    """
-                )
-                .eq("id", value: challengeId)
-                .single()
-                .execute()
-                .value
-            
-            return challengeWithLetters.letters ?? []
-        } catch {
-            print("Error fetching letters: \(error)")
-            throw error
-        }
-    }
 }

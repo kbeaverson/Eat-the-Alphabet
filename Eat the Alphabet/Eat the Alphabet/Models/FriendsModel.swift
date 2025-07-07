@@ -11,7 +11,10 @@ struct Friends: Codable {
     let user1_id: String
     let user2_id: String
     let created_at: Date
-    var status: String // eg. "pending", "accepted", "rejected", "blocked"
+    var status: String // eg. "pending", "accepted", "rejected"
+    
+    let user1: Account? = nil
+    let user2: Account? = nil
     
     init (user1_id: String, user2_id: String, created_at: Date, status: String) {
         self.user1_id = user1_id

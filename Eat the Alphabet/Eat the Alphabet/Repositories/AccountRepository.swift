@@ -9,7 +9,8 @@ import Foundation
 import Supabase
 
 class AccountRepository : AccountProtocol {
-    // 1
+
+    // 1 Create User
     func createAccount(account: Account) async throws-> Void {
         do {
             try await supabaseClient
@@ -22,7 +23,7 @@ class AccountRepository : AccountProtocol {
         }
     }
     
-    // 2 Fetch User by username
+    // 2 Fetch User by id
     func getAccount(byId id: String) async throws -> Account {
         do {
             let account: Account = try await supabaseClient
@@ -80,7 +81,7 @@ class AccountRepository : AccountProtocol {
             .value
     }
     
-    // get Friends, both sent and received
+    // get Friends, both sent and received, via foreign keys
     func getFriends(of userId: String) async throws -> [Friends] {
         // foriegn key query
         do {
@@ -98,7 +99,6 @@ class AccountRepository : AccountProtocol {
                     """
                 )
                 .eq("id", value: userId)
-                .single()
                 .execute()
                 .value
             let friends: [Friends] = accountWithFriends.friends ?? []
@@ -108,22 +108,37 @@ class AccountRepository : AccountProtocol {
             throw error
         }
     }
-        
-//    func PendingFriendRequests(of userId: String) async throws -> [Friends] {
-//
-//    }
     
-    func sendFriendRequest(from senderId: String, to receiverId: String) async throws -> Void {
-        // TODO using Friends repo's method
-    }
-    func acceptFriendRequest(from senderId: String, to receiverId: String) async throws -> Void {
-        // TODO using Friends repo's method
-    }
-    func rejectFriendRequest(from senderId: String, to receiverId: String) async throws -> Void {
-        // TODO using Friends repo's method
+    func getFriendsCount(of userId: String) async throws -> Int {
+        do {
+            let count: Int? = try await supabaseClient
+                .from("Account")
+                .select(
+                    """
+                    id, 
+                    friends (
+                        user1_id,
+                        user2_id,
+                        status,
+                        created_at
+                    )
+                    """)
+                .eq("id", value: userId)
+                .execute()
+                .count
+            guard let count = count else {
+                print("Error fetching friends count")
+                throw NSError(domain: "AccountRepository", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to fetch friends count"])
+            }
+            return count
+        } catch {
+            print("Error fetching friends count: \(error)")
+            throw error
+                
+        }
     }
 
-    // related data
+    // related data, via foreign keys
     // get User's Challenges
     func getChallenges(for userId: String) async throws -> [Challenge] {
         do {
@@ -197,19 +212,55 @@ class AccountRepository : AccountProtocol {
     // check if username exists
     func checkUsernameExists(username: String) async throws -> Bool {
         do {
-            let count: Int = try await supabaseClient
+            let count : Int? = try await supabaseClient
                 .from("Account")
                 .select()
                 .eq("username", value: username)
-                .single()
                 .execute()
-                .value
+                .count
+            guard let count = count else {
+                print("Error fetching username count")
+                throw NSError(domain: "AccountRepository", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to fetch username count"])
+            }
             return count > 0
         } catch {
             print("Error checking username existence: \(error)")
             throw error
         }
     }
+    
+    func checkEmailExists(email: String) async throws -> Bool {
+        do {
+            let count: Int? = try await supabaseClient
+                .from("Account")
+                .select()
+                .eq("email", value: email)
+                .execute()
+                .count
+            guard let count = count else {
+                print("Error fetching email count")
+                throw NSError(domain: "AccountRepository", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to fetch email count"])
+            }
+            return count > 0
+        } catch {
+            print("Error checking email existence: \(error)")
+            throw error
+        }
+    }
+    
+    func getCurrentUser() async throws -> Account {
+        do {
+            guard let currentUserId : UUID = supabaseClient.auth.currentUser?.id else {
+                throw NSError(domain: "AccountRepository", code: 1, userInfo: [NSLocalizedDescriptionKey: "No current user found"])
+            }
+            return try await getAccount(byId: currentUserId.uuidString)
+        } catch {
+            print("Error fetching current user: \(error)")
+            throw error
+        }
+    }
+    
+
         
 }
 
