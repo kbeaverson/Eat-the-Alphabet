@@ -37,6 +37,12 @@ struct HomeScreen: View {
             .tabViewStyle(.tabBarOnly)
             .onAppear {
                 print("Home Screen Appeared")
+                let appearance = UITabBarAppearance()
+                    appearance.configureWithOpaqueBackground()
+                appearance.backgroundColor = UIColor.appBackground
+
+                    UITabBar.appearance().standardAppearance = appearance
+                    UITabBar.appearance().scrollEdgeAppearance = appearance
             }
             .onDisappear {
                 print("Home Screen Disappeared")
