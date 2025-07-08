@@ -1,5 +1,11 @@
 ## User settings
-xcuserdata/
+*.xcodeproj/*
+
+# Track the project.pbxproj file
+!*.xcodeproj/project.pbxproj
+
+# Ignore user-specific settings
+*.xcodeproj/xcuserdata/*
 
 
 ## Obj-C/Swift specific
@@ -18,7 +24,7 @@ playground.xcworkspace
 # Packages/
 # Package.pins
 # Package.resolved
-*.xcodeproj
+# *.xcodeproj
 
 .build/
 
