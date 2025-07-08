@@ -9,6 +9,7 @@ import Foundation
 import Supabase
 
 class AccountRepository : AccountProtocol {
+    static let shared = AccountRepository()
     // 1
     func createAccount(account: Account) async throws-> Void {
         do {
@@ -27,7 +28,8 @@ class AccountRepository : AccountProtocol {
         do {
             let account: Account = try await supabaseClient
                 .from("Account")
-                .select()
+                .select("id, created_at, username, display_name, profile_image_url, phone_number, email")
+            // FIXME: Temporarily doesn't retrieve address because this data needs decoded separately
                 .eq("id", value: id)
                 .single()
                 .execute()
@@ -84,25 +86,36 @@ class AccountRepository : AccountProtocol {
     func getFriends(of userId: String) async throws -> [Friends] {
         // foriegn key query
         do {
-            let accountWithFriends: Account = try await supabaseClient
-                .from("Account")
-                .select(
-                    """
-                    id,
-                    friends (
-                        created_at,
-                        user1_id,
-                        user2_id,
-                        status
-                    )
-                    """
-                )
-                .eq("id", value: userId)
-                .single()
+//            let accountWithFriends: Account = try await supabaseClient
+//                .from("Account")
+//                .select(
+//                    """
+//                    id,
+//                    friends (
+//                        created_at,
+//                        user1_id,
+//                        user2_id,
+//                        status
+//                    )
+//                    """
+//                )
+//                .eq("id", value: userId)
+//                .single()
+//                .execute()
+//                .value
+//            let friends: [Friends] = accountWithFriends.friends ?? []
+//            return friends
+            let users: [Friends] = try await supabaseClient
+                .from("Friends")
+                .select()
+                .eq("user1_id", value: userId)
+                //.or("user2_id.eq.\(userId)")
                 .execute()
                 .value
-            let friends: [Friends] = accountWithFriends.friends ?? []
-            return friends
+            
+            print("Fetched \(users.count) friends for participant: \(userId)")
+            
+            return users
         } catch {
             print("Error fetching friends: \(error)")
             throw error
@@ -127,71 +140,175 @@ class AccountRepository : AccountProtocol {
     // get User's Challenges
     func getChallenges(for userId: String) async throws -> [Challenge] {
         do {
-            let accountWithChallenges: [Account] = try await supabaseClient
-                .from("Account")
-                .select(
-                    """
-                    id,
-                    challenges (*)
-                    """
-                )
-                .eq("id", value: userId)
-                .single()
+//            let accountWithChallenges: [Account] = try await supabaseClient
+//                .from("Account")
+//                .select(
+//                    """
+//                    id,
+//                    challenges (*)
+//                    """
+//                )
+//                .eq("id", value: userId)
+//                .single()
+//                .execute()
+//                .value
+//            
+//            return accountWithChallenges.first?.challenges ?? []
+            let challenges: [ChallengeParticipant] = try await supabaseClient
+                .from("Challenge_Participant")
+                .select()
+                .eq("user_id", value: userId)
                 .execute()
                 .value
             
-            return accountWithChallenges.first?.challenges ?? []
+            let challengeIDs = challenges.map { $0.challengeID }
+            
+            if (challengeIDs.isEmpty) {
+                print("Found no challenges for participant: \(userId)")
+                return []
+            }
+            
+            let final: [Challenge] = try await supabaseClient
+                .from("Challenge")
+                .select("id, title, radius, created_at, description")
+                .in("id", values: challengeIDs)
+                .execute()
+                .value
+            print("Fetched \(final.count) challenges for participant: \(userId)")
+            
+            return final
         } catch {
             print("Error fetching challenges: \(error)")
             throw error
         }
     }
     
-    // get User's Experiences
+    // get User's Experiences //FIXME: Not presently functional, replaced with fetchAllExperiences
     func getExperiences(for userId: String) async throws -> [Experience] {
-        do {
-            let accountWithExperiences: [Account] = try await supabaseClient
-                .from("Account")
-                .select(
-                    """
-                    id,
-                    experiences (*)
-                    """
-                )
-                .eq("id", value: userId)
-                .single()
-                .execute()
-                .value
-            
-            return accountWithExperiences.first?.experiences ?? []
-        } catch {
-            print("Error fetching experiences: \(error)")
-            throw error
-        }
+//        do {
+//            let accountWithExperiences: Account = try await supabaseClient
+//                .from("Account")
+//                .select(
+//                    """
+//                    id,
+//                    Experience_Participant!user_id (
+//                        Experience (*)
+//                    )
+//                    """
+//                )
+//                .eq("id", value: userId)
+//                .single()
+//                .execute()
+//                .value
+//            
+//            return accountWithExperiences.experiences ?? []
+//        } catch {
+//            print("Error fetching experiences: \(error)")
+//            throw error
+//        }
+        return []
     }
     
-    // get User's Reviews
-    func getReviews(by userId: String) async throws -> [Review] {
-        do {
-            
-            let accountWithReviews: [Account] = try await supabaseClient
-                .from("Account")
-                .select(
-                    """
-                    id,
-                    reviews (*)
-                    """
-                )
-                .eq("id", value: userId)
-                .single()
-                .execute()
-                .value
-            
-            return accountWithReviews.first?.reviews ?? []
-        } catch {
-            print("Error fetching reviews: \(error)")
-            throw error
+    func fetchAllExperiences(for userID: String) async throws -> [Experience] {
+        let experiences: [ExperienceParticipant] = try await supabaseClient
+            .from("Experience_Participant")
+            .select()
+            .eq("user_id", value: userID)
+            .execute()
+            .value
+        
+        let experienceIDs = experiences.map { $0.experienceID }
+        
+        if (experienceIDs.isEmpty) {
+            print("Found no experiences for participant: \(userID)")
+            return []
         }
+        
+        let final: [Experience] = try await supabaseClient
+            .from("Experience")
+            .select()
+            .in("id", values: experienceIDs)
+            .execute()
+            .value
+        print("Fetched \(final.count) experiences for participant: \(userID)")
+        
+        return final
+    }
+    
+    func fetchAllRestaurants(for userID: String) async throws -> [Restaurant] {
+        let experiences: [ExperienceParticipant] = try await supabaseClient
+            .from("Experience_Participant")
+            .select()
+            .eq("user_id", value: userID)
+            .execute()
+            .value
+        
+        let experienceIDs = experiences.map { $0.experienceID }
+        
+        if (experienceIDs.isEmpty) {
+            print("Found no experiences (for restaurants) for participant: \(userID)")
+            return []
+        }
+        
+        let userExperiences: [Experience] = try await supabaseClient
+            .from("Experience")
+            .select()
+            .in("id", values: experienceIDs)
+            .execute()
+            .value
+        
+        let restaurantIDs = Array(Set(userExperiences.map { $0.restaurant_id }))
+
+        if restaurantIDs.isEmpty {
+            print("No restaurants associated with experiences for user: \(userID)")
+            return []
+        }
+
+        let restaurants: [Restaurant] = try await supabaseClient
+            .from("Restaurant")
+            .select("id, created_at, name, address_text, avg_per_cost, details, image_url, cuisine, map_imported_rating, rating, map_imported_id")
+            .in("id", values: restaurantIDs)
+            .execute()
+            .value
+
+        print("Fetched \(restaurants.count) restaurants for participant: \(userID)")
+        return restaurants
+    }
+    
+    // get User's Reviews //FIXME: Not presently functional, replaced with fetchReviews
+    func getReviews(by userId: String) async throws -> [Review] {
+//        do {
+//            
+//            let accountWithReviews: Account = try await supabaseClient
+//                .from("Account")
+//                .select(
+//                    """
+//                    id,
+//                    reviews (*)
+//                    """
+//                )
+//                .eq("id", value: userId)
+//                .single()
+//                .execute()
+//                .value
+//            
+//            return accountWithReviews.reviews ?? []
+//        } catch {
+//            print("Error fetching reviews: \(error)")
+//            throw error
+//        }
+        return []
+    }
+    
+    func fetchReviews(for userID : String) async throws -> [Review] {
+        let reviews: [Review] = try await supabaseClient
+            .from("Review")
+            .select()
+            .eq("user_id", value: userID)
+            .execute()
+            .value
+        print("Fetched \(reviews.count) reviews for user \(userID)")
+        return reviews
     }
     
     // check if username exists

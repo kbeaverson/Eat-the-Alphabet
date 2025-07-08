@@ -15,7 +15,7 @@ struct Restaurant: Codable, Identifiable {
     let avg_per_cost : Int?
     let map_imported_rating : Float?
     let rating : Float?
-    let address_wgs : GeoPoint
+    let address_wgs : GeoPoint? // FIXME: Temporarily optional until decoding is handled properly
     let address_text : String?
     let details : String?
     let image_url : String?

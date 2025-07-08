@@ -24,17 +24,17 @@ class RestaurantViewModel: Identifiable, ObservableObject {
         self.cuisine = restaurant.cuisine
         self.details = restaurant.details// FIXME: add details to the database table and model
         self.imageUrl = restaurant.image_url
-        if let userCoord = userLocation {
-            self.distance = RestaurantViewModel.getDistanceInKm(
-                selfCoord2d: userCoord,
-                targetCoord2d: CLLocationCoordinate2D(
-                    latitude: restaurant.address_wgs.latitude,
-                    longitude: restaurant.address_wgs.longitude
-                )
-            )
-        } else {
-            self.distance = nil
-        }
+//        if let userCoord = userLocation {
+//            self.distance = RestaurantViewModel.getDistanceInKm(
+//                selfCoord2d: userCoord,
+//                targetCoord2d: CLLocationCoordinate2D(
+//                    latitude: restaurant.address_wgs.latitude,
+//                    longitude: restaurant.address_wgs.longitude
+//                )
+//            )
+//        } else {
+//            self.distance = nil
+//        }
     }
     
     static func getDistanceInKm(selfCoord2d: CLLocationCoordinate2D, targetCoord2d: CLLocationCoordinate2D) -> Double {
