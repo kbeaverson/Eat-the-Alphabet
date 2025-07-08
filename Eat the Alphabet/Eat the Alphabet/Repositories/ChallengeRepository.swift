@@ -54,6 +54,8 @@ class ChallengeRepository : ChallengeProtocol {
         do {
             let challengesOfUser: [Challenge] = try await accountRepository.getChallenges(for: userId)
             
+            // print("Challenges found for user \(userId): \(challengesOfUser.count)")
+            
             if challengesOfUser.isEmpty {
                 print("No challenges found for user \(userId).")
                 return []

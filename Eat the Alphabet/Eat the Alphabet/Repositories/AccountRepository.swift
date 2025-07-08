@@ -137,22 +137,20 @@ class AccountRepository : AccountProtocol {
     // get User's Challenges
     func getChallenges(for userId: String) async throws -> [Challenge] {
         do {
-            let accountWithChallenges: Account = try await supabaseClient
-                .from("Account")
-                .select(
-                    """
-                    challenges_id,
-                    Challenge (
-                        id
-                    )
-                    """
-                )
-                .eq("id", value: userId)
-                .single()
+            struct ChallengeParticipantWithChallenge: Codable {
+                let challenge_id: String
+                let Challenge: Challenge
+            }
+            let results: [ChallengeParticipantWithChallenge] = try await supabaseClient
+                .from("Challenge_Participant")
+                .select("""
+                    challenge_id,
+                    Challenge (*)
+                """)
+                .eq("user_id", value: userId)
                 .execute()
                 .value
-            
-            return accountWithChallenges.challenges ?? []
+            return results.map { $0.Challenge }
         } catch {
             print("Error fetching challenges: \(error)")
             throw error
