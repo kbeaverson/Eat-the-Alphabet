@@ -11,29 +11,16 @@ import UIKit
 // the class is to be embedded inside a ExperienceListItem, as a Restaurant is a part of an Experience
 struct RestaurantListItem: View {
     
-    let restaurant: Restaurant
-    let viewModel: RestaurantViewModel = RestaurantViewModel()
-    // @Binding var isSelected: Bool // THIS now is part of the outer view
-    // var isSelectionModeOn: Bool = false // THIS now is part of the outer view
-    
-    // var onTap: (() -> Void)? = nil // for tap handling
-    
+    var restaurant: Restaurant
+    var topPadding: CGFloat = 0
+    var trailingPadding: CGFloat = 0
+
     @State private var loadedImage: Image? = nil
     @State private var bgColor: Color = .restaurantListItemDefault // NOTE: if not manually set, it will be the default color
     
     var body: some View {
-        /** TODO: a z-stack with the following HStack on the top and a opacity=0.5 background of same color (or default to default bg)
-         and the experience on the bottom with just a title "Experience of $(experience's letter)"
-         */
-        /**
-         TODO: Is it possible to move the long-press context menu to the entire card view.
-         if User Joined: add a button to the context menu red "leave", if User Not Joined: add a button to the context menu regular "join"
-         */
-        /**
-         TODO: Make the desciption text multilines
-         */
         
-        HStack {
+        HStack(alignment: .top, spacing: 12) {
             // image to the leftmost
             loadedImage?
                 .resizable()
@@ -64,35 +51,18 @@ struct RestaurantListItem: View {
                 }
             }
             .foregroundColor(.defaultText) // TODO: this is font color, might need to change
-            //.padding(.leading, 8)
-            
-//            Spacer()
-//            // hide checkbox when not in selection mode
-//            if (isSelectionModeOn) {
-//                Toggle("", isOn: $isSelected)
-//                    .toggleStyle(CheckboxToggleStyle())
-//                    .frame(width: 24, height: 24)
-//                    .padding(.trailing, 12)
-//            }
+
+            Spacer() // to push the text to the left
         }
         .background(bgColor) // changed to UIKit image average color
         .cornerRadius(12)
-//        .onAppear {
-//            loadImageAndColor(from: restaurant.imageUrl)
-//        }
-//        .onTapGesture {
-//            if !isSelectionModeOn {
-//                onTap?()
-//            }
-//        }
-//        .contextMenu {
-//            VStack(alignment: .leading) {
-//                Text(restaurant.details ?? "No details available")
-//                    .font(.footnote)
-//                    .multilineTextAlignment(.leading)
-//                    .padding(8)
-//            }
-//        }
+        .padding(.top, topPadding)
+                .padding(.trailing, trailingPadding)
+                .background(bgColor)
+                .cornerRadius(12)
+                .onAppear {
+                    loadImageAndColor(from: restaurant.image_url)
+                }
         
     }
     

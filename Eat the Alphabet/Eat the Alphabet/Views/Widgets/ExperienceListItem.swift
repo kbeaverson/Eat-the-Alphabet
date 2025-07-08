@@ -3,26 +3,18 @@
 //  Eat the Alphabet
 //
 //  Created by Ronald Liao on 2025/7/4.
-//
 
-//
-//  RestaurantCardView.swift
-//  Eat the Alphabet
-//
-//  Created by Ronald Liao on 2025/6/11.
-//
 
 import SwiftUI
 import UIKit
 
 // the class is to embedded with a restaurantListItem, as a Restaurant is a part of an Experience
 struct ExperienceListItem: View {
-    let viewModel: ExperienceViewModel = ExperienceViewModel()
-    let associatedRestaurantModel: RestaurantViewModel = RestaurantViewModel()
+    @StateObject private var viewModel: ExperienceViewModel = ExperienceViewModel()
+    @StateObject private var associatedRestaurantModel: RestaurantViewModel = RestaurantViewModel()
     
     @Binding var isSelected: Bool // THIS now is part of the outer view
     var isSelectionModeOn: Bool = false // THIS now is part of the outer view
-    
     var onTap: (() -> Void)? = nil // for tap handling
     
     var body: some View {
@@ -42,7 +34,7 @@ struct ExperienceListItem: View {
          TODO: Make the desciption text multilines
          */
         
-        ZStack {
+        ZStack (alignment: .topLeading){
             VStack(alignment: .leading) {
                 HStack() {
                     // the experience title
@@ -61,6 +53,9 @@ struct ExperienceListItem: View {
                             .padding(.trailing, 12)
                     }
                 }
+                .padding(.top, 8)
+                .padding(.horizontal, 12)
+                
                 // if the associated restaurant is loaded, show it
                 if let restaurant = associatedRestaurantModel.restaurant {
                     RestaurantListItem(
@@ -70,11 +65,13 @@ struct ExperienceListItem: View {
             }
         }
         .onAppear {
+            print("ExperienceListItem onAppear called")
             // load the restaurant data
             if let experience = viewModel.experience {
                 Task {
                     do {
                         try await associatedRestaurantModel.fetchRestaurant(byId: experience.restaurant_id)
+                        print("Restaurant fetched successfully:", associatedRestaurantModel.restaurant?.name ?? "Unknown")
                     } catch {
                         print("Failed to fetch restaurant:", error)
                     }
