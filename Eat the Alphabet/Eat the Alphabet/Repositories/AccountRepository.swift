@@ -9,6 +9,32 @@ import Foundation
 import Supabase
 
 class AccountRepository : AccountProtocol {
+    static let shared = AccountRepository()
+    
+    func getFriendsCount(of userId: String) async throws -> Int {
+            do {
+                let count: Int? = try await supabaseClient
+                    .from("Account")
+                    .select(
+                        """
+                        *, 
+                        friends (*)
+                        """)
+                    .eq("id", value: userId)
+                    .execute()
+                    .count
+                guard let count = count else {
+                    print("Error fetching friends count")
+                    throw NSError(domain: "AccountRepository", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to fetch friends count"])
+                }
+                return count
+            } catch {
+                print("Error fetching friends count: \(error)")
+                throw error
+                    
+            }
+        }
+    
 
     // 1 Create User
     func createAccount(account: Account) async throws-> Void {
@@ -58,6 +84,8 @@ class AccountRepository : AccountProtocol {
         }
     }
     
+    
+    
     // 3 update Account by id
     func updateAccount(account: Account) async throws -> Void{
         do {
@@ -83,34 +111,32 @@ class AccountRepository : AccountProtocol {
     }
     
     // get Friends, both sent and received, via foreign keys
-    func getFriends(of userId: String) async throws -> [Friends] {
-        // foriegn key query
-        do {
-            let accountWithFriends: Account = try await supabaseClient
-                .from("Account")
-                .select(
-                    """
-                    id,
-                    friends (
-                        created_at,
-                        user1_id,
-                        user2_id,
-                        status
+        func getFriends(of userId: String) async throws -> [Friends] {
+            // foriegn key query
+            do {
+                let accountWithFriends: Account = try await supabaseClient
+                    .from("Account")
+                    .select(
+                        """
+                        id,
+                        friends (
+                            created_at,
+                            user1_id,
+                            user2_id,
+                            status
+                        )
+                        """
                     )
-                    """
-                )
-                .eq("id", value: userId)
-                .execute()
-                .value
-            
-            print("Fetched \(users.count) friends for participant: \(userId)")
-            
-            return users
-        } catch {
-            print("Error fetching friends: \(error)")
-            throw error
+                    .eq("id", value: userId)
+                    .execute()
+                    .value
+                let friends: [Friends] = accountWithFriends.friends ?? []
+                return friends
+            } catch {
+                print("Error fetching friends: \(error)")
+                throw error
+            }
         }
-    }
     
     func sendFriendRequest(from senderId: String, to receiverId: String) async throws -> Void {
         // TODO using Friends repo's method
@@ -261,6 +287,17 @@ class AccountRepository : AccountProtocol {
             throw error
         }
     }
+    
+    func fetchReviews(for userID : String) async throws -> [Review] {
+            let reviews: [Review] = try await supabaseClient
+                .from("Review")
+                .select()
+                .eq("user_id", value: userID)
+                .execute()
+                .value
+            print("Fetched \(reviews.count) reviews for user \(userID)")
+            return reviews
+        }
     
     // check if username exists
     func checkUsernameExists(username: String) async throws -> Bool {

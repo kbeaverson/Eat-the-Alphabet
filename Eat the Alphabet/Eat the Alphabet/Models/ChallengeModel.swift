@@ -9,7 +9,7 @@ import CoreLocation
 struct Challenge: Codable, Identifiable {
     let id : String
     var title : String?
-    var center_wgs : GeoPoint? // FIXME: Temporarily optional until decoding functional
+    var center_wgs : String? // FIXME: Temporarily optional until decoding functional
     var radius : Float
     let created_at : Date
     var description: String? // Optional description of the challenge
