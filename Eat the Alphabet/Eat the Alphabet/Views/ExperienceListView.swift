@@ -11,7 +11,7 @@ import CoreLocation
 
 struct ExperienceListView: View {
     //    @Environment(\.dismiss) var dismiss // ?
-    @EnvironmentObject var appState: AppState //
+    // @EnvironmentObject var appState: AppState //
     @EnvironmentObject var permissionManager: PermissionManager // Location permission manager
     
     // challenge experience

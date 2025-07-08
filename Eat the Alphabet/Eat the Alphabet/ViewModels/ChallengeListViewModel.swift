@@ -9,7 +9,7 @@ import SwiftUI
 
 // for the ChallengesView, on in 2nd of the root tab navigation
 class ChallengeListViewModel: ObservableObject {
-    @EnvironmentObject var appState: AppState
+    // @EnvironmentObject var appState: AppState
     
     @Published var challenges : [Challenge] = []
     // TODO: Consider monitoring loading status/errors with other published vars?
@@ -27,7 +27,7 @@ class ChallengeListViewModel: ObservableObject {
     @MainActor
     public func getChallengesByAccount() async throws {
         // guard the current authenticated user exists
-        guard let user = appState.currentAuthUser else {
+        guard let user = supabaseClient.auth.currentUser else {
             print ("No authenticated user found.")
             throw NSError(domain: "ChallengesViewModel", code: 1, userInfo: [NSLocalizedDescriptionKey: "No authenticated user found."])
         }

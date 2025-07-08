@@ -10,7 +10,7 @@ import Supabase
 
 struct LoginView : View {
     @Binding var session: Session?
-    @EnvironmentObject var appState: AppState
+    // @EnvironmentObject var appState: AppState
     
     @State private var email = ""
     @State private var password = ""

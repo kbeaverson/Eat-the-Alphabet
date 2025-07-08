@@ -4,7 +4,6 @@ import Supabase
 
 // NOTE: API encapsulation for
 class RestaurantRepository : RestaurantProtocol {
-    private let experienceRepository: ExperienceRepository = ExperienceRepository()
     
     func getRestaurant(by id: String) async throws -> Restaurant {
         do {
@@ -48,7 +47,16 @@ class RestaurantRepository : RestaurantProtocol {
     func getRestaurants(byChallenge challengeId: String) async throws -> [Restaurant] {
         // each challenge has several experiences, each experience has a restaurant
         do {
-            let experiences: [Experience] = try await experienceRepository.getExperiences(byChallenge: challengeId)
+            let experiences: [Experience] = try await supabaseClient
+                .from("experiences")
+                .select()
+                .eq("challenge_id", value: challengeId)
+                .execute()
+                .value
+            
+            if experiences.isEmpty {
+                print("No experiences found for challenge \(challengeId).")
+            }
             
             let restaurantIds = experiences.map { $0.restaurant_id }
             let restaurants: [Restaurant] = try await supabaseClient

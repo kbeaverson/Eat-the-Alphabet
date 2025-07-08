@@ -17,7 +17,7 @@ class AccountViewModel: ObservableObject {
         self.user = Account(
             id: UUID().uuidString,
             created_at: Date(),
-            address_wgs: GeoPoint(CLLocationCoordinate2D(latitude: 0, longitude: 0)),
+            address_wgs: "", // GeoPoint(CLLocationCoordinate2D(latitude: 0, longitude: 0)),
             username: "",
             display_name: "",
             profile_image_url: nil,

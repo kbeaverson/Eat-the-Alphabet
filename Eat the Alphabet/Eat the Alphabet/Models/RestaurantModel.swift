@@ -16,7 +16,7 @@ struct Restaurant: Codable, Identifiable {
     let map_imported_id: String
     let map_imported_rating : Float?
     let rating : Float?
-    let address_wgs : GeoPoint
+    let address_wgs : String //FIXME: GeoPoint
     let address_text : String?
     let details : String?
     let image_url : String?
@@ -32,7 +32,7 @@ struct Restaurant: Codable, Identifiable {
          map_imported_id: String,
          map_imported_rating: Float? = nil,
          rating: Float? = nil,
-         address_wgs: GeoPoint,
+         address_wgs: String,
          address_text: String? = nil,
          details: String? = nil,
          image_url: String? = nil) {

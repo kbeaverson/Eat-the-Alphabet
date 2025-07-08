@@ -31,7 +31,18 @@ struct Eat_the_AlphabetTests {
         try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
     }
     
-    @Test func test() async throws {
+    @Test func testRestaurantRepo() async throws {
+        // 登录
+        do {
+            if try await supabaseClient.auth.session.isExpired {
+                let result = try await AuthService.shared.login(
+                    email: "liao.833@buckeyemail.osu.edu",
+                    password: "Ge6vnyn2p25a"
+                )
+            }
+        } catch {
+            print("Login failed: \(error)")
+        }
         
     }
     

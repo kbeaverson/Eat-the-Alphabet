@@ -18,7 +18,6 @@ struct ChallengesView: View {
             let fieldWidth = geo.size.width * 0.6
             BackgroundScaffold {
                 VStack(spacing: 20) {
-                    Text("Challenges View")
                     // NOTE: @Binging valuemust use a reference to a @State or another @Bingding
                     LazyVStack(spacing: 10) {
                         ForEach(self.viewModel.challenges, id: \.id) { challenge in

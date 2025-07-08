@@ -38,7 +38,8 @@ class ChallengeViewModel : ObservableObject {
     }
     
     func updateChallengeCoords(newCoords : CLLocationCoordinate2D) async throws {
-        challenge.center_wgs = GeoPoint(newCoords)
+        // in format POINT(-73.946823 40.807416)
+        challenge.center_wgs = String(format: "POINT(%.6f %.6f)", newCoords.longitude, newCoords.latitude)
         challenge = challenge
         try await challengeRepository.updateChallenge(challenge: self.challenge)
     }

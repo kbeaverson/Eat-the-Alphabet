@@ -24,6 +24,7 @@ final class AuthService {
                 email: email,
                 password: password
             )
+            // appState.currentAuthUser = result.user
             return .success(result.user)
         } catch {
             print("Login error: \(error)")
@@ -41,7 +42,7 @@ final class AuthService {
                     "username": .string(username)
                 ]
             )
-            
+            // appState.currentAuthUser = result.user
             return .success(result.user)
             // appState?.session = result.session
         }

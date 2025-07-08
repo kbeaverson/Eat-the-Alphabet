@@ -9,7 +9,7 @@ import CoreLocation
 struct Challenge: Codable, Identifiable {
     let id : String
     var title : String?
-    var center_wgs : GeoPoint
+    var center_wgs : String //FIXME: GeoPoint
     var radius : Float
     let created_at : Date
     var description: String? // Optional description of the challenge
@@ -21,7 +21,7 @@ struct Challenge: Codable, Identifiable {
     // TEST: constructor from just data
     init(id: String,
          title: String,
-         center_wgs: GeoPoint,
+         center_wgs: String,
          radius: Float,
          created_at: Date,
          description: String? = nil) {

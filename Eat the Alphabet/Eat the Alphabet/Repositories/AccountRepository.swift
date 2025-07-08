@@ -115,13 +115,8 @@ class AccountRepository : AccountProtocol {
                 .from("Account")
                 .select(
                     """
-                    id, 
-                    friends (
-                        user1_id,
-                        user2_id,
-                        status,
-                        created_at
-                    )
+                    *, 
+                    friends (*)
                     """)
                 .eq("id", value: userId)
                 .execute()
@@ -142,12 +137,14 @@ class AccountRepository : AccountProtocol {
     // get User's Challenges
     func getChallenges(for userId: String) async throws -> [Challenge] {
         do {
-            let accountWithChallenges: [Account] = try await supabaseClient
+            let accountWithChallenges: Account = try await supabaseClient
                 .from("Account")
                 .select(
                     """
-                    id,
-                    challenges (*)
+                    challenges_id,
+                    Challenge (
+                        id
+                    )
                     """
                 )
                 .eq("id", value: userId)
@@ -155,7 +152,7 @@ class AccountRepository : AccountProtocol {
                 .execute()
                 .value
             
-            return accountWithChallenges.first?.challenges ?? []
+            return accountWithChallenges.challenges ?? []
         } catch {
             print("Error fetching challenges: \(error)")
             throw error
@@ -169,8 +166,8 @@ class AccountRepository : AccountProtocol {
                 .from("Account")
                 .select(
                     """
-                    id,
-                    experiences (*)
+                    *,
+                    Experience (*)
                     """
                 )
                 .eq("id", value: userId)
@@ -193,8 +190,8 @@ class AccountRepository : AccountProtocol {
                 .from("Account")
                 .select(
                     """
-                    id,
-                    reviews (*)
+                    *,
+                    Review (*)
                     """
                 )
                 .eq("id", value: userId)
