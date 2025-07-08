@@ -8,9 +8,9 @@
 protocol ReviewProtocol {
     // Basic CRUD
     // we do not use `_` to omit the parameter label
-    func createReview(review: Review) async throws -> Review
+    func createReview(review: Review) async throws
     func getReview(by id: String) async throws -> Review
-    func updateReview(review: Review) async throws
+    func updateReview(review: Review, userId: String) async throws -> Void
     func deleteReview(by id: String) async throws
 
     // Relation-based queries (ordered by createdAt)

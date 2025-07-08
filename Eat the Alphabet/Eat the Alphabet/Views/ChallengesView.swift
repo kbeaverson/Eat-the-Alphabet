@@ -1,5 +1,5 @@
 //
-//  ChallengeListView.swift
+//  ChallengesView.swift
 //  Eat the Alphabet
 //
 //  Created by Will Erkman on 6/8/25.
@@ -8,30 +8,28 @@
 import SwiftUI
 import CoreLocation
 
+// for the ChallengesView, on in 2nd of the root tab navigation
 struct ChallengesView: View {
     // ViewModel
-    private let viewModel = ChallengesViewModel()
-    
-    @State private var challenges: [Challenge] = []
+    @StateObject private var viewModel : ChallengeListViewModel = ChallengeListViewModel()
     
     var body: some View {
         GeometryReader { geo in
             let fieldWidth = geo.size.width * 0.6
             BackgroundScaffold {
                 VStack(spacing: 20) {
-                    Text("Challenges View")
-                    // TODO: pass in real title of challenge
-                    // NOTE: @Binging valuemust use a reference to a @State or another @Bingding
-                    LazyVStack(spacing: 10) {
-                        ForEach(challenges) {
-                            challenge in
-                            
+                    LazyVStack(alignment: .leading, spacing: 10) {
+                        ForEach(self.viewModel.challenges, id: \.id) { challenge in
+                            ChallengeListItem(challenge: challenge)
                         }
                     }
+                    .frame(maxHeight: .infinity, alignment: .top) // 关键：顶部对齐
                 }
+                .frame(maxHeight: .infinity, alignment: .top) // 关键：顶部对齐
             }
         }
         .onAppear {
+            loadChallenges()
         }
         
     }
@@ -39,8 +37,7 @@ struct ChallengesView: View {
         Task {
             // Fetch challenges when the view appears
             do {
-                // TODO:
-                try await viewModel.loadChallenges()
+                try await viewModel.getChallengesByAccount()
             } catch {
                 print("Failed to load challenges: \(error)")
             }

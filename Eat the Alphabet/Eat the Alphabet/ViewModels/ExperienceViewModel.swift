@@ -8,18 +8,22 @@
 import Foundation
 
 class ExperienceViewModel: ObservableObject {
-//    @Published var experience : Experience
+    
+    @Published var experience : Experience?
+    
     private let repository : ExperienceRepository
-    private let userRepository : AccountRepository
+    private let accountRepository : AccountRepository
     private let reviewRepository : ReviewRepository
     
-    init(restaurant: Restaurant, challenge: Challenge, repository: ExperienceRepository, userRepository: AccountRepository, reviewRepository: ReviewRepository) {
-//        self.experience = experience
-        self.repository = repository
-        self.userRepository = userRepository
-        self.reviewRepository = reviewRepository
+    init() {
+        self.repository = ExperienceRepository()
+        self.accountRepository = AccountRepository()
+        self.reviewRepository = ReviewRepository()
     }
     // FIXME
+    
+    // fetch experience by challenge_id
+
 //    func createExperience() async {
 //        do {
 //            try await repository.createExperience(experience: self.experience)

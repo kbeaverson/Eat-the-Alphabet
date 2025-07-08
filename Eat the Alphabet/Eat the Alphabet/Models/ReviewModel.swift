@@ -16,7 +16,8 @@ struct Review: Codable, Identifiable {
     var order : String
     let user_id: String
     var experience_id: String
-    
+
+    var experience: Experience? // one Experience has multiple reviews, review has a FK to Experience
     var image_urls: [String]? = []
     
     // TEST: constructor from just data

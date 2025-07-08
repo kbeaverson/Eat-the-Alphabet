@@ -10,7 +10,7 @@ import Foundation
 struct Account: Codable, Identifiable {
     let id: String
     let created_at: Date
-    var address_wgs: GeoPoint?
+    var address_wgs: String? //FIXME: GeoPoint?
     var username: String?
     var display_name: String?
     var profile_image_url: String?
@@ -26,7 +26,7 @@ struct Account: Codable, Identifiable {
     // TEST: constructor from just data
     init(id: String,
          created_at: Date,
-         address_wgs: GeoPoint? = nil,
+         address_wgs: String? = nil,
          username: String,
          display_name: String? = nil,
          profile_image_url: String? = nil,

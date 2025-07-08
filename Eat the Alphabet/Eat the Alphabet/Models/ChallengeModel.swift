@@ -21,7 +21,7 @@ struct Challenge: Codable, Identifiable {
     // TEST: constructor from just data
     init(id: String,
          title: String,
-         center_wgs: GeoPoint,
+         center_wgs: String,
          radius: Float,
          created_at: Date,
          description: String? = nil) {

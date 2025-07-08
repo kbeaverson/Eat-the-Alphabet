@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RegisterView: View {
-    @EnvironmentObject var appState: AppState
+    // @EnvironmentObject var appState: AppState
     
     @State private var username = ""
     @State private var email = ""
@@ -133,14 +133,14 @@ struct RegisterView: View {
                     email: email,
                     password: password
                 )
-                do {
-                    appState.currentAuthUser = try result.get()
-                } catch {
-                    print("Error getting user from registration result: \(error)")
-                    alertMessage = "Registration failed: \(error.localizedDescription)"
-                    showAlert = true
-                    return
-                }
+//                do {
+//                    appState.currentAuthUser = try result.get()
+//                } catch {
+//                    print("Error getting user from registration result: \(error)")
+//                    alertMessage = "Registration failed: \(error.localizedDescription)"
+//                    showAlert = true
+//                    return
+//                }
                 
                 print("Registered successfully.")
             } catch {

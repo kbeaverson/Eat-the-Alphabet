@@ -9,7 +9,6 @@ import SwiftUI
 import Supabase
 
 struct ContentView : View {
-    // @EnvironmentObject var appState: AppState
     @State private var checkingSession = true
     @State private var session: Session? = nil
     
@@ -19,37 +18,35 @@ struct ContentView : View {
         Group {
             if checkingSession {
                 ProgressView("Loading...")
-                    .onAppear {
-                        Task {
-                            do {
-                                print("Loading session...")
-                                // Load the session when the app starts. If no previous session exist or is expired, we shall navigate to the login screen
-                                session = try await supabaseClient.auth.session
-                                
-                                print("User info: " + String(describing: session?.user))
-                                let isExpired = try await supabaseClient.auth.session.isExpired
-                                if isExpired {
-                                    print("Session expired, navigating to login screen.")
-                                } else {
-                                    print("Session is valid, navigating to home screen.")
-                                }
-                                checkingSession = false // finished checking session
-                            } catch {
-                                print("Error loading session: \(error)")
-                                // Handle error, e.g., navigate to login screen
-                                checkingSession = false // finished checking session
-                            }
-                        }
-                    }
             } else {
                 contentView
+            }
+        }
+        .onAppear {
+            Task {
+                do {
+                    print("Loading session...")
+                    let loadedSession = try await supabaseClient.auth.session
+                    let isExpired = try await supabaseClient.auth.session.isExpired
+                    await MainActor.run {
+                        session = isExpired ? nil : loadedSession
+                        checkingSession = false
+                    }
+                } catch {
+                    print("Error loading session: \(error)")
+                    await MainActor.run {
+                        session = nil
+                        checkingSession = false
+                    }
+                }
             }
         }
     }
     
     var contentView: some View {
         NavigationStack {
-            if session == nil { // placeholder
+
+            if (session == nil) {
                 LoginView(
                     session: $session,
                 )
@@ -60,5 +57,4 @@ struct ContentView : View {
             }
         }
     }
-    
 }

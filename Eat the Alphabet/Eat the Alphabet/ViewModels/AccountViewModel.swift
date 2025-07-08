@@ -9,7 +9,7 @@ import Foundation
 import CoreLocation
 import Supabase
 
-class UserViewModel: ObservableObject {
+class AccountViewModel: ObservableObject {
     @Published var user: Account
     private let repository: AccountRepository
     
@@ -17,7 +17,7 @@ class UserViewModel: ObservableObject {
         self.user = Account(
             id: UUID().uuidString,
             created_at: Date(),
-            address_wgs: GeoPoint(CLLocationCoordinate2D(latitude: 0, longitude: 0)),
+            address_wgs: "", // GeoPoint(CLLocationCoordinate2D(latitude: 0, longitude: 0)),
             username: "",
             display_name: "",
             profile_image_url: nil,

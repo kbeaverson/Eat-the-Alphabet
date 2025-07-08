@@ -13,6 +13,7 @@ struct Restaurant: Codable, Identifiable {
     let created_at : Date
     let cuisine : String
     let avg_per_cost : Int?
+    let map_imported_id: String
     let map_imported_rating : Float?
     let rating : Float?
     let address_wgs : GeoPoint? // FIXME: Temporarily optional until decoding is handled properly
@@ -20,7 +21,7 @@ struct Restaurant: Codable, Identifiable {
     let details : String?
     let image_url : String?
     
-    var experiences: [Experience]? = [] // Experiences associated with the restaurant
+    var experiences: Experience? // Experience in the upper stream of the restaurant (???)
     
     // TEST: constructor from just data
     init(id: String,
@@ -28,9 +29,10 @@ struct Restaurant: Codable, Identifiable {
          created_at: Date,
          cuisine: String,
          avg_per_cost: Int? = nil,
+         map_imported_id: String,
          map_imported_rating: Float? = nil,
          rating: Float? = nil,
-         address_wgs: GeoPoint,
+         address_wgs: String,
          address_text: String? = nil,
          details: String? = nil,
          image_url: String? = nil) {
@@ -39,6 +41,7 @@ struct Restaurant: Codable, Identifiable {
         self.created_at = created_at
         self.cuisine = cuisine
         self.avg_per_cost = avg_per_cost
+        self.map_imported_id = map_imported_id
         self.map_imported_rating = map_imported_rating
         self.rating = rating
         self.address_wgs = address_wgs
@@ -53,6 +56,7 @@ struct Restaurant: Codable, Identifiable {
         case created_at = "created_at"
         case cuisine = "cuisine"
         case avg_per_cost = "avg_per_cost"
+        case map_imported_id = "map_imported_id"
         case map_imported_rating = "map_imported_rating"
         case rating = "rating"
         case address_wgs = "address_wgs"

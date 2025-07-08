@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ReviewViewModel: ObservableObject {
+class ReviewItemViewModel: ObservableObject {
     @Published var review: Review
     private let reviewRepository : ReviewRepository /*= ReviewRepository()*/
     
@@ -36,7 +36,7 @@ class ReviewViewModel: ObservableObject {
         review.review = reviewText
         review = review
         do {
-            try await reviewRepository.updateReview(review: review)
+            try await reviewRepository.updateReview(review: review, userId: supabaseClient.auth.currentUser?.id.uuidString ?? "")
         } catch {
             print("Error updating review text: \(error)")
         }
@@ -46,7 +46,7 @@ class ReviewViewModel: ObservableObject {
         review.rating = rating
         review = review
         do {
-            try await reviewRepository.updateReview(review: self.review)
+            try await reviewRepository.updateReview(review: self.review, userId: supabaseClient.auth.currentUser?.id.uuidString ?? "")
         } catch {
             print("Error updating review rating: \(error)")
         }
@@ -56,7 +56,7 @@ class ReviewViewModel: ObservableObject {
         review.order = order
         review = review
         do {
-            try await reviewRepository.updateReview(review: self.review)
+            try await reviewRepository.updateReview(review: self.review, userId: supabaseClient.auth.currentUser?.id.uuidString ?? "")
         } catch {
             print("Error updating review order: \(error)")
         }

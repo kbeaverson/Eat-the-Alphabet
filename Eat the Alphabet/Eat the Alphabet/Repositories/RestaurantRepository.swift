@@ -5,21 +5,6 @@ import Supabase
 // NOTE: API encapsulation for
 class RestaurantRepository : RestaurantProtocol {
     
-    func createRestaurant(restaurant: Restaurant) async throws -> Void {
-        do {
-            try await supabaseClient
-                .from("Restaurant")
-                .insert(restaurant)
-                .execute()
-            
-            print("Restaurant successfully created.")
-        } catch {
-            
-            print("Error creating restaurant: \(error)")
-            throw error
-        }
-    }
-    
     func getRestaurant(by id: String) async throws -> Restaurant {
         do {
             let restaurant: Restaurant = try await supabaseClient
@@ -33,6 +18,87 @@ class RestaurantRepository : RestaurantProtocol {
             return restaurant
         } catch {
             print("Error fetching restaurant by id: \(error)")
+            throw error
+        }
+    }
+    
+    func getRestaurant(byExperience experienceId: String) async throws -> Restaurant {
+        do {
+            let restaurant: Restaurant = try await supabaseClient
+                .from("Restaurant")
+                .select(
+                    """
+                    *,
+                    experiences(*)
+                    """
+                )
+                .eq("experiences.id", value: experienceId)
+                .single()
+                .execute()
+                .value
+            
+            return restaurant
+        } catch {
+            print("Error fetching restaurants by experience: \(error)")
+            throw error
+        }
+    }
+    
+    func getRestaurants(byChallenge challengeId: String) async throws -> [Restaurant] {
+        // each challenge has several experiences, each experience has a restaurant
+        do {
+            let experiences: [Experience] = try await supabaseClient
+                .from("experiences")
+                .select()
+                .eq("challenge_id", value: challengeId)
+                .execute()
+                .value
+            
+            if experiences.isEmpty {
+                print("No experiences found for challenge \(challengeId).")
+            }
+            
+            let restaurantIds = experiences.map { $0.restaurant_id }
+            let restaurants: [Restaurant] = try await supabaseClient
+                .from("Restaurant")
+                .select()
+                .in("id", values: restaurantIds)
+                .execute()
+                .value
+            return restaurants
+        } catch {
+            print("Error fetching restaurants by challenge: \(error)")
+            throw error
+        }
+    }
+    
+    func getRestaurants(byCuisine cuisine: String) async throws -> [Restaurant] {
+        do {
+            let restaurants: [Restaurant] = try await supabaseClient
+                .from("Restaurant")
+                .select()
+                .eq("cuisine", value: cuisine)
+                .execute()
+                .value
+            
+            return restaurants
+        } catch {
+            print("Error fetching restaurants by cuisine: \(error)")
+            throw error
+        }
+    }
+    
+    func createRestaurant(restaurant: Restaurant) async throws -> Void {
+        do {
+            try await supabaseClient
+                .from("Restaurant")
+                .insert(restaurant)
+                .execute()
+            
+            print("Restaurant successfully created.")
+        } catch {
+            
+            print("Error creating restaurant: \(error)")
             throw error
         }
     }
@@ -77,9 +143,9 @@ class RestaurantRepository : RestaurantProtocol {
 //        <#code#>
 //    }
     
-    func getExperiences(for restaurantId: String) async throws -> [Experience] {
+    func getWithExperience(for restaurantId: String) async throws -> Restaurant {
         do {
-            let restaurantWithExperiences: Restaurant = try await supabaseClient
+            let restaurantWithExperience: Restaurant = try await supabaseClient
                 .from("Restaurant")
                 .select(
                     """
@@ -92,9 +158,29 @@ class RestaurantRepository : RestaurantProtocol {
                 .execute()
                 .value
             
-            return restaurantWithExperiences.experiences ?? []
+            return restaurantWithExperience
         } catch {
             print("Error fetching experiences for restaurant: \(error)")
+            throw error
+        }
+    }
+    
+    func getReviews(for restaurantId: String) async throws -> [Review] {
+        do {
+            let reviews: [Review] = try await supabaseClient
+                .from("Review")
+                .select(
+                    """
+                    *,
+                    experience(*)
+                    """
+                )
+                .eq("experience.id", value: restaurantId)
+                .execute()
+                .value
+            return reviews
+        } catch {
+            print("Error fetching reviews for restaurant: \(error)")
             throw error
         }
     }
