@@ -17,7 +17,7 @@ class ExperienceRepository : ExperienceProtocol {
     func getExperience(by id: String) async throws -> Experience {
         do {
             let experiences: Experience = try await supabaseClient
-                .from("experiences")
+                .from("Experience")
                 .select()
                 .eq("id", value: id)
                 .single()
@@ -33,7 +33,7 @@ class ExperienceRepository : ExperienceProtocol {
     func getExperiences(byChallenge challengeId: String) async throws -> [Experience] {
         do {
             let experiences: [Experience] = try await supabaseClient
-                .from("experiences")
+                .from("Experience")
                 .select()
                 .eq("challenge_id", value: challengeId)
                 .execute()

@@ -25,8 +25,8 @@ struct ExperienceListView: View {
     @State private var selectedExperience: Experience?
     
     // view model info
-    private let viewModel: ExperienceListViewModel = ExperienceListViewModel()
-    private let restaurantRepository: RestaurantRepository = RestaurantRepository()
+    @StateObject private var viewModel: ExperienceListViewModel = ExperienceListViewModel()
+    // @StateObject private var restaurantRepository: RestaurantRepository = RestaurantRepository()
     
     var body: some View {
         Group {

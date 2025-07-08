@@ -23,8 +23,9 @@ class ExperienceListViewModel: ObservableObject {
     @MainActor
     func fetchExperiences(challengeId: String) async throws{
         do {
-            let fetchedExperience = try await repository.getExperiences(byChallenge: challengeId)
-            self.experiences = fetchedExperience
+            let fetchedExperiences: [Experience] = try await repository.getExperiences(byChallenge: challengeId)
+            print("Fetched experiences: \(fetchedExperiences.count) for challenge \(challengeId)")
+            self.experiences = fetchedExperiences
         } catch {
             print("Error fetching experience: \(error)")
             throw error
