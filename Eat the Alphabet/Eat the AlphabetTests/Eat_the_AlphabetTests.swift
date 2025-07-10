@@ -31,7 +31,7 @@ struct Eat_the_AlphabetTests {
         try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
     }
     
-    @Test func testRestaurantRepo() async throws {
+    @Test func testAuth() async throws {
         // 登录
         do {
             if try await supabaseClient.auth.session.isExpired {
@@ -43,7 +43,6 @@ struct Eat_the_AlphabetTests {
         } catch {
             print("Login failed: \(error)")
         }
-        
     }
     
     /** TEST follow-up log out test function*/

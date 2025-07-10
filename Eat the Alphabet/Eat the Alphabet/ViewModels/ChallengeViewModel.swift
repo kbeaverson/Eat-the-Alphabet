@@ -10,6 +10,7 @@ import CoreLocation
 @MainActor
 class ChallengeViewModel : ObservableObject {
     @Published var challenge: Challenge
+    
     private let challengeRepository : ChallengeRepository
     private let experienceRepository : ExperienceRepository
     private let accountRepository : AccountRepository
@@ -84,5 +85,21 @@ class ChallengeViewModel : ObservableObject {
         let challengeWithRepository = try await challengeRepository.getWithExperiences(by: challenge.id)
         challenge.experiences = challengeWithRepository.experiences
         challenge = challengeWithRepository
+    }
+    
+    func getIfParticipated(userId: String, challengeId: String) async throws -> Bool {
+        return try await challengeRepository.getIfParticipated(userId: userId, challengeId: challengeId)
+    }
+    
+    func joinChallenge(userId: String, challengeId: String) async throws {
+        try await challengeRepository.joinChallenge(userId: userId, challengeId: challengeId)
+        // After joining, reload participants to update the challenge state
+        // try await loadParticipants()
+    }
+    
+    func leaveChallenge(userId: String, challengeId: String) async throws {
+        try await challengeRepository.leaveChallenge(userId: userId, challengeId: challengeId)
+        // After leaving, reload participants to update the challenge state
+        // try await loadParticipants()
     }
 }

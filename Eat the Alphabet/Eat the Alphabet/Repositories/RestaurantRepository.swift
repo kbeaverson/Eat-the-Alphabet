@@ -4,8 +4,8 @@ import Supabase
 
 // NOTE: API encapsulation for
 class RestaurantRepository : RestaurantProtocol {
-    
     func getRestaurant(by id: String) async throws -> Restaurant {
+        print ("Fetching restaurant by id: \(id)")
         do {
             let restaurant: Restaurant = try await supabaseClient
                 .from("Restaurant")
@@ -14,7 +14,6 @@ class RestaurantRepository : RestaurantProtocol {
                 .single()
                 .execute()
                 .value
-            
             return restaurant
         } catch {
             print("Error fetching restaurant by id: \(error)")
@@ -22,22 +21,23 @@ class RestaurantRepository : RestaurantProtocol {
         }
     }
     
-    func getRestaurant(byExperience experienceId: String) async throws -> Restaurant {
+    func getRestaurant(byExperience experienceId: String) async throws -> Restaurant? {
         do {
-            let restaurant: Restaurant = try await supabaseClient
-                .from("Restaurant")
+            let experience: Experience = try await supabaseClient
+                .from("Experience")
                 .select(
                     """
-                    *,
-                    experiences(*)
+                    *, 
+                    restaurant_id,
+                    Restaurant (id, *)
                     """
                 )
-                .eq("experiences.id", value: experienceId)
+                .eq("id", value: experienceId)
                 .single()
                 .execute()
                 .value
             
-            return restaurant
+            return experience.restaurant // restaurant
         } catch {
             print("Error fetching restaurants by experience: \(error)")
             throw error
@@ -89,6 +89,7 @@ class RestaurantRepository : RestaurantProtocol {
     }
     
     func createRestaurant(restaurant: Restaurant) async throws -> Void {
+        
         do {
             try await supabaseClient
                 .from("Restaurant")
@@ -126,13 +127,12 @@ class RestaurantRepository : RestaurantProtocol {
                 .delete()
                 .eq("id", value: id)
                 .execute()
-            
+                    
             print("Restaurant successfully deleted.")
         } catch {
             print("Error deleting restaurant: \(error)")
             throw error
         }
-
     }
     
 //    func searchRestaurants(by name: String) async throws -> [Restaurant] {
@@ -186,26 +186,4 @@ class RestaurantRepository : RestaurantProtocol {
     }
     
     // TODO: technique revise
-    func getAverageRating(for restaurantId: String) async throws -> Float? {
-        do {
-            let restaurant: Restaurant = try await supabaseClient
-                .from("Restaurant")
-                .select(
-                    """
-                    avg(map_imported_rating) as avg_map_imported_rating,
-                    avg(rating) as avg_rating
-                    """
-                )
-                .eq("id", value: restaurantId)
-                .single()
-                .execute()
-                .value
-            
-            return restaurant.map_imported_rating ?? restaurant.rating ?? nil
-        } catch {
-            print("Error fetching average rating for restaurant: \(error)")
-            throw error
-        }
-    }
-
 }

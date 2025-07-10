@@ -43,4 +43,12 @@ class ChallengeListViewModel: ObservableObject {
         }
     }
     
+//    public func ifParticipated( challengeId: String) async throws -> Bool {
+//        do {
+//            return try await challengeRepository.getIfParticipated(userId: supabaseClient.auth.currentUser?.id.uuidString ?? "", challengeId: challengeId)
+//        } catch {
+//            print("Error checking participation: \(error)")
+//            throw error
+//        }
+//    }
 }

@@ -17,6 +17,7 @@ struct Experience: Identifiable, Codable {
     
     var reviews: [Review]? = []
     var participants: [Account]? = [] // Participants associated with the experience
+    var restaurant: Restaurant? = nil // Restaurants associated with the experience
     
     init (id: String,
           created_at: Date,
@@ -31,5 +32,18 @@ struct Experience: Identifiable, Codable {
         self.restaurant_id = restaurant_id
         self.challenge_id = challenge_id
         self.letter = letter
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case created_at = "created_at"
+        case status = "status"
+        case restaurant_id = "restaurant_id"
+        case challenge_id = "challenge_id"
+        case letter = "letter"
+        
+        case reviews = "Review"
+        case participants = "Participant"
+        case restaurant = "Restaurant"
     }
 }

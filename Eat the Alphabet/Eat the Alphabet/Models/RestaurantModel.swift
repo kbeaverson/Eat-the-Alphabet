@@ -14,14 +14,15 @@ struct Restaurant: Codable, Identifiable {
     let cuisine : String
     let avg_per_cost : Int?
     let map_imported_id: String
-    let map_imported_rating : Float?
-    let rating : Float?
+    let map_imported_rating : Int?
+    let rating : Int?
     let address_wgs : String? // FIXME: Temporarily optional until decoding is handled properly
     let address_text : String?
     let details : String?
     let image_url : String?
     
-    var experiences: Experience? // Experience in the upper stream of the restaurant (???)
+    // Experience in the upper stream of the restaurant !!!
+    // NOTE: do not include Experience, else there will be a cyclic dependency.
     
     // TEST: constructor from just data
     init(id: String,
@@ -30,8 +31,8 @@ struct Restaurant: Codable, Identifiable {
          cuisine: String,
          avg_per_cost: Int? = nil,
          map_imported_id: String,
-         map_imported_rating: Float? = nil,
-         rating: Float? = nil,
+         map_imported_rating: Int? = nil,
+         rating: Int? = nil,
          address_wgs: String?, // Should be Geopoint? Made String to fix build errors
          address_text: String? = nil,
          details: String? = nil,

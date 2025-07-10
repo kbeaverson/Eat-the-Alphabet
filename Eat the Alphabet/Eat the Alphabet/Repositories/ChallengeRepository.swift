@@ -12,6 +12,7 @@ import Supabase
 // TODO: Unwrap all of the async methods so that the do/catch can be implemented at the ViewModel layer so as to allow error message propagation to the User
 class ChallengeRepository : ChallengeProtocol {
     
+    
     private let accountRepository: AccountRepository = AccountRepository()
     
     // 1 Create
@@ -101,7 +102,7 @@ class ChallengeRepository : ChallengeProtocol {
     }
     
     
-    // related items via forign table relationships
+    // REVISE: related items via forign table relationships
     func getWithExperiences(by challengeId: String) async throws -> Challenge {
         do {
             let challengeWithExperiences: Challenge = try await supabaseClient
@@ -146,24 +147,74 @@ class ChallengeRepository : ChallengeProtocol {
     /** Original intention of this methods was to fetch with foreign keys,
      so that one query can fetch both the challenge itself and its related data.
      Name change to "get WITH"*/
+    // REVISE
     func getWithParticipants(byChallengeId challengeId: String) async throws -> Challenge {
         do {
             let challengeWithParticipants: Challenge = try await supabaseClient
-                .from("Challenge")
-                .select(
-                    """
-                    *,
-                    participants(*)
-                    """
-                )
+                .from("Challenge_Participant")
+                .select()
                 .eq("id", value: challengeId)
                 .single()
                 .execute()
                 .value
-            
             return challengeWithParticipants
         } catch {
             print("Error fetching participants: \(error)")
+            throw error
+        }
+    }
+    
+    func joinChallenge(userId: String, challengeId: String) async throws {
+        do {
+            let participant = ChallengeParticipant(userID: userId, challengeID: challengeId)
+            let responseStatus = try await supabaseClient
+                .from("Challenge_Participant")
+                .insert(participant)
+                .execute()
+                .status
+            
+            guard responseStatus == 201 else {
+                throw NSError(domain: "ChallengeRepository", code: responseStatus, userInfo: [NSLocalizedDescriptionKey: "Failed to join challenge. Status code: \(responseStatus)"])
+            }
+        } catch {
+            print("Error joining challenge: \(error)")
+            throw error
+        }
+    }
+    
+    func leaveChallenge(userId: String, challengeId: String) async throws {
+        do {
+            let responseStatus = try await supabaseClient
+                .from("Challenge_Participant")
+                .delete()
+                .eq("user_id", value: userId)
+                .eq("challenge_id", value: challengeId)
+                .execute()
+                .status
+            
+            guard responseStatus == 204 else {
+                throw NSError(domain: "ChallengeRepository", code: responseStatus, userInfo: [NSLocalizedDescriptionKey: "Failed to leave challenge. Status code: \(responseStatus)"])
+            }
+        } catch {
+            print("Error leaving challenge: \(error)")
+            throw error
+        }
+    }
+    
+    func getIfParticipated(userId: String, challengeId: String) async throws -> Bool {
+        do {
+            let participant: ChallengeParticipant? = try await supabaseClient
+                .from("Challenge_Participant")
+                .select()
+                .eq("user_id", value: userId)
+                .eq("challenge_id", value: challengeId)
+                .single()
+                .execute()
+                .value
+            
+            return participant != nil
+        } catch {
+            print("Error checking participation: \(error)")
             throw error
         }
     }

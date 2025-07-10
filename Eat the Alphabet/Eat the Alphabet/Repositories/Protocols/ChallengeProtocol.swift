@@ -14,8 +14,12 @@ protocol ChallengeProtocol {
     func deleteChallenge(id: String) async throws
 
     // Experiences (progress tracking)
-    func getWithExperiences(by challengeId: String) async throws -> Challenge
+    func getWithExperiences(by challengeId: String) async throws -> Challenge //
     func getExperience(forLetter letter: Character, in challengeId: String) async throws -> Experience?
+    
+    func getIfParticipated(userId: String, challengeId: String) async throws -> Bool
+    func joinChallenge(userId: String, challengeId: String) async throws
+    func leaveChallenge(userId: String, challengeId: String) async throws
     
     // with Participants
     func getWithParticipants(byChallengeId challengeId: String) async throws -> Challenge
