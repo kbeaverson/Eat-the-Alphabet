@@ -75,30 +75,30 @@ class ChallengeViewModel : ObservableObject {
         try await challengeRepository.updateChallenge(challenge: self.challenge)
     }
     
-    func loadParticipants() async throws {
-        let challengeWithParticipants = try await challengeRepository.getWithParticipants(byChallengeId: challenge.id)
+    func loadWithParticipants() async throws {
+        let challengeWithParticipants = try await challengeRepository.fetchWithParticipants(byChallengeId: challenge.id)
         challenge.participants = challengeWithParticipants.participants
         challenge = challengeWithParticipants
     }
     
-    func loadExperience() async throws{
-        let challengeWithRepository = try await challengeRepository.getWithExperiences(by: challenge.id)
+    func loadWithExperience() async throws{
+        let challengeWithRepository = try await challengeRepository.fetchWithExperiences(byChallengeId: challenge.id)
         challenge.experiences = challengeWithRepository.experiences
         challenge = challengeWithRepository
     }
     
     func getIfParticipated(userId: String, challengeId: String) async throws -> Bool {
-        return try await challengeRepository.getIfParticipated(userId: userId, challengeId: challengeId)
+        return try await challengeRepository.checkParticipation(userId: userId, challengeId: challengeId)
     }
     
     func joinChallenge(userId: String, challengeId: String) async throws {
-        try await challengeRepository.joinChallenge(userId: userId, challengeId: challengeId)
+        try await challengeRepository.addParticipant(userId: userId, challengeId: challengeId)
         // After joining, reload participants to update the challenge state
         // try await loadParticipants()
     }
     
     func leaveChallenge(userId: String, challengeId: String) async throws {
-        try await challengeRepository.leaveChallenge(userId: userId, challengeId: challengeId)
+        try await challengeRepository.removeParticipant(userId: userId, challengeId: challengeId)
         // After leaving, reload participants to update the challenge state
         // try await loadParticipants()
     }

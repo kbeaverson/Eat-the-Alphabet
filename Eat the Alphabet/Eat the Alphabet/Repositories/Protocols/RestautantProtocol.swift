@@ -6,21 +6,19 @@
 //
 
 protocol RestaurantProtocol {
-    // CRUD
-    func getRestaurant(by id: String) async throws -> Restaurant // WORK
-    func getRestaurant(byExperience experienceId: String) async throws -> Restaurant? // WORK
-    func getRestaurants(byChallenge challengeId: String) async throws -> [Restaurant] // WORK
-    func getRestaurants(byCuisine cuisine: String) async throws -> [Restaurant] // WORK
-    
+    // basic CRUD
+    func fetchRestaurant(by id: String) async throws -> Restaurant // WORK
     func createRestaurant(restaurant: Restaurant) async throws // 
     func updateRestaurant(restaurant: Restaurant) async throws
     func deleteRestaurant(id: String) async throws
     
-    // Experience-related
-    func getWithExperience(for restaurantId: String) async throws -> Restaurant
+    // advanced R
+    func fetchRestaurant(byExperience experienceId: String) async throws -> Restaurant? // WORK
+    func fetchRestaurants(byChallenge challengeId: String) async throws -> [Restaurant] // WORK
+    func fetchRestaurants(byCuisine cuisine: String) async throws -> [Restaurant] // WORK
     
     // Review-related
-    func getReviews(for restaurantId: String) async throws -> [Review]
+    func fetchReviews(for experienceId: String) async throws -> [Review]
     
     // Aggregation (optional)
 //    func getAverageRating(for restaurantId: String) async throws -> Int?

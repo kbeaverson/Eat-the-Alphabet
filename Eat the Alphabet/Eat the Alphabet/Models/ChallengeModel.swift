@@ -40,5 +40,10 @@ struct Challenge: Codable, Identifiable {
         case radius = "radius"
         case created_at = "created_at"
         case description = "description"
+        
+        case experiences = "Experience"
+        case letters = "letter"
+        case participants = "Account"
+        
     }
 }

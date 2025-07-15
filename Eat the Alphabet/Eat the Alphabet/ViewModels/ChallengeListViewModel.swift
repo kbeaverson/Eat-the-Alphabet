@@ -34,7 +34,7 @@ class ChallengeListViewModel: ObservableObject {
         
         do {
             // Would place monitoring/error stuff here
-            let challenges = try await challengeRepository.getChallenges(byUserId: user.id.uuidString)
+            let challenges = try await challengeRepository.fetchChallenges(byUser: user.id.uuidString)
             self.challenges = challenges.map{ $0 }
         }
         catch {
@@ -42,13 +42,4 @@ class ChallengeListViewModel: ObservableObject {
             throw error
         }
     }
-    
-//    public func ifParticipated( challengeId: String) async throws -> Bool {
-//        do {
-//            return try await challengeRepository.getIfParticipated(userId: supabaseClient.auth.currentUser?.id.uuidString ?? "", challengeId: challengeId)
-//        } catch {
-//            print("Error checking participation: \(error)")
-//            throw error
-//        }
-//    }
 }

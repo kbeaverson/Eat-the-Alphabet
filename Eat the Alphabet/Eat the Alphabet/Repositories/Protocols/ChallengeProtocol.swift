@@ -8,24 +8,32 @@
 protocol ChallengeProtocol {
     // Basic CRUD
     func createChallenge(challenge: Challenge) async throws
-    func getChallenge(by id: String) async throws -> Challenge
-    func getChallenges(byUserId userId: String) async throws -> [Challenge]
+    func fetchChallenge(by id: String) async throws -> Challenge
     func updateChallenge(challenge: Challenge) async throws
     func deleteChallenge(id: String) async throws
+    
+    // Advanced R
+    func fetchChallenges(byUser userId: String) async throws -> [Challenge]
 
-    // Experiences (progress tracking)
-    func getWithExperiences(by challengeId: String) async throws -> Challenge //
-    func getExperience(forLetter letter: Character, in challengeId: String) async throws -> Experience?
+    // Experience: get with child experiences; get only the child experiences
+    func fetchWithExperiences(byChallengeId challengeId: String) async throws -> Challenge
+    func fetchExperiences(byChallengeId challengeId: String) async throws -> [Experience]
+    func fetchExperience(byLetter letter: Character, in challengeId: String) async throws -> Experience?
     
-    func getIfParticipated(userId: String, challengeId: String) async throws -> Bool
-    func joinChallenge(userId: String, challengeId: String) async throws
-    func leaveChallenge(userId: String, challengeId: String) async throws
-    
-    // with Participants
-    func getWithParticipants(byChallengeId challengeId: String) async throws -> Challenge
+    // Participants
+    // get with child Participants
+    func fetchWithParticipants(byChallengeId challengeId: String) async throws -> Challenge
+    func fetchParticipants(byChallengeId challengeId: String) async throws -> [Account]?
+    // participants operation
+    func checkParticipation(userId: String, challengeId: String) async throws -> Bool
+    func addParticipant(userId: String, challengeId: String) async throws
+    func removeParticipant(userId: String, challengeId: String) async throws
     
     // Letters
-    func getLetters(in challengeId: String) async throws -> [String]
+    func fetchExperienceLetters(in challengeId: String, status: String) async throws -> [String]
+    
+    // get with child Letters (NOTE: Child Experiences already included this information)
+    // func fetchWithLetters(byChallengeId challengeId: String) async throws -> Challenge
     
     // Search and discovery
 //    func searchChallenges(by keyword: String) async throws -> [Challenge]

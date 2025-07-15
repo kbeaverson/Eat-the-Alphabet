@@ -39,14 +39,14 @@ final class RestaurantRepositoryTests: XCTestCase {
         
 
     func testGetRestaurantById() async throws {
-        let restaurant = try await repo.getRestaurant(by: testRestaurantId)
+        let restaurant = try await repo.fetchRestaurant(by: testRestaurantId)
         // print info
         print("Restaurant fetched: \(restaurant)")
         XCTAssertEqual(restaurant.id, testRestaurantId)
     }
 
     func testGetRestaurantByExperience() async throws {
-        let restaurant: Restaurant? = try await repo.getRestaurant(byExperience: testExperienceId)
+        let restaurant: Restaurant? = try await repo.fetchRestaurant(byExperience: testExperienceId)
         if (restaurant != nil) {
             print("Restaurant from experience: \(String(describing: restaurant))")
         }
@@ -54,12 +54,12 @@ final class RestaurantRepositoryTests: XCTestCase {
     }
 
     func testGetRestaurantsByChallenge() async throws {
-        let experiences: [Experience] = try await experienceRepo.getExperiences(byChallenge: testChallengeId)
+        let experiences: [Experience] = try await experienceRepo.fetchExperiences(byChallenge: testChallengeId)
         // print("Experiences for challenge \(testChallengeId): \(experiences)")
         XCTAssertFalse(experiences.isEmpty, "No experiences found for challenge \(testChallengeId)")
         var restaurants : [Restaurant] = []
         for experience in experiences {
-            if let restaurant = try await repo.getRestaurant(byExperience: experience.id) {
+            if let restaurant = try await repo.fetchRestaurant(byExperience: experience.id) {
                 restaurants.append(restaurant)
             }
         }
@@ -68,11 +68,22 @@ final class RestaurantRepositoryTests: XCTestCase {
     }
 
     func testGetRestaurantsByCuisine() async throws {
-        let restaurants = try await repo.getRestaurants(byCuisine: testCuisine)
+        let restaurants = try await repo.fetchRestaurants(byCuisine: testCuisine)
         // print("Restaurants for cuisine \(testCuisine): \(restaurants)")
         XCTAssertFalse(restaurants.isEmpty)
     }
 
+    
+    func testFetchReviews() async throws {
+        let reviews = try await repo.fetchReviews(for: testExperienceId)
+        if reviews.isEmpty {
+            print("No reviews found for experience \(testExperienceId).")
+        } else {
+            print("Reviews for experience \(testExperienceId): \(reviews)")
+        }
+        XCTAssertFalse(reviews.isEmpty, "Expected to find reviews for experience \(testExperienceId)")
+    }
+    
     func testCreateRestaurant() async throws {
         // 创建
         try await repo.createRestaurant(restaurant: dummy)
@@ -80,7 +91,7 @@ final class RestaurantRepositoryTests: XCTestCase {
     
     func testReadRestaurant() async throws {
         // 查询
-        let restaurant = try await repo.getRestaurant(by: dummy.id)
+        let restaurant = try await repo.fetchRestaurant(by: dummy.id)
         print("Restaurant fetched: \(restaurant)")
         XCTAssertEqual(restaurant.id, dummy.id)
     }
@@ -104,7 +115,7 @@ final class RestaurantRepositoryTests: XCTestCase {
         )
         try await repo.updateRestaurant(restaurant: updated)
         
-        let fetched = try await repo.getRestaurant(by: dummy.id)
+        let fetched = try await repo.fetchRestaurant(by: dummy.id)
         print("Updated restaurant fetched: \(fetched)")
         XCTAssertEqual(fetched.name, "UnitTest Greek Updated")
     }
@@ -113,7 +124,7 @@ final class RestaurantRepositoryTests: XCTestCase {
         // 删除
         try await repo.deleteRestaurant(id: dummy.id)
         do {
-            _ = try await repo.getRestaurant(by: dummy.id)
+            _ = try await repo.fetchRestaurant(by: dummy.id)
             XCTFail("Should throw after deletion")
         } catch {
             // 预期抛出

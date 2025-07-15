@@ -14,7 +14,7 @@ class ExperienceRepository : ExperienceProtocol {
     
     private let restaurantRepository: RestaurantRepository = RestaurantRepository()
     // 1 Read
-    func getExperience(by id: String) async throws -> Experience {
+    func fetchExperience(by id: String) async throws -> Experience {
         do {
             let experiences: Experience = try await supabaseClient
                 .from("Experience")
@@ -30,7 +30,7 @@ class ExperienceRepository : ExperienceProtocol {
         }
     }
     
-    func getExperiences(byChallenge challengeId: String) async throws -> [Experience] {
+    func fetchExperiences(byChallenge challengeId: String) async throws -> [Experience] {
         do {
             let experiences: [Experience] = try await supabaseClient
                 .from("Experience")
@@ -136,10 +136,30 @@ class ExperienceRepository : ExperienceProtocol {
     //    }
     
     // FIXED: under review
-    func getRestaurant(for experienceId: String) async throws -> Restaurant {
-        do {
-            let restaurant: Restaurant = try await restaurantRepository.getRestaurant(by: experienceId)
-            return restaurant
+    func fetchRestaurant(for experienceId: String) async throws -> Restaurant? {
+        do { // Experience
+            let experienceWithRestaurant: String = try await supabaseClient
+                .from("Experience")
+                .select(
+                    """
+                    *,
+                    id,
+                    restaurant_id,
+                    Restaurant(id, *)
+                    """
+                    )
+                .eq("id", value: experienceId)
+                .single()
+                .execute()
+                .data
+                .debugDescription
+                // .value
+            
+            print("Experience with restaurant: \(experienceWithRestaurant)")
+            
+            // let restaurant: Restaurant = try await restaurantRepository.fetchRestaurant(by: experienceId)
+            // return experienceWithRestaurant.restaurant
+            return nil
         } catch {
             print("Error fetching restaurant for experience: \(error)")
             throw error
@@ -147,20 +167,25 @@ class ExperienceRepository : ExperienceProtocol {
     }
     
     // FIXED
-    func getWithParticipants(for experienceId: String) async throws -> Experience {
-        do {
-            let experienceWithParticipants: Experience = try await supabaseClient
+    func fetchParticipants(for experienceId: String) async throws -> [Account]? {
+        do { // Experience
+            let experienceWithParticipants: String = try await supabaseClient
                 .from("Experience")
                 .select(
                     """
                     *,
-                    participants(*)
+                    id,
+                    User(id*)
                     """)
-                .eq("experience_id", value: experienceId)
+                .eq("id", value: experienceId)
                 .single()
                 .execute()
-                .value
-            return experienceWithParticipants
+                .data
+                .debugDescription
+                //.value
+            
+            return nil
+            // return experienceWithParticipants.participants
         } catch {
             print("Error fetching participants for experience: \(error)")
             throw error
@@ -202,20 +227,24 @@ class ExperienceRepository : ExperienceProtocol {
         }
     }
     
-    func getWithReviews(by experienceId : String) async throws -> Experience {
-        do {
-            return try await supabaseClient
+    func fetchReviews(for experienceId : String) async throws -> [Review]? {
+        do { // Experience
+            let experienceWithReviews: String = try await supabaseClient
                 .from("Experience")
                 .select(
                     """
                     *,
-                    reviews(*)
+                    id,
+                    Review(experience_id, *)
                     """
                 )
                 .eq("id", value: experienceId)
                 .single()
                 .execute()
-                .value as Experience
+                .data.debugDescription
+            //.value
+            
+            return nil//experienceWithReviews.reviews
         }
         catch {
             print("Error fetching reviews: \(error)")
@@ -227,21 +256,4 @@ class ExperienceRepository : ExperienceProtocol {
 //    func addReview(review: Review, for experienceId: String) async throws -> Void{
 //        
 //    }
-    
-    func getSelfLetter(for experienceId: String) async throws -> String? {
-        do {
-            let experience: Experience = try await supabaseClient
-                .from("experiences")
-                .select("letter")
-                .eq("id", value: experienceId)
-                .single()
-                .execute()
-                .value
-            
-            return experience.letter
-        } catch {
-            print("Error fetching self letter for experience: \(error)")
-            throw error
-        }
-    }
 }

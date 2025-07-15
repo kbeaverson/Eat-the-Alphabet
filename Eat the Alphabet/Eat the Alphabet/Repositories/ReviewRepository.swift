@@ -9,6 +9,43 @@ import Foundation
 import Supabase
 
 final class ReviewRepository : ReviewProtocol {
+    func fetchReviews(byUser userId: String) async throws -> [Review] {
+        do {
+            let reviews: [Review] = try await supabaseClient
+                .from("Review")
+                .select()
+                .eq("user_id", value: userId)
+                .execute()
+                .value
+            
+            if reviews.isEmpty {
+                print("No reviews found for user \(userId).")
+            }
+            return reviews
+        } catch {
+            print("Error fetching reviews by user: \(error)")
+            throw error
+        }
+    }
+    
+    func fetchReviews(byExperience experienceId: String) async throws -> [Review] {
+        do {
+            let reviews: [Review] = try await supabaseClient
+                .from("Review")
+                .select()
+                .eq("experience_id", value: experienceId)
+                .execute()
+                .value
+            
+            if reviews.isEmpty {
+                print("No reviews found for experience \(experienceId).")
+            }
+            return reviews
+        } catch {
+            print("Error fetching reviews by experience: \(error)")
+            throw error
+        }
+    }
     
     // 1
     func createReview(review : Review) async throws {
@@ -27,7 +64,7 @@ final class ReviewRepository : ReviewProtocol {
     }
     
     // 2
-    func getReview(by id: String) async throws -> Review {
+    func fetchReview(by id: String) async throws -> Review {
         do {
             return try await supabaseClient
                 .from("Review")

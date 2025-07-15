@@ -19,6 +19,8 @@ struct AccountView: View {
     @State var friends: [Friends] = []
     @State var challenges: [Challenge] = []
     
+    var accountRepository = AccountRepository()
+    
     var body: some View {
         GeometryReader { geo in
             let fieldWidth = geo.size.width * 0.9
@@ -156,7 +158,7 @@ struct AccountView: View {
                     print("No valid account available to load experiences for")
                     return
                 }
-                let fetchedExperiences = try await AccountRepository.shared.fetchAllExperiences(for: account.id)
+                let fetchedExperiences = try await accountRepository.fetchAllExperiences(for: account.id)
                 await MainActor.run {
                     experiences = fetchedExperiences
                     print("Loaded experiences: \(experiences.count)")
@@ -174,7 +176,7 @@ struct AccountView: View {
                     print("No valid account available to load restaurants for")
                     return
                 }
-                let fetchedRestaurants = try await AccountRepository.shared.fetchAllRestaurants(for: account.id)
+                let fetchedRestaurants = try await accountRepository.fetchAllRestaurants(for: account.id)
                 await MainActor.run {
                     restaurants = fetchedRestaurants
                     print("Loaded restaurants: \(restaurants.count)")
@@ -192,7 +194,7 @@ struct AccountView: View {
                     print("No valid account available to load reviews for")
                     return
                 }
-                let fetchedReviews = try await AccountRepository.shared.fetchReviews(for: account.id)
+                let fetchedReviews = try await accountRepository.fetchReviews(for: account.id) ?? []
                 await MainActor.run {
                     reviews = fetchedReviews
                     print("Loaded reviews: \(reviews.count)")
@@ -210,7 +212,7 @@ struct AccountView: View {
                     print("No valid account available to load friends")
                     return
                 }
-                let fetchedFriends = try await AccountRepository.shared.getFriends(of: account.id)
+                let fetchedFriends = try await accountRepository.fetchFriends(of: account.id)
                 await MainActor.run {
                     friends = fetchedFriends
                     print("Loaded friends: \(friends.count)")
@@ -228,7 +230,7 @@ struct AccountView: View {
                     print("No valid account available to load challenges")
                     return
                 }
-                let fetchedChallenges = try await AccountRepository.shared.getChallenges(for: account.id)
+                let fetchedChallenges = try await accountRepository.fetchChallenges(for: account.id) ?? []
                 await MainActor.run {
                     challenges = fetchedChallenges
                     print("Loaded challenges: \(challenges.count)")

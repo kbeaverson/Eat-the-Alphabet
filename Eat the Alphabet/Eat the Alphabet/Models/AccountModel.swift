@@ -63,6 +63,10 @@ struct Account: Codable, Identifiable {
         case profile_image_url = "profile_image_url"
         case phone_number = "phone_number"
         case email = "email"
+        
+        case reviews = "Review"
+        case challenges = "Challenge"
+        case experiences = "Experience"
     }
 }
 

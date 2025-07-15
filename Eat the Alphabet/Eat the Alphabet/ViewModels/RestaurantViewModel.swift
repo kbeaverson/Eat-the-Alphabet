@@ -14,7 +14,7 @@ class RestaurantViewModel: Identifiable, ObservableObject {
     
     public func fetchRestaurant(byId restaurantId: String) async throws {
         // Fetch restaurant from the repository
-        let fetchedRestaurant = try await restaurantRepository.getRestaurant(by: restaurantId)
+        let fetchedRestaurant = try await restaurantRepository.fetchRestaurant(by: restaurantId)
         print("Fetched restaurant: \(fetchedRestaurant)")
         self.restaurant = fetchedRestaurant
     }

@@ -62,7 +62,7 @@ struct HomeScreen: View {
                 }
                 let id = session.user.id.uuidString
                 print("ID found in session: \(id)")
-                let fetchedAccount = try await AccountRepository.shared.getAccount(byId: id)
+                let fetchedAccount = try await AccountRepository.shared.fetchAccount(byId: id)
                 await MainActor.run {
                     self.account = fetchedAccount
                     self.isLoading = false

@@ -7,8 +7,9 @@
 
 protocol ExperienceProtocol {
     // Basic CRUD operations
-    func getExperience(by id: String) async throws -> Experience
-    func getExperiences(byChallenge challengeId: String) async throws -> [Experience]
+    func fetchExperience(by id: String) async throws -> Experience
+    func fetchExperiences(byChallenge challengeId: String) async throws -> [Experience]
+   
     func createExperience(challengeId: String, restaurantId: String, letter: String) async throws
     func createExperience(experience: Experience) async throws
     func updateExperience(experience: Experience) async throws
@@ -18,17 +19,15 @@ protocol ExperienceProtocol {
     // func getExperienceDetails(by id: String) async throws -> ExperienceDetails
     
     // get with related data
-    func getRestaurant(for experienceId: String) async throws -> Restaurant
+    func fetchRestaurant(for experienceId: String) async throws -> Restaurant?
     
     // pariticipants
-    func getWithParticipants(for experienceId: String) async throws -> Experience
+    func fetchParticipants(for experienceId: String) async throws -> [Account]?
     func addParticipant(userId: String, to experienceId: String) async throws
     func removeParticipant(userId: String, from experienceId: String) async throws
     
     // reviews
-    func getWithReviews(by experienceId: String) async throws -> Experience
+    func fetchReviews(for experienceId: String) async throws -> [Review]?
     // func addReview(review: Review, for experienceId: String) async throws
     // func deleteReview(reviewId: String, for experienceId: String) async throws
-    
-    func getSelfLetter(for experienceId: String) async throws -> String?
 }
