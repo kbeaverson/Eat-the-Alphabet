@@ -13,19 +13,19 @@ import Supabase
 final class ExperienceRepoTest: XCTestCase {
     let repo : ExperienceRepository = ExperienceRepository()
     
-    let testNewExperience = Experience(
-        id: "7f6e7f93-a268-41c2-b961-1d2896f0ff9f",
-        created_at: Date(),
-        status: "incomplete",
-        restaurant_id: "14b76d6d-fb81-4a95-a616-38870e7d81eb", // restaurant lavazza
-        challenge_id: "7c718dd0-8af1-4636-9f0e-97fbd2dff7eb", // Shanghai Challenge
-        letter: "Z"
-    )
+//    let testNewExperience = Experience(
+//        id: "7f6e7f93-a268-41c2-b961-1d2896f0ff9f",
+//        created_at: Date(),
+//        status: "incomplete",
+//        restaurant_id: "14b76d6d-fb81-4a95-a616-38870e7d81eb", // restaurant lavazza
+//        challenge_id: "7c718dd0-8af1-4636-9f0e-97fbd2dff7eb", // Shanghai Challenge
+//        letter: "Z"
+//    )
     
     let testChallengeId = "7c718dd0-8af1-4636-9f0e-97fbd2dff7eb" // the one in shanghai
     let testExperienceId = "c2e6a3df-7825-4334-897f-5ab01a971fb1" // `Playground` (near 一大会址)
-    let testRestaurantId = "d9844422-5c73-4b1d-82ee-f518cb694ec5" // `Playground` restaurant
-    let testUserId = "16dfab99-d548-4a4c-96bb-27f08589b84f"
+    let testRestaurantId = "d9844422-5c73-4b1d-82ee-f518cb694ec5" // ch2, exp1' `Playground` restaurant
+    let testUserId = "16dfab99-d548-4a4c-96bb-27f08589b84f" // user 3
     
     let testNotAssociatedRestaurantId = "a1c62ea4-b029-4867-90d6-0ad0d87bb280" // not associated with any challenge or experience
     let testInsertExperience: Experience = Experience(
@@ -43,7 +43,7 @@ final class ExperienceRepoTest: XCTestCase {
         do {
             let experience = try await repo.fetchExperience(by: testExperienceId)
             XCTAssertNotNil(experience)
-            XCTAssertEqual(experience.id, testExperienceId)
+            XCTAssertEqual(experience?.id, testExperienceId)
         } catch {
             XCTFail("Failed to fetch experience by id: \(error)")
             throw error
@@ -53,9 +53,9 @@ final class ExperienceRepoTest: XCTestCase {
     func testCreateExperinece() async throws {
         do {
             try await repo.createExperience(experience: testInsertExperience)
-            //let fetchedExperience = try await repo.fetchExperience(by: testNewExperience.id)
-            //XCTAssertNotNil(fetchedExperience)
-            //XCTAssertEqual(fetchedExperience.id, testNewExperience.id)
+            let fetchedExperience = try await repo.fetchExperience(by: testInsertExperience.id)
+            XCTAssertNotNil(fetchedExperience)
+            XCTAssertEqual(fetchedExperience?.id, testInsertExperience.id)
         } catch {
             XCTFail("Failed to create experience: \(error)")
             throw error
@@ -64,14 +64,14 @@ final class ExperienceRepoTest: XCTestCase {
     
     func testUpdateExperience() async throws {
         do {
-            var experienceToUpdate = testNewExperience
+            var experienceToUpdate = testInsertExperience
             experienceToUpdate.status = "complete"
             try await repo.updateExperience(experience: experienceToUpdate)
             
             let updatedExperience = try await repo.fetchExperience(by: experienceToUpdate.id)
             
             XCTAssertNotNil(updatedExperience)
-            XCTAssertEqual(updatedExperience.status, "complete")
+            XCTAssertEqual(updatedExperience?.status, "complete")
         }
         catch {
             XCTFail("Failed to update experience: \(error)")
@@ -80,7 +80,7 @@ final class ExperienceRepoTest: XCTestCase {
         }
     }
     
-    func testFetchRestaurant() async throws {
+    func testFetchRestaurantForExperience() async throws {
         do {
             let restaurant : Restaurant? = try await repo.fetchRestaurant(for: testExperienceId)
             if restaurant != nil {
@@ -96,8 +96,11 @@ final class ExperienceRepoTest: XCTestCase {
     // add participants to the test experience
     func testAddParticipants() async throws {
         do {
-            try await repo.addParticipant(userId: testUserId, to: testExperienceId)
-            let participants: [Account]? = try await repo.fetchParticipants(for: testExperienceId)
+            try await repo.addParticipant(userId: testUserId, to: testInsertExperience.id)
+            let participants: [Account]? = try await repo.fetchParticipants(for: testInsertExperience.id)
+            for participant in participants ?? [] {
+                print("Participant ID: \(participant.id), Name: \(participant.username ?? "Unknown")")
+            }
             XCTAssertNotNil(participants)
             XCTAssertTrue(participants?.contains(where: { $0.id == testUserId }) ?? false)
         } catch {
@@ -120,8 +123,8 @@ final class ExperienceRepoTest: XCTestCase {
     
     func testRemoveParticipant() async throws {
         do {
-            try await repo.removeParticipant(userId: testUserId, from: testExperienceId)
-            let participants: [Account]? = try await repo.fetchParticipants(for: testExperienceId)
+            try await repo.removeParticipant(userId: testUserId, from: testInsertExperience.id)
+            let participants: [Account]? = try await repo.fetchParticipants(for: testInsertExperience.id)
             XCTAssertFalse(participants?.contains(where: { $0.id == testUserId }) ?? true)
         } catch {
             XCTFail("Failed to remove participant: \(error)")
@@ -141,5 +144,15 @@ final class ExperienceRepoTest: XCTestCase {
         }
     }
     
+    func testRemoveExperience() async throws {
+        do {
+            try await repo.deleteExperience(id: testInsertExperience.id)
+            let deletedExperience = try await repo.fetchExperience(by: testInsertExperience.id)
+            XCTAssertNil(deletedExperience, "Experience should be deleted")
+        } catch {
+            XCTFail("Failed to delete experience: \(error)")
+            throw error
+        }
+    }
 }
 

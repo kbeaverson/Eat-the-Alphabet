@@ -14,16 +14,18 @@ class ExperienceRepository : ExperienceProtocol {
     
     private let restaurantRepository: RestaurantRepository = RestaurantRepository()
     // 1 Read
-    func fetchExperience(by id: String) async throws -> Experience {
+    func fetchExperience(by id: String) async throws -> Experience? {
         do {
-            let experiences: Experience = try await supabaseClient
+            let experiences: [Experience] = try await supabaseClient
                 .from("Experience")
                 .select()
                 .eq("id", value: id)
-                .single()
                 .execute()
                 .value
-            return experiences
+            if experiences.isEmpty {
+                return nil
+            }
+            return experiences[0]
         } catch {
             print("Error fetching experience: \(error)")
             throw error
@@ -55,7 +57,7 @@ class ExperienceRepository : ExperienceProtocol {
     func createExperience(experience: Experience) async throws {
         do {
             try await supabaseClient
-                .from("experiences")
+                .from("Experience")
                 .insert(experience)
                 .execute()
         } catch {
@@ -88,6 +90,7 @@ class ExperienceRepository : ExperienceProtocol {
             try await supabaseClient
                 .from("Experience")
                 .update(experience)
+                .eq("id", value: experience.id)
                 .execute()
         }
         catch {
@@ -138,7 +141,7 @@ class ExperienceRepository : ExperienceProtocol {
     // FIXED: under review
     func fetchRestaurant(for experienceId: String) async throws -> Restaurant? {
         do { // Experience
-            let experienceWithRestaurant: String = try await supabaseClient
+            let experienceWithRestaurant: Experience = try await supabaseClient
                 .from("Experience")
                 .select(
                     """
@@ -151,15 +154,14 @@ class ExperienceRepository : ExperienceProtocol {
                 .eq("id", value: experienceId)
                 .single()
                 .execute()
-                .data
-                .debugDescription
+                .value
                 // .value
             
             print("Experience with restaurant: \(experienceWithRestaurant)")
             
             // let restaurant: Restaurant = try await restaurantRepository.fetchRestaurant(by: experienceId)
             // return experienceWithRestaurant.restaurant
-            return nil
+            return experienceWithRestaurant.restaurant
         } catch {
             print("Error fetching restaurant for experience: \(error)")
             throw error
@@ -169,22 +171,22 @@ class ExperienceRepository : ExperienceProtocol {
     // FIXED
     func fetchParticipants(for experienceId: String) async throws -> [Account]? {
         do { // Experience
-            let experienceWithParticipants: String = try await supabaseClient
+            let experienceWithParticipants: Experience = try await supabaseClient
                 .from("Experience")
                 .select(
                     """
                     *,
                     id,
-                    User(id*)
+                    Account(id,*)
                     """)
                 .eq("id", value: experienceId)
                 .single()
                 .execute()
-                .data
-                .debugDescription
-                //.value
+                .value
             
-            return nil
+            print("Experience with participants: \(experienceWithParticipants)")
+            
+            return experienceWithParticipants.participants
             // return experienceWithParticipants.participants
         } catch {
             print("Error fetching participants for experience: \(error)")
@@ -229,7 +231,7 @@ class ExperienceRepository : ExperienceProtocol {
     
     func fetchReviews(for experienceId : String) async throws -> [Review]? {
         do { // Experience
-            let experienceWithReviews: String = try await supabaseClient
+            let experienceWithReviews: Experience = try await supabaseClient
                 .from("Experience")
                 .select(
                     """
@@ -241,10 +243,10 @@ class ExperienceRepository : ExperienceProtocol {
                 .eq("id", value: experienceId)
                 .single()
                 .execute()
-                .data.debugDescription
-            //.value
+                .value
+                // .data.debugDescription
             
-            return nil//experienceWithReviews.reviews
+            return experienceWithReviews.reviews
         }
         catch {
             print("Error fetching reviews: \(error)")

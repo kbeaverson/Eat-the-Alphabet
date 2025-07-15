@@ -7,7 +7,7 @@
 
 protocol ExperienceProtocol {
     // Basic CRUD operations
-    func fetchExperience(by id: String) async throws -> Experience
+    func fetchExperience(by id: String) async throws -> Experience?
     func fetchExperiences(byChallenge challengeId: String) async throws -> [Experience]
    
     func createExperience(challengeId: String, restaurantId: String, letter: String) async throws

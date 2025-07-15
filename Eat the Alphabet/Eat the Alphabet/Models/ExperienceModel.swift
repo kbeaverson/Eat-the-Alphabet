@@ -43,7 +43,7 @@ struct Experience: Identifiable, Codable {
         case letter = "letter"
         
         case reviews = "Review"
-        case participants = "Participant"
+        case participants = "Account"
         case restaurant = "Restaurant"
     }
 }
