@@ -5,6 +5,8 @@
 //  Created by Ronald Liao on 2025/6/30.
 //
 
+import CoreLocation
+
 protocol RestaurantProtocol {
     // basic CRUD
     func fetchRestaurant(by id: String) async throws -> Restaurant // WORK
@@ -19,6 +21,8 @@ protocol RestaurantProtocol {
     
     // Review-related
     func fetchReviews(for experienceId: String) async throws -> [Review]
+    
+    func getRestaurantAddressWGS(for restaurantId: String) async throws -> CLLocationCoordinate2D
     
     // Aggregation (optional)
 //    func getAverageRating(for restaurantId: String) async throws -> Int?

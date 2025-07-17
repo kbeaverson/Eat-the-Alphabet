@@ -13,11 +13,10 @@ import Supabase
 final class AccountRepoTests: XCTestCase {
     let repo = AccountRepository()
     
-    
     let testUserId = "74ab959f-ad2c-40f3-b1b2-0cc84341c5ca"
     let testUsername = "Frederisch L"
     let testEmail = "luxiliao@iu.edu"
-    let testPhone = "18345678901"
+    let testPhone = "13512345678"
     let testDisplayName = "Ludwig van Beethoven"
     let testProfileImage = "https://cf-assets.www.cloudflare.com/zkvhlag99gkb/45BaEMmPeM13adYBN7nanP/eaceb4f50062eaf53c4a484231f177ee/image12-1.png"
     let testAddress = "POINT(121.4737 31.2304)" // Shanghai coordinates
@@ -102,17 +101,6 @@ final class AccountRepoTests: XCTestCase {
         catch {
             XCTFail("Failed to get current user: \(error)")
         }
-    }
-        
-    // func get number of friends
-    func getFriendsCount() async throws {
-//        do {
-//            let count = try await repo.getFriendsCount()
-//            XCTAssertGreaterThan(count, 0, "Friends count should be greater than 0")
-//        } catch {
-//            XCTFail("Failed to get friends count: \(error)")
-//            throw error
-//        }
     }
     
     

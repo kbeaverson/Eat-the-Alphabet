@@ -33,35 +33,33 @@ struct ExperienceListItem: View {
         /**
          TODO: Make the desciption text multilines
          */
-        
-        ZStack (alignment: .topLeading){
-            VStack(alignment: .leading) {
-                HStack() {
-                    // the experience title
-                    Text("Experience of \(viewModel.experience?.letter ?? "Unknown Letter")")
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                        .padding(8)
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(8)
-                    Spacer()
-                    // checkbox if in selection mode
-                    if (isSelectionModeOn) {
-                        Toggle("", isOn: $isSelected)
-                            .toggleStyle(CheckboxToggleStyle())
-                            .frame(width: 24, height: 24)
-                            .padding(.trailing, 12)
-                    }
+    
+        VStack(alignment: .leading) {
+            HStack() {
+                // the experience title
+                Text("Experience of \(viewModel.experience?.letter ?? "Unknown Letter")")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                    .padding(8)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(8)
+                Spacer()
+                // checkbox if in selection mode
+                if (isSelectionModeOn) {
+                    Toggle("", isOn: $isSelected)
+                        .toggleStyle(CheckboxToggleStyle())
+                        .frame(width: 24, height: 24)
+                        .padding(.trailing, 12)
                 }
-                .padding(.top, 8)
-                .padding(.horizontal, 12)
-                
-                // if the associated restaurant is loaded, show it
-                if let restaurant = associatedRestaurantModel.restaurant {
-                    RestaurantListItem(
-                        restaurant: restaurant
-                    )
-                }
+            }
+            .padding(.top, 8)
+            .padding(.horizontal, 12)
+            
+            // if the associated restaurant is loaded, show it
+            if let restaurant = associatedRestaurantModel.restaurant {
+                RestaurantListItem(
+                    restaurant: restaurant
+                )
             }
         }
         .onAppear {

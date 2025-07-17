@@ -8,7 +8,7 @@ class RestaurantRepository : RestaurantProtocol {
         print ("Fetching restaurant by id: \(id)")
         do {
             let restaurant: Restaurant = try await supabaseClient
-                .from("Restaurant")
+                .from("RestaurantWithWKT")
                 .select()
                 .eq("id", value: id)
                 .single()
@@ -60,7 +60,7 @@ class RestaurantRepository : RestaurantProtocol {
             
             let restaurantIds = experiences.map { $0.restaurant_id }
             let restaurants: [Restaurant] = try await supabaseClient
-                .from("Restaurant")
+                .from("RestaurantWithWKT")
                 .select()
                 .in("id", values: restaurantIds)
                 .execute()
@@ -75,7 +75,7 @@ class RestaurantRepository : RestaurantProtocol {
     func fetchRestaurants(byCuisine cuisine: String) async throws -> [Restaurant] {
         do {
             let restaurants: [Restaurant] = try await supabaseClient
-                .from("Restaurant")
+                .from("RestaurantWithWKT")
                 .select()
                 .eq("cuisine", value: cuisine)
                 .execute()
@@ -166,5 +166,38 @@ class RestaurantRepository : RestaurantProtocol {
         }
     }
     
-    // TODO: technique revise
+    func getRestaurantAddressWGS(for restaurantId: String) async throws -> CLLocationCoordinate2D {
+        do {
+            let restaurants: [Restaurant] = try await supabaseClient
+                .from("RestaurantWithWKT")
+                .select()
+                .eq("id", value: restaurantId)
+                .execute()
+                .value
+            
+            guard let restaurant = restaurants.first else {
+                throw NSError(domain: "RestaurantRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Restaurant not found with id \(restaurantId)"])
+            }
+            
+            guard let address_wgs = restaurant.address_wgs else {
+                throw NSError(domain: "RestaurantRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Address not found for restaurant with id \(restaurantId)"])
+            }
+            
+            let coordinates = address_wgs.replacingOccurrences(of: "POINT(", with: "")
+                .replacingOccurrences(of: ")", with: "")
+                .split(separator: " ")
+                .compactMap { Double($0) }
+            
+            guard coordinates.count == 2 else {
+                throw NSError(domain: "RestaurantRepository", code: 400, userInfo: [NSLocalizedDescriptionKey: "Invalid address format for restaurant with id \(restaurantId)"])
+            }
+            let latitude = coordinates[1]
+            let longitude = coordinates[0]
+            
+            return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        } catch {
+            print("Error fetching restaurant address: \(error)")
+            throw error
+        }
+    }
 }

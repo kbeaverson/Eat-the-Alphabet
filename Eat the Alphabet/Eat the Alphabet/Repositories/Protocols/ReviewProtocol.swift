@@ -9,14 +9,14 @@ protocol ReviewProtocol {
     // Basic CRUD
     // we do not use `_` to omit the parameter label
     func createReview(review: Review) async throws
-    func fetchReview(by id: String) async throws -> Review
+    func fetchReview(by id: String) async throws -> Review?
     func updateReview(review: Review, userId: String) async throws -> Void
     func deleteReview(by id: String) async throws
 
     // Relation-based queries (ordered by createdAt)
     func fetchReviews(byUser userId: String) async throws -> [Review]
     func fetchReviews(byExperience experienceId: String) async throws -> [Review]
-//    func getReviews(byRestaurant restaurantId: String) async throws -> [Review]
+    func fetchReviews(byRestaurant restaurantId: String) async throws -> [Review]
 //
 //    // Aggregates
 //    func getAverageRating(forRestaurantId restaurantId: String) async throws -> Float?

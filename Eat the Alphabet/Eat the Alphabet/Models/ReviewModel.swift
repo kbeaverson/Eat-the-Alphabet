@@ -17,8 +17,8 @@ struct Review: Codable, Identifiable {
     let user_id: String
     var experience_id: String
 
-    var experience: Experience? // one Experience has multiple reviews, review has a FK to Experience
-    var image_urls: [String]? = []
+    var experience: Experience? = nil// one Experience has multiple reviews, review has a FK to Experience
+    var image_urls: [String]? = nil // optional array of image URLs associated with the review
     
     // TEST: constructor from just data
     init (id: String,

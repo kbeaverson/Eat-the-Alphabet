@@ -4,6 +4,7 @@
 //
 //  Created by Ronald Liao on 2025/6/30.
 //
+import CoreLocation
 
 protocol ChallengeProtocol {
     // Basic CRUD
@@ -31,6 +32,9 @@ protocol ChallengeProtocol {
     
     // Letters
     func fetchExperienceLetters(in challengeId: String, status: String) async throws -> [String]
+    
+    // LOCATION: "POINT(** ***)" parse to CLLocationCoordinate2D
+    func getChallengeLocation(challengeId: String) async throws -> CLLocationCoordinate2D
     
     // get with child Letters (NOTE: Child Experiences already included this information)
     // func fetchWithLetters(byChallengeId challengeId: String) async throws -> Challenge

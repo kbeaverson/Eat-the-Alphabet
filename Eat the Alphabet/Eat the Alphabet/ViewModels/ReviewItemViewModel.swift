@@ -16,6 +16,7 @@ class ReviewItemViewModel: ObservableObject {
         self.reviewRepository = ReviewRepository()
     }
     
+    //
 //    func createReview() async {
 //        do {
 //            try await reviewRepository.createReview(review: review)
@@ -24,6 +25,7 @@ class ReviewItemViewModel: ObservableObject {
 //        }
 //    }
     
+    // NOTE: one can only delete his/her own review
 //    func deleteReview() async {
 //        do {
 //            try await reviewRepository.deleteReview(review: review)

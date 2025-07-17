@@ -12,6 +12,7 @@ import Supabase
 // TODO: Unwrap all of the async methods so that the do/catch can be implemented at the ViewModel layer so as to allow error message propagation to the User
 class ChallengeRepository : ChallengeProtocol {
     
+    
     private let accountRepository: AccountRepository = AccountRepository()
     
     // 1 Create
@@ -32,7 +33,7 @@ class ChallengeRepository : ChallengeProtocol {
     func fetchChallenge(by id: String) async throws -> Challenge {
         do {
             let challenge: Challenge = try await supabaseClient
-                .from("Challenge")
+                .from("ChallengeWithWKT")
                 .select()
                 .eq("id", value: id)
                 .single()
@@ -98,7 +99,7 @@ class ChallengeRepository : ChallengeProtocol {
         do {
             // AWAITING DEBUG
             let challengeWithExperience : Challenge = try await supabaseClient
-                .from("Challenge")
+                .from("ChallengeWithWKT")
                 .select(
                     """
                     *,
@@ -163,7 +164,7 @@ class ChallengeRepository : ChallengeProtocol {
     func fetchWithParticipants(byChallengeId challengeId: String) async throws -> Challenge {
         do {
             let challengeWithParticipants: [Challenge] = try await supabaseClient
-                .from("Challenge")
+                .from("ChallengeWithWKT")
                 .select(
                     """
                     *,
@@ -278,14 +279,53 @@ class ChallengeRepository : ChallengeProtocol {
                 .execute()
                 .value
             
-            // print("Fetched Challenge with Letters: \(challengeWithLetters)")
-            
+            print("Fetched Challenge with Letters: \(challengeWithLetters)")
+
             let letters: [String] = challengeWithLetters.experiences?.compactMap { experience in
                 experience.letter
             } ?? []
             return letters
         } catch {
             print("Error fetching letters: \(error)")
+            throw error
+        }
+    }
+    
+    func getChallengeLocation(challengeId: String) async throws -> CLLocationCoordinate2D {
+        do {
+            let challenge: [Challenge] = try await supabaseClient
+                .from("ChallengeWithWKT")
+                .select("""
+                    id,
+                    title,
+                    center_wgs,
+                    radius,
+                    created_at,
+                    description
+                """)
+                .eq("id", value: challengeId)
+                .execute()
+                .value
+            guard !challenge.isEmpty else {
+                throw NSError(domain: "ChallengeRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Challenge not found."])
+            }
+            guard let location = challenge[0].center_wgs else {
+                throw NSError(domain: "ChallengeRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Challenge location not found."])
+            }
+            // parse from String to CLLocationCoordinate2D: "POINT(121.469435 31.224894)" to CLLocationCoordinate2D(latitude: 31.224894, longitude: 121.469435)
+            print("Challenge Location: \(location)")
+            let coordinates = location.replacingOccurrences(of: "POINT(", with: "")
+                .replacingOccurrences(of: ")", with: "")
+                .split(separator: " ")
+                .compactMap { Double($0) }
+            guard coordinates.count == 2 else {
+                throw NSError(domain: "ChallengeRepository", code: 400, userInfo: [NSLocalizedDescriptionKey: "Invalid challenge location format."])
+            }
+            let latitude = coordinates[1]
+            let longitude = coordinates[0]
+            return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        } catch {
+            print("Error fetching challenge location: \(error)")
             throw error
         }
     }

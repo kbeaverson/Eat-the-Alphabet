@@ -4,6 +4,22 @@
 //
 //  Created by Will Erkman on 6/9/25.
 //
+
+/**
+ REMINDER: This model has a View remotely
+ 
+ CREATE OR REPLACE VIEW public."AccountWithWKT" AS
+ SELECT
+   id,
+   created_at,
+   ST_AsText(address_wgs)    AS address_wgs,
+   username,
+   display_name,
+   profile_image_url,
+   phone_number,
+   email
+ FROM public."Account";
+ */
 import Supabase
 import Foundation
 
@@ -17,11 +33,11 @@ struct Account: Codable, Identifiable {
     var phone_number: String?
     var email: String // Supabase Auth User's email, NOT NULLABLE
     
-    var reviews: [Review]? = [] // reviews made by this user
-    var challenges: [Challenge]? = [] // challenges created by this user
-    var experiences: [Experience]? = [] // experiences created by this user
+    var reviews: [Review]? = nil // reviews made by this user
+    var challenges: [Challenge]? = nil // challenges created by this user
+    var experiences: [Experience]? = nil // experiences created by this user
     
-    var friends: [Friends]? = [] // user1_id or user2_id == user.id
+    var friends: [Friends]? = nil // user1_id or user2_id == user.id
     
     // TEST: constructor from just data
     init(id: String,

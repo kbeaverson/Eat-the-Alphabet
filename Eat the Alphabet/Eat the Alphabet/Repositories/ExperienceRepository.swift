@@ -53,6 +53,28 @@ class ExperienceRepository : ExperienceProtocol {
         }
     }
     
+    func fetchExperiences(byRestaurant restaurantId: String) async throws -> [Experience] {
+        do {
+            let experiences: [Experience] = try await supabaseClient
+                .from("Experience")
+                .select(
+                    """
+                    *,
+                    id,
+                    restaurant_id
+                    """
+                    )
+                .eq("restaurant_id", value: restaurantId)
+                .execute()
+                .value
+            
+            if experiences.isEmpty {
+                print("No experiences found for restaurant \(restaurantId).")
+            }
+            return experiences
+        }
+    }
+    
     // 2 Create - add new experience
     func createExperience(experience: Experience) async throws {
         do {

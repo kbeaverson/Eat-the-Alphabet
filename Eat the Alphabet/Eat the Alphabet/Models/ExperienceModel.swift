@@ -15,8 +15,8 @@ struct Experience: Identifiable, Codable {
     let challenge_id : String
     let letter: String
     
-    var reviews: [Review]? = []
-    var participants: [Account]? = [] // Participants associated with the experience
+    var reviews: [Review]? = nil
+    var participants: [Account]? = nil // Participants associated with the experience
     var restaurant: Restaurant? = nil // Restaurants associated with the experience
     
     init (id: String,

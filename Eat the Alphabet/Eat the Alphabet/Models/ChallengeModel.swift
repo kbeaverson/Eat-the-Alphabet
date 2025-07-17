@@ -4,6 +4,19 @@
 //
 //  Created by Kenny Beaverson on 6/4/25.
 //
+
+/**
+ REMINDER: This model has a View remotely:
+ CREATE OR REPLACE VIEW public."ChallengeWithWKT" AS
+ SELECT
+   id,
+   title,
+   ST_AsText(center_wgs)    AS center_wgs,
+   radius,
+   created_at,
+   description
+ FROM public."Challenge";
+ */
 import CoreLocation
 
 struct Challenge: Codable, Identifiable {
@@ -14,9 +27,9 @@ struct Challenge: Codable, Identifiable {
     let created_at : Date
     var description: String? // Optional description of the challenge
     
-    var experiences: [Experience]? = [] // Experiences associated with the challenge
-    var letters: [String]? = [] // Letters associated with the challenge
-    var participants: [Account]? = [] // Participants associated with the challenge
+    var experiences: [Experience]? = nil // Experiences associated with the challenge
+    var letters: [String]? = nil // Letters associated with the challenge
+    var participants: [Account]? = nil // Participants associated with the challenge
     
     // TEST: constructor from just data
     init(id: String,
@@ -44,6 +57,5 @@ struct Challenge: Codable, Identifiable {
         case experiences = "Experience"
         case letters = "letter"
         case participants = "Account"
-        
     }
 }

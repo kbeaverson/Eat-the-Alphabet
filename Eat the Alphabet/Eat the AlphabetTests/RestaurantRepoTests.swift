@@ -10,7 +10,7 @@ import XCTest
 import Supabase
 import CoreLocation
 
-final class RestaurantRepositoryTests: XCTestCase {
+final class RestaurantRepoTest: XCTestCase {
     let repo = RestaurantRepository()
     let experienceRepo = ExperienceRepository()
     
@@ -127,8 +127,14 @@ final class RestaurantRepositoryTests: XCTestCase {
             _ = try await repo.fetchRestaurant(by: dummy.id)
             XCTFail("Should throw after deletion")
         } catch {
-            // 预期抛出
             print("Restaurant successfully deleted, caught expected error: \(error)")
+            throw error // rethrow to indicate test success
         }
+    }
+    
+    func testGetRestaurantAddrWGS() async throws {
+        let location : CLLocationCoordinate2D = try await repo.getRestaurantAddressWGS(for: testRestaurantId)
+        
+        print("Restaurant address WGS for \(testRestaurantId): \(location)")
     }
 }

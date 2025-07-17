@@ -9,6 +9,8 @@ import Foundation
 import Supabase
 
 final class ReviewRepository : ReviewProtocol {
+    private let experienceRepository: ExperienceProtocol = ExperienceRepository()
+    
     func fetchReviews(byUser userId: String) async throws -> [Review] {
         do {
             let reviews: [Review] = try await supabaseClient
@@ -47,6 +49,35 @@ final class ReviewRepository : ReviewProtocol {
         }
     }
     
+    func fetchReviews(byRestaurant restaurantId: String) async throws -> [Review] {
+        do {
+            // get experiences associated with the restaurant
+            let experiences: [Experience] = try await experienceRepository.fetchExperiences(byRestaurant: restaurantId)
+            if experiences.isEmpty {
+                print("No experiences found for restaurant \(restaurantId).")
+                return []
+            }
+            // get reviews associated with those experiences
+            let experienceIds = experiences.map { $0.id }
+            let reviews: [Review] = try await supabaseClient
+                .from("Review")
+                .select()
+                .in("experience_id", values: experienceIds)
+                .execute()
+                .value
+            
+            if reviews.isEmpty {
+                print("No reviews found for restaurant \(restaurantId).")
+                return []
+            }
+            return reviews
+        } catch {
+            print("Error fetching reviews by restaurant: \(error)")
+            throw error
+        }
+    }
+                
+    
     // 1
     func createReview(review : Review) async throws {
         do {
@@ -64,14 +95,18 @@ final class ReviewRepository : ReviewProtocol {
     }
     
     // 2
-    func fetchReview(by id: String) async throws -> Review {
+    func fetchReview(by id: String) async throws -> Review? {
         do {
-            return try await supabaseClient
+            let review: [Review] = try await supabaseClient
                 .from("Review")
                 .select()
                 .eq("id", value: id)
                 .execute()
                 .value
+            if review.isEmpty {
+                return nil
+            }
+            return review.first
         } catch {
             print("Error fetching review: \(error)")
             

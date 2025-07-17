@@ -135,7 +135,10 @@ final class ChallengeRepoTest: XCTestCase {
         XCTAssertFalse(lettersCompleted.isEmpty, "Available letters should not be empty")
     }
     
-    
-
+    func testGetChallengeLocation() async throws {
+        let location: CLLocationCoordinate2D = try await challengeRepo.getChallengeLocation(challengeId: testChallengeID)
+        print("Challenge Location: \(location.latitude), \(location.longitude)")
+        XCTAssertNotNil(location, "Challenge location should not be nil")
+    }
 }
 

@@ -20,7 +20,37 @@ class ReviewListViewModel: ObservableObject {
         self.userId = userId
         self.experienceId = experienceId
     }
+    // for restaurant page variant
+    @MainActor
+    func loadReviews(byRestaurantId restaurantId: String) async {
+        do {
+            let reviews = try await reviewRepository.fetchReviews(byRestaurant: restaurantId)
+        } catch {
+            print("Error fetching reviews for restaurant: \(error)")
+        }
+    }
     
+    // for experience page variant
+    @MainActor
+    func loadReviews(byExperienceId experienceId: String) async {
+        do {
+            let reviews = try await reviewRepository.fetchReviews(byExperience: experienceId)
+            self.reviewViewModels = reviews.map { ReviewItemViewModel(review: $0) }
+        } catch {
+            print("Error fetching reviews for experience: \(error)")
+        }
+    }
+    
+    @MainActor
+    func deleteReview(reviewId: String) async {
+        // Note: one can only delete reviews that they created
+        
+    }
+    
+    @MainActor
+    func addReview(experienceId: String, review: Review) async {
+        
+    }
 //    @MainActor
 //    func loadReviewsForUser() async {
 //        // Would place monitoring/error stuff here
