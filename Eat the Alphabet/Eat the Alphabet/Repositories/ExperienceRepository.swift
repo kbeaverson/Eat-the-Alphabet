@@ -162,6 +162,10 @@ class ExperienceRepository : ExperienceProtocol {
     
     // FIXED: under review
     func fetchRestaurant(for experienceId: String) async throws -> Restaurant? {
+        if experienceId.isEmpty {
+            print("Experience ID is empty.")
+            return nil
+        }
         do { // Experience
             let experienceWithRestaurant: Experience = try await supabaseClient
                 .from("Experience")

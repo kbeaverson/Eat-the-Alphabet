@@ -12,7 +12,6 @@ import Supabase
 // TODO: Unwrap all of the async methods so that the do/catch can be implemented at the ViewModel layer so as to allow error message propagation to the User
 class ChallengeRepository : ChallengeProtocol {
     
-    
     private let accountRepository: AccountRepository = AccountRepository()
     
     // 1 Create
@@ -30,15 +29,18 @@ class ChallengeRepository : ChallengeProtocol {
     }
     
     // 2 Read by its id
-    func fetchChallenge(by id: String) async throws -> Challenge {
+    func fetchChallenge(by id: String) async throws -> Challenge? {
         do {
-            let challenge: Challenge = try await supabaseClient
+            let challenges: [Challenge] = try await supabaseClient
                 .from("ChallengeWithWKT")
                 .select()
                 .eq("id", value: id)
-                .single()
                 .execute()
                 .value
+            
+            guard let challenge = challenges.first else {
+                throw NSError(domain: "ChallengeRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Challenge not found with id \(id)"])
+            }
             
             return challenge
         } catch {
@@ -91,6 +93,24 @@ class ChallengeRepository : ChallengeProtocol {
             print("Challenge successfully deleted.")
         } catch {
             print("Error deleting challenge: \(error)")
+            throw error
+        }
+    }
+    
+    func searchChallenges(byIdPart: String) async throws -> [Challenge] {
+        do {
+            // get anything that contains the the input
+            let challenges: [Challenge] = try await supabaseClient
+                .from("ChallengeWithWKT")
+                .select()
+                // .ilike("id", pattern: "%\(byIdPart)%")
+                .eq("id", value: byIdPart)
+                .execute()
+                .value
+            
+            return challenges
+        } catch {
+            print("Error searching challenges by ID part: \(error)")
             throw error
         }
     }

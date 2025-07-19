@@ -51,6 +51,17 @@ class ChallengeViewModel : ObservableObject {
         try await challengeRepository.updateChallenge(challenge: self.challenge)
     }
     
+    func getCLLCoordinates() async -> CLLocationCoordinate2D? {
+        do {
+            let location: CLLocationCoordinate2D = try await challengeRepository.getChallengeLocation(challengeId: challenge.id)
+            print("Fetched challenge location: \(location.latitude), \(location.longitude)")
+            return location
+        } catch {
+            print("Error fetching challenge location: \(error)")
+            return nil
+        }
+    }
+    
     func addChallengeExperience(experience : Experience) async throws{
         challenge.experiences = (challenge.experiences ?? []) + [experience]
         challenge = challenge
@@ -94,12 +105,12 @@ class ChallengeViewModel : ObservableObject {
     func joinChallenge(userId: String, challengeId: String) async throws {
         try await challengeRepository.addParticipant(userId: userId, challengeId: challengeId)
         // After joining, reload participants to update the challenge state
-        // try await loadParticipants()
+        try await loadWithParticipants()
     }
     
     func leaveChallenge(userId: String, challengeId: String) async throws {
         try await challengeRepository.removeParticipant(userId: userId, challengeId: challengeId)
         // After leaving, reload participants to update the challenge state
-        // try await loadParticipants()
+        try await loadWithParticipants()
     }
 }

@@ -9,7 +9,7 @@ import CoreLocation
 protocol ChallengeProtocol {
     // Basic CRUD
     func createChallenge(challenge: Challenge) async throws
-    func fetchChallenge(by id: String) async throws -> Challenge
+    func fetchChallenge(by id: String) async throws -> Challenge?
     func updateChallenge(challenge: Challenge) async throws
     func deleteChallenge(id: String) async throws
     
@@ -40,7 +40,7 @@ protocol ChallengeProtocol {
     // func fetchWithLetters(byChallengeId challengeId: String) async throws -> Challenge
     
     // Search and discovery
-//    func searchChallenges(by keyword: String) async throws -> [Challenge]
+    func searchChallenges(byIdPart: String) async throws -> [Challenge]
 //    func getNearbyChallenges(near point: GeoPoint, radius: Float) async throws -> [Challenge]
 
     // Optional analytics

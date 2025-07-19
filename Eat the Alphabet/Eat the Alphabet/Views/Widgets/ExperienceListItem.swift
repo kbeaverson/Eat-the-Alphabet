@@ -10,6 +10,9 @@ import UIKit
 
 // the class is to embedded with a restaurantListItem, as a Restaurant is a part of an Experience
 struct ExperienceListItem: View {
+    // PASSED-IN experience
+    var experience: Experience
+    
     @StateObject private var viewModel: ExperienceViewModel = ExperienceViewModel()
     @StateObject private var associatedRestaurantModel: RestaurantViewModel = RestaurantViewModel()
     
@@ -18,21 +21,6 @@ struct ExperienceListItem: View {
     var onTap: (() -> Void)? = nil // for tap handling
     
     var body: some View {
-        /** TODO: a z-stack with the RestaurantListItem on the top
-         a opacity=0.5 background of same color (or default to default bg)
-         and the experience on the bottom with just a title "Experience of $(experience's letter)"
-         */
-        
-        /** TODO:
-         check if the user participated in the experience. If the user has not, display with a less opacity background
-         */
-        /**
-         TODO: Is it possible to move the long-press context menu to the entire card view.
-         if User Joined: add a button to the context menu red "leave", if User Not Joined: add a button to the context menu regular "join"
-         */
-        /**
-         TODO: Make the desciption text multilines
-         */
     
         VStack(alignment: .leading) {
             HStack() {
@@ -41,8 +29,7 @@ struct ExperienceListItem: View {
                     .font(.headline)
                     .foregroundColor(.primary)
                     .padding(8)
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(8)
+                    .background(.clear)
                 Spacer()
                 // checkbox if in selection mode
                 if (isSelectionModeOn) {
@@ -63,16 +50,13 @@ struct ExperienceListItem: View {
             }
         }
         .onAppear {
-            print("ExperienceListItem onAppear called")
+            // print("ExperienceListItem onAppear called")
+            // assign the experience to the view model
+            viewModel.experience = experience
             // load the restaurant data
-            if let experience = viewModel.experience {
+            if viewModel.experience != nil {
                 Task {
-                    do {
-                        try await associatedRestaurantModel.fetchRestaurant(byId: experience.restaurant_id)
-                        print("Restaurant fetched successfully:", associatedRestaurantModel.restaurant?.name ?? "Unknown")
-                    } catch {
-                        print("Failed to fetch restaurant:", error)
-                    }
+                    await viewModel.loadAssociatedRestaurant()
                 }
             }
         }

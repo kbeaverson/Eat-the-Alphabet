@@ -128,7 +128,6 @@ final class RestaurantRepoTest: XCTestCase {
             XCTFail("Should throw after deletion")
         } catch {
             print("Restaurant successfully deleted, caught expected error: \(error)")
-            throw error // rethrow to indicate test success
         }
     }
     

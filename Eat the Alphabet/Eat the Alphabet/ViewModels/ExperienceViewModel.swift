@@ -20,65 +20,78 @@ class ExperienceViewModel: ObservableObject {
         self.accountRepository = AccountRepository()
         self.reviewRepository = ReviewRepository()
     }
+    
+    init(experience: Experience) {
+        self.experience = experience
+        self.repository = ExperienceRepository()
+        self.accountRepository = AccountRepository()
+        self.reviewRepository = ReviewRepository()
+    }
     // FIXME
     
     // fetch experience by challenge_id
 
-//    func createExperience() async {
-//        do {
-//            try await repository.createExperience(experience: self.experience)
-//        } catch {
-//            print("Error creating experience: \(error)")
-//        }
-//    }
-//    
-//    func deleteExperience() async {
-//        do {
-//            try await repository.deleteExperience(experience: self.experience)
-//        } catch {
-//            print("Error deleting experience: \(error)")
-//        }
-//    }
-//    
-//    func addReview(review : Review) async {
-//        experience.reviews.append(review)
-//        experience = experience // TODO: Implement publishChanges method that does this line
-//        do {
-//            try await repository.updateExperience(experience: self.experience)
-//        } catch {
-//            print("Error adding review: \(error)")
-//        }
-//    }
-//    
-//    func removeReview(reviewId : String) async {
-//        experience.reviews.removeAll { $0.id == reviewId }
-//        experience = experience
-//        do {
-//            try await repository.updateExperience(experience: self.experience)
-//        } catch {
-//            print("Error removing review: \(error)")
-//        }
-//    }
-//    
-//    func addPhoto(url: String) async {
-//        experience.photo_urls.append(url)
-//        experience = experience
-//        do {
-//            try await repository.updateExperience(experience: self.experience)
-//        } catch {
-//            print("Error adding photo: \(error)")
-//        }
-//    }
-//    
-//    func removePhoto(url: String) async {
-//        experience.photo_urls.removeAll { $0 == url }
-//        experience = experience
-//        do {
-//            try await repository.updateExperience(experience: self.experience)
-//        } catch {
-//            print("Error removing photo: \(error)")
-//        }
-//    }
     
+    func deleteExperience() async {
+        // if experience is nil, it is not assigned and we warn-and-return
+        guard let experience = experience else {
+            print("Experience is nil, cannot delete.")
+            return
+        }
+        do {
+            try await repository.deleteExperience(id: experience.id)
+        } catch {
+            print("Error deleting experience: \(error)")
+        }
+    }
+ 
+    func removeReview(reviewId : String) async {
+        do {
+            try await reviewRepository.deleteReview(by: reviewId)
+        } catch {
+            print("Error removing review: \(error)")
+        }
+    }
+
+    func addPhoto() async throws {
+        // TODO: get a photo passed in
+        // TODO: handle EOF file
+        // TODO: upload to bucket
+        // TODO: handle upload error
+        // TODO: get upload response (attempt to get a retrievable URL)
+        // TODO: add URL to experience.photo_urls
+        // TODO: update experience in repository
+    }
+
+    func deletePhoto(by experienceId: String) async {
+        // TODO: set nil or empty string for photo_urls
+        // TODO: update experience in repository
+        // TODO: handle errors
+        // TODO: delete photo from bucket
+        // TODO: handle bucket deletion errors
+    }
+    
+    func loadAssociatedRestaurant() async {
+        guard let experience = experience else {
+            print("Experience is nil, cannot load associated restaurant.")
+            return
+        }
+        do {
+            let restaurant: Restaurant? = try await repository.fetchRestaurant(for: experience.id)
+            if let restaurant = restaurant {
+                print("Loaded restaurant for experience \(experience.id): \(restaurant.name)")
+                await MainActor.run {
+                    // 这里建议直接赋值 experience（如果 experience 是 class，可以直接改属性）
+                    self.experience?.restaurant = restaurant
+                }
+            } else {
+                print("No restaurant found for experience \(experience.id)")
+            }
+        } catch {
+            print("Error fetching restaurant for experience: \(error)")
+        }
+    }
+        
+
 }
 

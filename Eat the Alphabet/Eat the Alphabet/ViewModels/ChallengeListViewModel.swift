@@ -42,4 +42,14 @@ class ChallengeListViewModel: ObservableObject {
             throw error
         }
     }
+    
+    @MainActor
+    public func searchChallenges(byIdPart challengeId: String) async throws /*-> [Challenge]*/ {
+        do {
+            let challenges : [Challenge] = try await challengeRepository.searchChallenges(byIdPart: challengeId)
+            self.challenges = challenges
+            return
+        }
+    }
+        
 }

@@ -32,7 +32,7 @@ struct ChallengeListItem: View {
     }
 
     var body: some View {
-        NavigationLink(destination: ExperienceListView(challenge: challenge)) {
+        NavigationLink(destination: ChallengeDetailsView(challenge: challenge)) {
             ZStack(alignment: .topLeading) {
                 HStack {
                     Text(challenge.title ?? "Untitled Challenge")
@@ -55,11 +55,6 @@ struct ChallengeListItem: View {
             }
             .background(.clear)
             .cornerRadius(12)
-//            .onTapGesture {
-//                if !isSelectionModeOn {
-//                    onTap?()
-//                }
-//            }
         }
         .contextMenu {
             if let isParticipated = isParticipated {
