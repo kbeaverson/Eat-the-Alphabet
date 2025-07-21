@@ -18,19 +18,30 @@ struct RestaurantListItem: View {
     @State private var loadedImage: Image? = nil
     @State private var bgColor: Color = .restaurantListItemDefault // NOTE: if not manually set, it will be the default color
     
+    @StateObject private var viewModel: RestaurantViewModel = RestaurantViewModel()
+    
     var body: some View {
         
         HStack(alignment: .top, spacing: 12) {
             // image to the leftmost
-            loadedImage?
-                .resizable()
-                .scaledToFill()
-                .frame(width: 100, height: 100)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+            if let loadedImage = loadedImage {
+                loadedImage
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 100, height: 100)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+            } else {
+                Image("RestaurantPlaceholderImage")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 100, height: 100)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+            }
+            
             // stack of testaurant name, cuisine, and distance
             VStack(alignment: .leading, spacing: 4) {
-                // Restaurant name
-                Text(restaurant.name)
+                // Restaurant name, if the name is more than 20 characters, truncate it
+                Text( restaurant.name.count < 20 ? restaurant.name : String(restaurant.name.prefix(20)) + "..." )
                     .font(.system(size: 24, weight: .bold, design: .serif))
                 // Cuisine
                 Text(restaurant.cuisine)
@@ -39,15 +50,9 @@ struct RestaurantListItem: View {
                 HStack {
                     Image(systemName: "mappin.and.ellipse")
                         .font(.caption)
-                    // distance text
-                    //if let distance = restaurant.distance {
-                    //    Text(String(format: "%.1f mile", distance * 0.621371)) // converting km to miles
-                    //        .font(.caption)
-                    //} else {
-                        Text("Distance unknown")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    //}
+                    Text("Distance unknown")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
             }
             .foregroundColor(.defaultText) // TODO: this is font color, might need to change

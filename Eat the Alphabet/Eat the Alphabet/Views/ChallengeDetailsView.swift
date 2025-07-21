@@ -59,9 +59,14 @@ struct ChallengeDetailsView: View {
                                     .foregroundColor(.secondary)
                             }
                             if let center = challenge.center_wgs {
-                                Text("Center: \(String(format: "%.6f", abs(cllCoord?.latitude ?? 0.0)))(\((cllCoord?.latitude ?? 0.0) >= 0 ? "N" : "S")), \(String(format: "%.6f", abs(cllCoord?.longitude ?? 0.0)))(\((cllCoord?.longitude ?? 0.0) >= 0 ? "E" : "W"))")
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)                            }
+                                HStack {
+                                    Image(systemName: "mappin.and.ellipse")
+                                        .font(.caption)
+                                    Text("Center: \(String(format: "%.6f", abs(cllCoord?.latitude ?? 0.0)))(\((cllCoord?.latitude ?? 0.0) >= 0 ? "N" : "S")), \(String(format: "%.6f", abs(cllCoord?.longitude ?? 0.0)))(\((cllCoord?.longitude ?? 0.0) >= 0 ? "E" : "W"))")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
                             if let desc = challenge.description {
                                 Text(desc)
                                     .font(.body)
@@ -74,6 +79,8 @@ struct ChallengeDetailsView: View {
                         // 下半部分：体验列表
                         LazyVStack(spacing: 10) {
                             ForEach(viewModel.experiences) { experience in
+                                // click will navigate to the ExperienceDetailView
+                                
                                 ExperienceListItem(
                                     experience: experience,
                                     isSelected: Binding(
@@ -111,24 +118,17 @@ struct ChallengeDetailsView: View {
                         }
                     }
                 }
-                .sheet(item: $selectedExperience) { restaurant in
-                    RestaurantDetailView(
-                        restaurantId: viewModel.experiences.first(where: { $0.id == restaurant.id })?.restaurant_id ?? ""
-                    )
-                    .presentationDetents([.large])
-                    .presentationDragIndicator(.visible)
-                }
                 .padding(10)
             }
             // .toolbarBackground(.visible, for: .navigationBar) // force make the toolbar visible?
         }
-        .sheet(item: $selectedExperience) { restaurant in
-            RestaurantDetailView(
-                restaurantId: viewModel.experiences.first(where: { $0.id == restaurant.id })?.restaurant_id ?? ""
-            )
-            .presentationDetents([.large]) // drawer-style
-            .presentationDragIndicator(.visible)
-        }
+//        .sheet(item: $selectedExperience) { restaurant in
+//            RestaurantDetailView(
+//                restaurantId: viewModel.experiences.first(where: { $0.id == restaurant.id })?.restaurant_id ?? ""
+//            )
+//            .presentationDetents([.large]) // drawer-style
+//            .presentationDragIndicator(.visible)
+//        }
     }
     
     

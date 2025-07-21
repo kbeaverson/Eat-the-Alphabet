@@ -16,7 +16,10 @@ class RestaurantViewModel: Identifiable, ObservableObject {
         // Fetch restaurant from the repository
         let fetchedRestaurant = try await restaurantRepository.fetchRestaurant(by: restaurantId)
         print("Fetched restaurant: \(fetchedRestaurant)")
-        self.restaurant = fetchedRestaurant
+        await MainActor.run {
+            // Update the restaurant property on the main thread
+            self.restaurant = fetchedRestaurant
+        }
     }
     
     static func getDistanceInKm(selfCoord2d: CLLocationCoordinate2D, targetCoord2d: CLLocationCoordinate2D) -> Double {

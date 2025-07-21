@@ -42,6 +42,7 @@ struct ChallengesView: View {
                     .frame(maxHeight: .infinity, alignment: .top) // 关键：顶部对齐
                 }
                 .frame(maxHeight: .infinity, alignment: .top) // 关键：顶部对齐
+                .padding(.horizontal, 10)
             }
             .toolbar {
                 ToolbarItemGroup(placement: .topBarLeading) {

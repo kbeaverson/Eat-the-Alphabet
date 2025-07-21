@@ -8,19 +8,29 @@
 import SwiftUI
 
 struct RestaurantDetailView: View {
-    let restaurantId: String
-    let viewModel: RestaurantViewModel = RestaurantViewModel()
+    var restaurantId: String
+    var restaurant: Restaurant?
+    
+    @StateObject private var viewModel: RestaurantViewModel = RestaurantViewModel()
     @State private var loadedImage: Image? = nil
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                loadedImage?
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(height: 240)
-                    .clipped()
-
+                if let loadedImage = loadedImage {
+                    loadedImage
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(height: 240)
+                        .clipped()
+                } else {
+                    Image("RestaurantPlaceholderImage")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(height: 240)
+                        .clipped()
+                }
+                
                 Text(viewModel.restaurant?.name ?? "")
                     .font(.system(size: 32, weight: .heavy))
                     .foregroundColor(.blue)
@@ -41,11 +51,17 @@ struct RestaurantDetailView: View {
                 .padding(.horizontal)
 
                 HStack(spacing: 4) {
-                    ForEach(0..<5) { i in
-                        Image(systemName: i < 4 ? "star.fill" : "star") // Example: 4/5 stars
-                            .foregroundColor(.gray)
+                    let rating = Int(viewModel.restaurant?.rating ?? 0)
+                    // 画实心星
+                    ForEach(0..<rating, id: \.self) { _ in
+                        Image(systemName: "star.fill")
+                            .foregroundColor(.yellow)
                     }
-                }
+                    // 画空心星
+                    ForEach(0..<(5 - rating), id: \.self) { _ in
+                        Image(systemName: "star")
+                            .foregroundColor(.gray)
+                    }                }
                 .padding(.horizontal)
 
                 Text(viewModel.restaurant?.details ?? "No details available")
@@ -55,38 +71,46 @@ struct RestaurantDetailView: View {
                 Divider()
                     .padding(.horizontal)
 
-                VStack(spacing: 12) {
-                    ForEach(0..<2) { i in
-                        VStack(alignment: .leading) {
-                            HStack(spacing: 4) {
-                                ForEach(0..<5) { _ in
-                                    Image(systemName: "star")
-                                        .foregroundColor(.gray)
-                                }
-                            }
-                            Text("Alakasam")
-                                .bold()
-                            Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit...")
-                                .font(.footnote)
-                        }
-                        .padding()
-                        .background(.thinMaterial)
-                        .cornerRadius(8)
-                        .padding(.horizontal)
-                    }
-                }
+//                VStack(spacing: 12) {
+//                    ForEach(0..<2) { i in
+//                        VStack(alignment: .leading) {
+//                            HStack(spacing: 4) {
+//                                ForEach(0..<5) { _ in
+//                                    Image(systemName: "star")
+//                                        .foregroundColor(.gray)
+//                                }
+//                            }
+//                            Text("Alakasam")
+//                                .bold()
+//                            Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit...")
+//                                .font(.footnote)
+//                        }
+//                        .padding()
+//                        .background(.thinMaterial)
+//                        .cornerRadius(8)
+//                        .padding(.horizontal)
+//                    }
+//                }
             }
         }
         .onAppear {
-            Task {
-                do {
-                    try await viewModel.fetchRestaurant(byId: restaurantId)
-                }
-                catch {
-                    print("Error fetching restaurant: \(error)")
+            print("passed in restaurantId: \(restaurantId)")
+            print("passed in restaurant: \(String(describing: restaurant))")
+            if let restaurant = restaurant {
+                print("Using passed-in restaurant: \(restaurant)")
+                viewModel.restaurant = restaurant
+                loadImage()
+            } else {
+                print("Fetching restaurant with ID: \(restaurantId)")
+                Task {
+                    do {
+                        try await viewModel.fetchRestaurant(byId: restaurantId)
+                        loadImage()
+                    } catch {
+                        print("Error fetching restaurant: \(error)")
+                    }
                 }
             }
-            loadImage()
         }
     }
     

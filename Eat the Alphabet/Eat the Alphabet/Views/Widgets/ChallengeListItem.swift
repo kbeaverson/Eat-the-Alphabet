@@ -49,9 +49,8 @@ struct ChallengeListItem: View {
                     }
                 }
                 .frame(height: 60)
-                .background(Color.gray.opacity(0.5))
+                .background(Color.white.opacity(0.5))
                 .cornerRadius(12)
-                .padding(.horizontal)
             }
             .background(.clear)
             .cornerRadius(12)
