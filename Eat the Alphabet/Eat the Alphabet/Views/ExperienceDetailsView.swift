@@ -46,7 +46,7 @@ struct ExperienceDetailsView: View {
                     VStack(alignment: .center, spacing: 10) {
                         // 上半部分：Experience 信息
                         VStack(alignment: .leading, spacing: 8) {
-                            Text((experience.letter.isEmpty) ? "Experience of \(experience.letter)" : "Experience Unknown")
+                            Text("Experience of \(viewModel.experience?.letter ?? "Unknown Letter")")
                                 .font(.system(size: 24, weight: .bold, design: .monospaced))
                             HStack {
                                 Text("Created at: \(experience.created_at.formatted(.dateTime.year().month().day().hour().minute()))")
