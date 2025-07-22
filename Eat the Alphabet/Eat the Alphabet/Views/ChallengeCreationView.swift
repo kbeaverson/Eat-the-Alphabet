@@ -175,6 +175,18 @@ struct ChallengeCreationView: View {
             } catch {
                 print("Challenge created, but failed to join: \(error.localizedDescription)")
                 errorMessage = "Challenge created, but failed to join: \(error.localizedDescription)"
+                return
+            }
+            // If both operations are successful, navigate back
+            isLoading = false
+            errorMessage = nil
+            print("Challenge created and joined successfully.")
+            // Navigate back to the previous view
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let navigationController = windowScene.windows.first?.rootViewController as? UINavigationController {
+                navigationController.popViewController(animated: true)
+            } else {
+                print("Navigation controller not found.")
             }
         }
     }

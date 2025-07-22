@@ -45,4 +45,37 @@ class ExperienceListViewModel: ObservableObject {
             return nil
         }
     }
+    
+    public func joinExperience(experienceId: String) async throws {
+        do {
+            // check participation first
+            let isParticipating = try await repository.checkParticipation(userId: supabaseClient.auth.currentUser?.id.uuidString.lowercased() ?? "", experienceId: experienceId)
+            if isParticipating {
+                print("Already participating in experience \(experienceId)")
+                return
+            }
+            // Join the experience
+            try await repository.addParticipant(userId: supabaseClient.auth.currentUser?.id.uuidString.lowercased() ?? "", to: experienceId)
+            print("Successfully joined experience \(experienceId)")
+        } catch {
+            print("Error joining experience: \(error)")
+            throw error
+        }
+    }
+    
+    public func leaveExperience(experienceId: String) async throws {
+        do {
+            let isParticipating = try await repository.checkParticipation(userId: supabaseClient.auth.currentUser?.id.uuidString.lowercased() ?? "", experienceId: experienceId)
+            if !isParticipating {
+                print("Not participating in experience \(experienceId)")
+                return
+            }
+            // Leave the experience
+            try await repository.removeParticipant(userId: supabaseClient.auth.currentUser?.id.uuidString.lowercased() ?? "", from: experienceId)
+            print("Successfully left experience \(experienceId)")
+        } catch {
+            print("Error leaving experience: \(error)")
+            throw error
+        }
+    }
 }

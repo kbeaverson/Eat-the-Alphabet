@@ -220,6 +220,22 @@ class ExperienceRepository : ExperienceProtocol {
         }
     }
     
+    func checkParticipation(userId: String, experienceId: String) async throws -> Bool {
+        do {
+            let participants: [ExperienceParticipant] = try await supabaseClient
+                .from("Experience_Participant")
+                .select("*")
+                .eq("user_id", value: userId)
+                .eq("experience_id", value: experienceId)
+                .execute()
+                .value
+            
+            return !participants.isEmpty
+        } catch {
+            throw error
+        }
+    }
+    
     // CREATE FIXED: under review
     func addParticipant(userId: String, to experienceId: String) async throws {
         let experienceParticipant = ExperienceParticipant(
