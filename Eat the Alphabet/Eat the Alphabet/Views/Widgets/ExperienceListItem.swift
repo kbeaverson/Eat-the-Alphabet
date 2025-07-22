@@ -14,11 +14,12 @@ struct ExperienceListItem: View {
     var experience: Experience
     
     @StateObject private var viewModel: ExperienceViewModel = ExperienceViewModel()
-    // @StateObject private var associatedRestaurantModel: RestaurantViewModel = RestaurantViewModel()
     
     @Binding var isSelected: Bool // THIS now is part of the outer view
     var isSelectionModeOn: Bool = false // THIS now is part of the outer view
     var onTap: (() -> Void)? = nil // for tap handling
+    
+    @State private var isParticipated: Bool? = nil // Track if the user has participated
     
     var body: some View {
         NavigationLink( destination: ExperienceDetailsView(
@@ -62,19 +63,59 @@ struct ExperienceListItem: View {
                         await viewModel.loadAssociatedRestaurant()
                     }
                 }
+                
+                // check if the user has participated in this experience
+                Task {
+                    do {
+                        let participated = try await viewModel.checkParticipation(experienceId: experience.id)
+                        isParticipated = participated
+                        print("ExperienceListItem: User has participated: \(participated)")
+                    } catch {
+                        print("Error checking participation: \(error)")
+                        isParticipated = false
+                        throw error
+                    }
+                }
             }
-            .background(.white.opacity(isSelected ? 0.5 : 0.1))
+            .background(.white.opacity((isParticipated ?? false) ? 0.6 : 0.15))
             .cornerRadius(12)
             // long-press to show additional information
             .contextMenu {
                 // options: join if not joined, leave if joined
-                
+                if let isParticipated = isParticipated {
+                    Button(action: {
+                        Task {
+                            if isParticipated {
+                                do {
+                                    try await viewModel.leaveExperience(experienceId: experience.id)
+                                    await MainActor.run {
+                                        self.isParticipated = false
+                                    }
+                                } catch {
+                                    print("Error leaving experience: \(error.localizedDescription)")
+                                }
+                            } else {
+                                do {
+                                    try await viewModel.joinExperience(experienceId: experience.id)
+                                    await MainActor.run {
+                                        self.isParticipated = true
+                                    }
+                                } catch {
+                                    print("Error joining experience: \(error.localizedDescription)")
+                                }
+                            }
+                        }
+                    }) {
+                        if isParticipated {
+                            Label("Leave Experience", systemImage: "trash")
+                                .foregroundStyle(.red)
+                        } else {
+                            Label("Join Experience", systemImage: "plus")
+                                .foregroundStyle(.green)
+                        }
+                    }
+                }
             }
-//            .onTapGesture {
-//                if !isSelectionModeOn {
-//                    onTap?()
-//                }
-//            }
         }
     }
 }

@@ -120,26 +120,35 @@ struct ChallengeDetailsView: View {
                 }
                 .padding(10)
             }
-            // .toolbarBackground(.visible, for: .navigationBar) // force make the toolbar visible?
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    NavigationLink(destination: ExperienceCreationView()) {
+                        Image(systemName: "plus")
+                            .foregroundColor(.accentColor)
+                    }
+                    
+                }
+                // .toolbarBackground(.visible, for: .navigationBar) // force make the toolbar visible?
+            }
+            //        .sheet(item: $selectedExperience) { restaurant in
+            //            RestaurantDetailView(
+            //                restaurantId: viewModel.experiences.first(where: { $0.id == restaurant.id })?.restaurant_id ?? ""
+            //            )
+            //            .presentationDetents([.large]) // drawer-style
+            //            .presentationDragIndicator(.visible)
+            //        }
         }
-//        .sheet(item: $selectedExperience) { restaurant in
-//            RestaurantDetailView(
-//                restaurantId: viewModel.experiences.first(where: { $0.id == restaurant.id })?.restaurant_id ?? ""
-//            )
-//            .presentationDetents([.large]) // drawer-style
-//            .presentationDragIndicator(.visible)
-//        }
     }
-    
-    
-    func loadExperiencesFromChallenge() {
-        // Load restaurants when the view appears
-        Task {
-            do {
-                // Fetch restaurants for the challenge
-                try await viewModel.fetchExperiences(challengeId: challenge.id)
+        
+        
+        func loadExperiencesFromChallenge() {
+            // Load restaurants when the view appears
+            Task {
+                do {
+                    // Fetch restaurants for the challenge
+                    try await viewModel.fetchExperiences(challengeId: challenge.id)
+                }
             }
         }
     }
-}
 

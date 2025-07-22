@@ -22,6 +22,31 @@ struct ChallengesView: View {
             let fieldWidth = geo.size.width * 0.6
             BackgroundScaffold {
                 VStack(spacing: 20) {
+                    HStack(alignment: .center) {
+                        if (isSelectionModeOn) {
+                            Button("Cancel") {
+                                // reset selected list
+                                selectedIds.removeAll()
+                                isSelectionModeOn.toggle()
+                            }
+                        }
+                        NavigationLink(destination: ChallengeCreationView()) {
+                            Image(systemName: "plus")
+                        }
+                        
+                        Spacer()
+                        
+                        Button( isSelectionModeOn ? "Select" : "Select All" ) {
+                            if (isSelectionModeOn) { selectedIds = Set(viewModel.challenges.map { $0.id }) }
+                            else { isSelectionModeOn = true }
+                        }
+                        
+                        // search button with icon
+                        NavigationLink(destination: ChallengeSearchView()) {
+                            Image(systemName: "magnifyingglass")
+                        }
+                    }
+                    .padding(10)
                     LazyVStack(alignment: .leading, spacing: 10) {
                         ForEach(self.viewModel.challenges, id: \.id) { challenge in
                             ChallengeListItem(challenge: challenge,
@@ -43,31 +68,6 @@ struct ChallengesView: View {
                 }
                 .frame(maxHeight: .infinity, alignment: .top) // 关键：顶部对齐
                 .padding(.horizontal, 10)
-            }
-            .toolbar {
-                ToolbarItemGroup(placement: .topBarLeading) {
-                    if (isSelectionModeOn) {
-                        Button("Cancel") {
-                            // reset selected list
-                            selectedIds.removeAll()
-                            isSelectionModeOn.toggle()
-                        }
-                    }
-                    NavigationLink(destination: ChallengeCreationView()) {
-                        Image(systemName: "plus")
-                    }
-                }
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button( isSelectionModeOn ? "Select" : "Select All" ) {
-                        if (isSelectionModeOn) { selectedIds = Set(viewModel.challenges.map { $0.id }) }
-                        else { isSelectionModeOn = true }
-                    }
-                    
-                    // search button with icon
-                    NavigationLink(destination: ChallengeSearchView()) {
-                        Image(systemName: "magnifyingglass")
-                    }
-                }
             }
             .onAppear {
                 loadChallenges()
