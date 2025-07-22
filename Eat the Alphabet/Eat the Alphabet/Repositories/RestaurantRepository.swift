@@ -21,6 +21,23 @@ class RestaurantRepository : RestaurantProtocol {
         }
     }
     
+    func getRestaurant(byMapID mapID: String) async throws -> Restaurant {
+        do {
+            let restaurant: Restaurant = try await supabaseClient
+                .from("Restaurant")
+                .select()
+                .eq("map_imported_id", value: mapID)
+                .single()
+                .execute()
+                .value
+            
+            return restaurant
+        } catch {
+            print("Error fetching restaurant by map id: \(error)")
+            throw error
+        }
+    }
+    
     func fetchRestaurant(byExperience experienceId: String) async throws -> Restaurant? {
         do {
             let experience: Experience = try await supabaseClient
