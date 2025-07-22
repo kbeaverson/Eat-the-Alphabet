@@ -30,7 +30,14 @@ class ExperienceViewModel: ObservableObject {
     // FIXME
     
     // fetch experience by challenge_id
-
+    func createExperience(experience: Experience) async throws {
+        do {
+            try await repository.createExperience(experience: experience)
+        } catch {
+            print("Error creating experience: \(error)")
+            throw error
+        }
+    }
     
     func deleteExperience() async {
         // if experience is nil, it is not assigned and we warn-and-return
