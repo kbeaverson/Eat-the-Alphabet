@@ -9,13 +9,17 @@ import SwiftUI
 import CoreLocation
 
 struct ExperienceCreationView: View {
+    @Environment(\.dismiss) private var dismiss
+    
     @State private var letter: String = ""
     @State private var restaurantId: String = ""
-    @State private var challengeId: String = ""
     @State private var description: String = ""
-    @State private var selectedLocation: CLLocationCoordinate2D? = nil
     @State private var isLoading: Bool = false
     @State private var errorMessage: String? = nil
+    
+    @State var restaurant: Restaurant? = nil
+    var challengeCenter: CLLocationCoordinate2D
+    var challengeId: String
 
     private let viewModel: ExperienceViewModel = ExperienceViewModel()
 
@@ -41,48 +45,19 @@ struct ExperienceCreationView: View {
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke(Color.gray.opacity(0.4), lineWidth: 1)
                             )
-                            .accessibilityLabel("Experience letter field")
-
-                        TextField("Restaurant ID", text: $restaurantId)
-                            .frame(width: fieldWidth)
-                            .padding(8)
-                            .background(.textFieldBg)
-                            .cornerRadius(8)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(Color.gray.opacity(0.4), lineWidth: 1)
-                            )
-                            .accessibilityLabel("Restaurant ID field")
-
-                        TextField("Challenge ID", text: $challengeId)
-                            .frame(width: fieldWidth)
-                            .padding(8)
-                            .background(.textFieldBg)
-                            .cornerRadius(8)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(Color.gray.opacity(0.4), lineWidth: 1)
-                            )
-                            .accessibilityLabel("Challenge ID field")
-
-                        Text("Description")
-                            .font(.headline)
-                            .fontDesign(.monospaced)
-                        TextEditor(text: $description)
-                            .frame(width: fieldWidth, height: 100)
-                            .background(.appBackground)
-                            .cornerRadius(8)
-                            .accessibilityLabel("Experience description text field")
-
-                        Text((selectedLocation != nil) ? "Selected Resaurant: \(selectedLocation?.latitude ?? 0), \(selectedLocation?.longitude ?? 0)" : "Restaurant not selected")
+                        
+                        Text("Challenge Center WGS84: \(challengeCenter.latitude), \(challengeCenter.longitude)")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                             .padding(.top, 8)
-
+                        
                         NavigationLink(
-                            destination: MapPickerView(selectedLocation: $selectedLocation)
+                            destination: MapView(challengeCenter: challengeCenter, restaurant: Binding(
+                                get: { restaurant },
+                                set: { restaurant = $0 }
+                            ))
                         ) {
-                            Text("Pick Restaurant on the Map")
+                            Text("Open Full Map")
                                 .font(.system(size: 18, weight: .bold, design: .monospaced))
                                 .frame(maxWidth: buttonWidth)
                                 .padding()
@@ -93,6 +68,26 @@ struct ExperienceCreationView: View {
                         .buttonStyle(PlainButtonStyle())
                         .foregroundStyle(.defaultText)
                         .frame(width: fieldWidth)
+
+                        if restaurant == nil {
+                            TextField("Alternatively: Restaurant ID", text: $restaurantId)
+                                .frame(width: fieldWidth)
+                                .padding(8)
+                                .background(.textFieldBg)
+                                .cornerRadius(8)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(Color.gray.opacity(0.4), lineWidth: 1)
+                                )
+                        }
+                        
+                        Text("Description")
+                            .font(.headline)
+                            .fontDesign(.monospaced)
+                        TextEditor(text: $description)
+                            .frame(width: fieldWidth, height: 100)
+                            .background(.appBackground)
+                            .cornerRadius(8)
 
                         if let errorMessage {
                             Text(errorMessage)
@@ -135,8 +130,8 @@ struct ExperienceCreationView: View {
     }
 
     private func createExperience() {
-        guard !letter.isEmpty, !restaurantId.isEmpty, !challengeId.isEmpty else {
-            errorMessage = "请填写所有字段"
+        guard !letter.isEmpty, restaurant != nil ? true : !restaurantId.isEmpty, !challengeId.isEmpty else {
+            errorMessage = "Please fill in all the required fields."
             return
         }
         isLoading = true
@@ -144,7 +139,7 @@ struct ExperienceCreationView: View {
             id: UUID().uuidString,
             created_at: Date(),
             status: "incomplete",
-            restaurant_id: restaurantId,
+            restaurant_id: restaurant?.id ?? restaurantId,
             challenge_id: challengeId,
             letter: letter
         )
@@ -153,15 +148,11 @@ struct ExperienceCreationView: View {
                 try await viewModel.createExperience(experience: experience)
                 isLoading = false
                 errorMessage = nil
-                // 返回上一页
-                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                   let navigationController = windowScene.windows.first?.rootViewController as? UINavigationController {
-                    navigationController.popViewController(animated: true)
-                }
             } catch {
                 isLoading = false
-                errorMessage = "创建体验失败: \(error.localizedDescription)"
+                errorMessage = "Creation Failed: \(error.localizedDescription)"
             }
+            dismiss()
         }
     }
 }

@@ -31,19 +31,14 @@ class RestaurantViewModel: Identifiable, ObservableObject {
         return distanceInKm
     }
     
-    // Converts current view model back to model
-//    func toModel(with geoLocation: GeoPoint) -> Restaurant {
-//        return Restaurant(
-//            id: self.id,
-//            name: self.name,
-//            cuisine: self.cuisine,
-//            price: 30, // or add this field to VM
-//            rating: 4.5, // or computed/assigned
-//            address: geoLocation,
-//            details: self.details,
-//            imageUrl: self.imageUrl
-//        )
-//    }
-
+    public func getAddressWGS(for restaurantId: String) async throws -> CLLocationCoordinate2D? {
+        guard let restaurant = restaurant else {
+            print("Restaurant is nil, cannot get address.")
+            return nil
+        }
+        let coords : CLLocationCoordinate2D = try await restaurantRepository.getRestaurantAddressWGS(for: restaurant.id)
+        print("Fetched restaurant address WGS: \(coords.latitude), \(coords.longitude)")
+        return coords
+    }
     // TODO: other methods, CRUD operations, etc.
 }

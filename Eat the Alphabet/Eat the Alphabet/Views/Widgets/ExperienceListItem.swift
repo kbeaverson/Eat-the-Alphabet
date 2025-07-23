@@ -56,9 +56,9 @@ struct ExperienceListItem: View {
                 viewModel.experience = experience
                 if let restaurant = experience.restaurant {
                     viewModel.experience?.restaurant = restaurant
-                    print("直接使用传入的 restaurant: \(restaurant)")
+                    print("Using passed-in restaurant: \(restaurant)")
                 } else {
-                    print("需要异步加载 restaurant")
+                    print("Need to load restaurant async...")
                     Task {
                         await viewModel.loadAssociatedRestaurant()
                     }

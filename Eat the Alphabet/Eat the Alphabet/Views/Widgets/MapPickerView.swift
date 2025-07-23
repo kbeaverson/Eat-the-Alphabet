@@ -21,14 +21,14 @@ struct MapPickerView: View {
                 VStack {
                     MapReader { proxy in
                         Map (scope: mapScope) {
-                            Annotation("18th Avenue Library", coordinate: libraryLocation) {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .fill(Color.yellow)
-                                    Text("📚")
-                                        .padding(5)
-                                }
-                            }
+//                            Annotation("18th Avenue Library", coordinate: libraryLocation) {
+//                                ZStack {
+//                                    RoundedRectangle(cornerRadius: 5)
+//                                        .fill(Color.yellow)
+//                                    Text("📚")
+//                                        .padding(5)
+//                                }
+//                            }
                             // 如果已选点，显示一个红色标注
                             if let picked = selectedLocation {
                                 Annotation("Picked", coordinate: picked) {

@@ -184,9 +184,6 @@ class ExperienceRepository : ExperienceProtocol {
                 // .value
             
             print("Experience with restaurant: \(experienceWithRestaurant)")
-            
-            // let restaurant: Restaurant = try await restaurantRepository.fetchRestaurant(by: experienceId)
-            // return experienceWithRestaurant.restaurant
             return experienceWithRestaurant.restaurant
         } catch {
             print("Error fetching restaurant for experience: \(error)")

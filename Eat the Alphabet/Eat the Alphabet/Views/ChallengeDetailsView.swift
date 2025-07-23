@@ -44,9 +44,9 @@ struct ChallengeDetailsView: View {
         GeometryReader { geo in
             BackgroundScaffold {
                 ScrollView(.vertical, showsIndicators: false) {
-                    VStack(alignment: .center, spacing: 10) {
+                    LazyVStack(alignment: .center, spacing: 10) {
                         // 上半部分：Challenge 信息
-                        VStack(alignment: .leading, spacing: 8) {
+                        LazyVStack(alignment: .leading, spacing: 8) {
                             Text(challenge.title ?? "Untitled Challenge")
                                 .font(.system(size: 24, weight: .bold, design: .monospaced))
                             HStack {
@@ -83,7 +83,6 @@ struct ChallengeDetailsView: View {
                         LazyVStack(spacing: 10) {
                             ForEach(viewModel.experiences) { experience in
                                 // click will navigate to the ExperienceDetailView
-                                
                                 ExperienceListItem(
                                     experience: experience,
                                     isSelected: Binding(
@@ -124,34 +123,28 @@ struct ChallengeDetailsView: View {
                 .padding(10)
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    NavigationLink(destination: ExperienceCreationView()) {
-                        Image(systemName: "plus")
-                            .foregroundColor(.accentColor)
+                if let cllCoord_notNil: CLLocationCoordinate2D = cllCoord {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        NavigationLink(destination: ExperienceCreationView(challengeCenter: cllCoord_notNil, challengeId: challenge.id)) {
+                            Image(systemName: "plus")
+                                .foregroundColor(.accentColor)
+                        }
                     }
-                    
-                }
-                // .toolbarBackground(.visible, for: .navigationBar) // force make the toolbar visible?
-            }
-            //        .sheet(item: $selectedExperience) { restaurant in
-            //            RestaurantDetailView(
-            //                restaurantId: viewModel.experiences.first(where: { $0.id == restaurant.id })?.restaurant_id ?? ""
-            //            )
-            //            .presentationDetents([.large]) // drawer-style
-            //            .presentationDragIndicator(.visible)
-            //        }
-        }
-    }
-        
-        
-        func loadExperiencesFromChallenge() {
-            // Load restaurants when the view appears
-            Task {
-                do {
-                    // Fetch restaurants for the challenge
-                    try await viewModel.fetchExperiences(challengeId: challenge.id)
                 }
             }
         }
     }
+        
+        
+    func loadExperiencesFromChallenge() {
+        // Load restaurants when the view appears
+        Task {
+            do {
+                // Fetch restaurants for the challenge
+                try await viewModel.fetchExperiences(challengeId: challenge.id)
+            }
+        }
+    }
+    
+}
 

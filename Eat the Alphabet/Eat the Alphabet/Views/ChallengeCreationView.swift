@@ -9,6 +9,8 @@ import SwiftUI
 import CoreLocation
 
 struct ChallengeCreationView: View {
+    @Environment(\.dismiss) private var dismiss
+    
     @State private var title: String = ""
     @State private var radius: String = ""
     @State private var description: String = ""
@@ -187,12 +189,7 @@ struct ChallengeCreationView: View {
             errorMessage = nil
             print("Challenge created and joined successfully.")
             // Navigate back to the previous view
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let navigationController = windowScene.windows.first?.rootViewController as? UINavigationController {
-                navigationController.popViewController(animated: true)
-            } else {
-                print("Navigation controller not found.")
-            }
+            dismiss()
         }
     }
 }

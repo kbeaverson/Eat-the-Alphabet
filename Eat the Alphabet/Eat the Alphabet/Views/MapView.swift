@@ -13,8 +13,10 @@ extension CLLocationCoordinate2D {
 }
 
 struct MapView: View {
-    @Binding var challengeCenter: CLLocationCoordinate2D
-    @Binding var restaurant: Restaurant
+    // @Environment(\.dismiss) private var dismiss
+    
+    var challengeCenter: CLLocationCoordinate2D
+    @Binding var restaurant: Restaurant?
     @State private var position: MapCameraPosition = .automatic
     @State private var searchResults: [MKMapItem] = []
     @State private var visibleRegion: MKCoordinateRegion?
@@ -101,6 +103,6 @@ struct MapView: View {
 
 #Preview {
     @Previewable @State var center: CLLocationCoordinate2D = CLLocationCoordinate2D.columbus
-    @Previewable @State var restaurant: Restaurant = Restaurant(id: "", name: "", created_at: Date.now, cuisine: "", avg_per_cost: nil, map_imported_id: "", map_imported_rating: nil, rating: nil, address_wgs: nil, address_text: nil, details: nil, image_url: nil)
-    MapView(challengeCenter: $center, restaurant: $restaurant)
+    @Previewable @State var restaurant: Restaurant? = nil /*Restaurant(id: "", name: "", created_at: Date.now, cuisine: "", avg_per_cost: nil, map_imported_id: "", map_imported_rating: nil, rating: nil, address_wgs: nil, address_text: nil, details: nil, image_url: nil)*/
+    MapView(challengeCenter: center, restaurant: $restaurant)
 }

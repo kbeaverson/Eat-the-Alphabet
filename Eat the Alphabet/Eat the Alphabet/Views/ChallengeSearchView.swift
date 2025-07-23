@@ -45,7 +45,7 @@ struct ChallengeSearchView: View {
                             .padding(.top, 40)
                             .frame(maxWidth: .infinity, alignment: .center)
                     } else {
-                        LazyVStack(alignment: .leading, spacing: 10) {
+                        VStack(alignment: .leading, spacing: 10) {
                             
                             ForEach(viewModel.challenges, id: \.id) { item in
                                 ChallengeListItem(challenge: item, isSelected: Binding(
