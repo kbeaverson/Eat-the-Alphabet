@@ -21,7 +21,7 @@ struct ChallengesView: View {
         GeometryReader { geo in
             let fieldWidth = geo.size.width * 0.6
             BackgroundScaffold {
-                VStack(spacing: 20) {
+                LazyVStack(spacing: 20) {
                     HStack(alignment: .center) {
                         if (isSelectionModeOn) {
                             Button("Cancel") {

@@ -16,7 +16,7 @@ struct RestaurantDetailView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
+            LazyVStack(alignment: .leading, spacing: 16) {
                 if let loadedImage = loadedImage {
                     loadedImage
                         .resizable()
@@ -71,9 +71,9 @@ struct RestaurantDetailView: View {
                 Divider()
                     .padding(.horizontal)
 
-//                VStack(spacing: 12) {
+//                LazyVStack(spacing: 12) {
 //                    ForEach(0..<2) { i in
-//                        VStack(alignment: .leading) {
+//                        LazyVStack(alignment: .leading) {
 //                            HStack(spacing: 4) {
 //                                ForEach(0..<5) { _ in
 //                                    Image(systemName: "star")
