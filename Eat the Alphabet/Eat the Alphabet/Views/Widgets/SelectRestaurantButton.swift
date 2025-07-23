@@ -8,8 +8,12 @@ import SwiftUI
 import MapKit
 
 struct SelectRestaurantButton: View {
+    @Environment(\.dismiss) private var dismiss
+    
     var selectedRestaurant: MKMapItem
-    @Binding var restaurant: Restaurant
+    @Binding var restaurant: Restaurant?
+    
+    // var dismissCallback: (() -> Void)? = nil
     
     var restaurantRepository: RestaurantRepository = RestaurantRepository()
     
@@ -42,6 +46,9 @@ struct SelectRestaurantButton: View {
                     )
                 try? await restaurantRepository.createRestaurant(restaurant: newRest)
                 restaurant = newRest
+                
+                // Navigate back to the previous view
+                dismiss()
             }
         }
     }
