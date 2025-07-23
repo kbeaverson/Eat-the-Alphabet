@@ -28,6 +28,7 @@ struct RegisterView: View {
                         .font(.system(size: 36, weight: .bold, design: .monospaced))
                         .foregroundColor(.white)
                         .padding(.vertical, 40)
+                        .accessibilityAddTraits(.isHeader)
                     
                     TextField("Username", text: $username)
                         .textContentType(.username)

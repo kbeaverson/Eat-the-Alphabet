@@ -48,6 +48,7 @@ struct ExperienceDetailsView: View {
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Experience of \(viewModel.experience?.letter ?? "Unknown Letter")")
                                 .font(.system(size: 24, weight: .bold, design: .monospaced))
+                                .accessibilityAddTraits(.isHeader)
                             HStack {
                                 Text("Created at: \(experience.created_at.formatted(.dateTime.year().month().day().hour().minute()))")
                                     .font(.subheadline)

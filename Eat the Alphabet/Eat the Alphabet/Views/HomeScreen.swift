@@ -34,6 +34,8 @@ struct HomeScreen: View {
                     AccountView(session: $session, account: $account)
                 }
             }
+            .accessibilityElement(children: .contain)
+            .accessibilityLabel("Home screen")
             .tabViewStyle(.tabBarOnly)
             .onAppear {
                 print("Home Screen Appeared")

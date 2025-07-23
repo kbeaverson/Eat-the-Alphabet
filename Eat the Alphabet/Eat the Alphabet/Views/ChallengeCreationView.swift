@@ -41,6 +41,7 @@ struct ChallengeCreationView: View {
                             .font(.system(size: 28, weight: .bold, design: .monospaced))
                             .foregroundColor(.defaultText)
                             .padding(.top)
+                            .accessibilityAddTraits(.isHeader)
                         
                         TextField("Challenge Title", text: $title)
                             .frame(width: fieldWidth)
@@ -71,6 +72,7 @@ struct ChallengeCreationView: View {
                             .frame(width: fieldWidth, height: 100)
                             .background(.appBackground)
                             .cornerRadius(8)
+                            .accessibilityLabel("Text field to enter challenge description")
                         
                         // location lext
                         Text((selectedLocation != nil) ? "Selected Location: \(selectedLocation?.latitude ?? 0), \(selectedLocation?.longitude ?? 0)" : "No location selected")
@@ -116,7 +118,10 @@ struct ChallengeCreationView: View {
                                 )
                                 .foregroundStyle(.white)
                         }
+                        .accessibilityLabel("Create challenge button")
                     }
+                    .accessibilityElement(children: .contain)
+                    .accessibilityLabel("Challenge creation screen")
                     .padding()
                     .navigationBarTitleDisplayMode(.inline)
                     

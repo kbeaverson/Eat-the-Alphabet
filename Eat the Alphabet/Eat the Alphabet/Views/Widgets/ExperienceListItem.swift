@@ -77,6 +77,8 @@ struct ExperienceListItem: View {
                     }
                 }
             }
+            .accessibilityElement(children: .contain)
+            .accessibilityLabel("Experience list item for \(experience.letter)")
             .background(.white.opacity((isParticipated ?? false) ? 0.6 : 0.15))
             .cornerRadius(12)
             // long-press to show additional information

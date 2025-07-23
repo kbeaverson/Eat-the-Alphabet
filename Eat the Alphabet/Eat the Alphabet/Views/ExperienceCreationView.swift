@@ -30,6 +30,7 @@ struct ExperienceCreationView: View {
                             .font(.system(size: 28, weight: .bold, design: .monospaced))
                             .foregroundColor(.defaultText)
                             .padding(.top)
+                            .accessibilityAddTraits(.isHeader)
 
                         TextField("Letter", text: $letter)
                             .frame(width: fieldWidth)
@@ -40,6 +41,7 @@ struct ExperienceCreationView: View {
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke(Color.gray.opacity(0.4), lineWidth: 1)
                             )
+                            .accessibilityLabel("Experience letter field")
 
                         TextField("Restaurant ID", text: $restaurantId)
                             .frame(width: fieldWidth)
@@ -50,6 +52,7 @@ struct ExperienceCreationView: View {
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke(Color.gray.opacity(0.4), lineWidth: 1)
                             )
+                            .accessibilityLabel("Restaurant ID field")
 
                         TextField("Challenge ID", text: $challengeId)
                             .frame(width: fieldWidth)
@@ -60,6 +63,7 @@ struct ExperienceCreationView: View {
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke(Color.gray.opacity(0.4), lineWidth: 1)
                             )
+                            .accessibilityLabel("Challenge ID field")
 
                         Text("Description")
                             .font(.headline)
@@ -68,6 +72,7 @@ struct ExperienceCreationView: View {
                             .frame(width: fieldWidth, height: 100)
                             .background(.appBackground)
                             .cornerRadius(8)
+                            .accessibilityLabel("Experience description text field")
 
                         Text((selectedLocation != nil) ? "Selected Resaurant: \(selectedLocation?.latitude ?? 0), \(selectedLocation?.longitude ?? 0)" : "Restaurant not selected")
                             .font(.subheadline)
@@ -110,7 +115,7 @@ struct ExperienceCreationView: View {
                                         .fill(.buttonBg)
                                 )
                                 .foregroundStyle(.white)
-                        }
+                        }.accessibilityLabel("Create experience button")
                     }
                     .padding()
                     .navigationBarTitleDisplayMode(.inline)

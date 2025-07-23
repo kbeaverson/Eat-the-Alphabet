@@ -108,6 +108,7 @@ struct ChallengeListItem: View {
             }
         }
         .buttonStyle(PlainButtonStyle()) // 保证外观不变
+        .accessibilityLabel("Challenge button for \(challenge.title ?? "Untitled Challenge")")
     }
     
     func getIfParticipated(challengeId: String) async -> Bool? {

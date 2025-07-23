@@ -30,12 +30,14 @@ struct RestaurantListItem: View {
                     .scaledToFill()
                     .frame(width: 100, height: 100)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .accessibilityLabel("Restaurant image")
             } else {
                 Image("RestaurantPlaceholderImage")
                     .resizable()
                     .scaledToFill()
                     .frame(width: 100, height: 100)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .accessibilityLabel("Restaurant image")
             }
             
             // stack of testaurant name, cuisine, and distance
@@ -50,6 +52,7 @@ struct RestaurantListItem: View {
                 HStack {
                     Image(systemName: "mappin.and.ellipse")
                         .font(.caption)
+                        .accessibilityHidden(true)
                     Text("Distance unknown")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -59,6 +62,8 @@ struct RestaurantListItem: View {
 
             Spacer() // to push the text to the left
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Restaurant list item")
         .background(bgColor) // changed to UIKit image average color
         .cornerRadius(12)
         .padding(.top, topPadding)
@@ -68,7 +73,6 @@ struct RestaurantListItem: View {
                 .onAppear {
                     loadImageAndColor(from: restaurant.image_url)
                 }
-        
     }
     
     //TODO: load image and use UIKit's average color to set background color

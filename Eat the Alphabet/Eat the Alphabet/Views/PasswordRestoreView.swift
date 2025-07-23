@@ -23,6 +23,7 @@ struct PasswordRestoreView: View {
                         .font(.system(size: 32, weight: .bold, design: .monospaced))
                         .foregroundColor(.white)
                         .padding(.vertical, 40)
+                        .accessibilityAddTraits(.isHeader)
                     
                     TextField("Email/Phone Address", text: $email)
                         .padding(12) // inner padding (inside white box)
@@ -45,6 +46,7 @@ struct PasswordRestoreView: View {
                         Button("Send") {
                             print("Code sent")
                         }
+                        .accessibilityLabel("Send verification code")
                         .buttonStyle(.bordered)
                     }
                     

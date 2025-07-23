@@ -28,13 +28,15 @@ struct AccountView: View {
                 VStack(spacing: 20) {
                     HStack{
                         // TODO: Convert this to user bar with name, profile picture
-                        Text("Hello, \(account?.username ?? "User")")
+                        var greeting: String = "Hello, \(account?.username ?? "User")"
+                        Text(greeting)
                             .font(.system(size: 36, weight: .bold, design: .monospaced))
                             .foregroundColor(.white)
                             .padding(.vertical, 20)
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)
                             .truncationMode(.tail)
+                            .accessibilityLabel("Greeting to user: \(greeting)")
                         Spacer()
                         Button("Logout") {
                             // Handle logout action
@@ -44,6 +46,7 @@ struct AccountView: View {
                         .buttonStyle(.bordered)
                         .padding(.trailing, 20)
                         .foregroundColor(.defaultText)
+                        .accessibilityLabel("Logout Button")
                     }
                     .padding(.horizontal, 20)
                     
@@ -57,6 +60,7 @@ struct AccountView: View {
                             Spacer()
                         }
                     }.frame(width: fieldWidth, height: 20)
+                    .accessibilityLabel("User stats display. Number of friends: \(friends.count), challenges: \(challenges.count)")
                     
                     ScrollView {
                         // Pie chart with types of cuisines user has visited
@@ -72,11 +76,13 @@ struct AccountView: View {
                                         angularInset: 1.0,
                                     ).foregroundStyle(by: .value("Cuisine", cuisine))
                                         .cornerRadius(4)
+                                    .accessibilityLabel("Pie chart sector for \(cuisine) cuisine. Number of restaurants visited: \(count)")
                                 }
                             }
                         }
                         .frame(width: fieldWidth, height: 200)
                         .chartLegend(.visible)
+                        .accessibilityLabel("Pie chart displaying the types of cuisines the user has visited.")
                         // Bar chart with ratings of restaurants given
                         GroupBox("Restaurant Ratings") {
                             Chart {
@@ -88,11 +94,13 @@ struct AccountView: View {
                                         x: .value("Rating", rating),
                                         y: .value("Count", count)
                                     )
+                                    .accessibilityLabel("Bar for rating \(rating). Number of restaurants visited: \(count)")
                                 }
                             }.chartXAxis {
                                 AxisMarks(values: [1, 2, 3, 4, 5])
                             }
                         }.frame(width: fieldWidth, height: 200)
+                        .accessibilityLabel("Bar chart displaying the average rating of restaurants the user has visited.")
                         // Line chart with amount of experiences by month
                         GroupBox("Experiences by Day") {
                             Chart {
@@ -108,6 +116,7 @@ struct AccountView: View {
                                         x: .value("Date", date),
                                         y: .value("Count", count)
                                     )
+                                    .accessibilityLabel("Point for date \(date). Number of experiences: \(count)")
                                 }
                             }.chartXAxis {
                                 AxisMarks(values: .automatic(desiredCount: 7)) { value in
@@ -116,6 +125,7 @@ struct AccountView: View {
                                 }
                             }
                         }.frame(width: fieldWidth, height: 200)
+                            .accessibilityLabel("Line chart displaying the number of experiences the user has had each day.")
                     }
                 }
                 // makes the VStack fill its parent vertically, and pins its contents to the top

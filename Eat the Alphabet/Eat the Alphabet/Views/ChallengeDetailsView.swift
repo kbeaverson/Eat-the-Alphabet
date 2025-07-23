@@ -62,6 +62,7 @@ struct ChallengeDetailsView: View {
                                 HStack {
                                     Image(systemName: "mappin.and.ellipse")
                                         .font(.caption)
+                                        .accessibilityHidden(true)
                                     Text("Center: \(String(format: "%.6f", abs(cllCoord?.latitude ?? 0.0)))(\((cllCoord?.latitude ?? 0.0) >= 0 ? "N" : "S")), \(String(format: "%.6f", abs(cllCoord?.longitude ?? 0.0)))(\((cllCoord?.longitude ?? 0.0) >= 0 ? "E" : "W"))")
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
@@ -71,6 +72,8 @@ struct ChallengeDetailsView: View {
                                 Text(desc)
                                     .font(.body)
                                     .foregroundColor(.primary)
+                                    .accessibilityLabel("Challenge description")
+                                    .accessibilityValue(desc)
                             }
                         }
                         .padding(15)

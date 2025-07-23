@@ -28,6 +28,7 @@ struct LoginView : View {
                             .font(.system(size: 36, weight: .bold, design: .monospaced))
                             .foregroundColor(.white)
                             .padding(.vertical, 40)
+                            .accessibilityAddTraits(.isHeader)
                         
                         TextField("Email/Phone Address", text: $email)
                             .textContentType(.emailAddress)
