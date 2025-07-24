@@ -45,23 +45,25 @@ struct ChallengeSearchView: View {
                             .padding(.top, 40)
                             .frame(maxWidth: .infinity, alignment: .center)
                     } else {
-                        VStack(alignment: .leading, spacing: 10) {
-                            
-                            ForEach(viewModel.challenges, id: \.id) { item in
-                                ChallengeListItem(challenge: item, isSelected: Binding(
-                                    get: { selectedIds.contains(item.id) },
-                                    set: { isSelected in
-                                        if isSelected {
-                                            selectedIds.insert(item.id)
-                                        } else {
-                                            selectedIds.remove(item.id)
-                                        }
-                                    }),
-                                    isSelectionModeOn: isSelectionModeOn)
+                        ScrollView(.vertical, showsIndicators: false) {
+                            VStack(alignment: .leading, spacing: 10) {
+                                ForEach(viewModel.challenges, id: \.id) { item in
+                                    ChallengeListItem(challenge: item, isSelected: Binding(
+                                        get: { selectedIds.contains(item.id) },
+                                        set: { isSelected in
+                                            if isSelected {
+                                                selectedIds.insert(item.id)
+                                            } else {
+                                                selectedIds.remove(item.id)
+                                            }
+                                        }),
+                                                      isSelectionModeOn: isSelectionModeOn)
+                                }
+                                
                             }
-                            
+                            .frame(maxHeight: .infinity, alignment: .top)
+                            .padding(.horizontal, 10)
                         }
-                        .frame(maxHeight: .infinity, alignment: .top)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)

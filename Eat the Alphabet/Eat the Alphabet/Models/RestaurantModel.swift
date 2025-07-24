@@ -9,15 +9,15 @@ import CoreLocation
 // NOTE: changed to struct, original Restaurant model, 不含业务逻辑、不含 UI 信息、不处理数据库访问。
 struct Restaurant: Codable, Identifiable {
     let id : String
-    let name : String
+    var name : String
     let created_at : Date
-    let cuisine : String
-    let avg_per_cost : Int?
+    var cuisine : String
+    var avg_per_cost : Int?
     let map_imported_id: String
     let map_imported_rating : Int?
-    let rating : Int?
-    let address_wgs : String? // FIXME: Temporarily optional until decoding is handled properly
-    let address_text : String?
+    var rating : Int?
+    var address_wgs : String? // FIXME: Temporarily optional until decoding is handled properly
+    var address_text : String?
     let details : String?
     let image_url : String?
     
