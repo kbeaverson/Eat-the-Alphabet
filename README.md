@@ -23,7 +23,9 @@ The Eat the Alphabet challenge encourages participants to try restaurants whose 
   - Repositories: Handle data operations via Supabase
 
 ## Screenshots
-*Coming soon*
+| Account View   | Challenge View | Restaurant Select |
+| -------- | ------- | ------- |
+| ![alt text](https://github.com/kbeaverson/Eat-the-Alphabet/blob/main/Eat%20the%20Alphabet/screenshots/account_view.png) | ![alt text](https://github.com/kbeaverson/Eat-the-Alphabet/blob/main/Eat%20the%20Alphabet/screenshots/challenge_view.PNG) | ![alt text](https://github.com/kbeaverson/Eat-the-Alphabet/blob/main/Eat%20the%20Alphabet/screenshots/restaurant_select.PNG) |
 
 ## Database Schema
 *Coming soon*
