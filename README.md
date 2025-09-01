@@ -28,7 +28,7 @@ The Eat the Alphabet challenge encourages participants to try restaurants whose 
 | ![alt text](https://github.com/kbeaverson/Eat-the-Alphabet/blob/main/Eat%20the%20Alphabet/screenshots/account_view.png) | ![alt text](https://github.com/kbeaverson/Eat-the-Alphabet/blob/main/Eat%20the%20Alphabet/screenshots/challenge_view.PNG) | ![alt text](https://github.com/kbeaverson/Eat-the-Alphabet/blob/main/Eat%20the%20Alphabet/screenshots/restaurant_select.PNG) |
 
 ## Database Schema
-*Coming soon*
+![alt text](https://github.com/kbeaverson/Eat-the-Alphabet/blob/main/Eat%20the%20Alphabet/screenshots/supabase-schema.png)
 
 ## Testing
 - Unit Tests: verify repository operations
